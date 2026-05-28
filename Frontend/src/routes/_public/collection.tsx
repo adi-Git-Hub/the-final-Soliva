@@ -102,7 +102,7 @@ function CollectionRoute() {
               className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-soft group will-change-transform"
             >
               <img
-                src="/hero-image.webp" 
+                src="/hero-image.webp"
                 alt="Soliva Summer Movement"
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 loading="eager"
@@ -122,7 +122,7 @@ function CollectionRoute() {
               >
                 SS/26 VOLUME 01
               </motion.span>
-              
+
               <motion.h1
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -142,16 +142,29 @@ function CollectionRoute() {
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-[1.125rem] text-[#7b6a5f] font-light leading-relaxed max-w-xl mb-12"
               >
-                Thoughtfully designed for movement through Indian summers — breathable layers built for everyday comfort, exposure, and motion.
+                Thoughtfully designed for movement through Indian summers — breathable layers built
+                for everyday comfort, exposure, and motion.
               </motion.p>
 
               {/* Structured Feature Breakdown */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
                 {[
-                  { label: "BREATHABLE COMFORT", desc: "Dual-layer airflow system designed to release heat while shielding skin." },
-                  { label: "URBAN UTILITY", desc: "Engineered for 60kmph motion, city commutes, and everyday routines." },
-                  { label: "HEAT-READY WEAR", desc: "Lightweight fabrics tested in 45°C Nagpur summer conditions." },
-                  { label: "DAILY EXPOSURE", desc: "Zero-gap protection calibrated for long outdoor exposure hours." },
+                  {
+                    label: "BREATHABLE COMFORT",
+                    desc: "Dual-layer airflow system designed to release heat while shielding skin.",
+                  },
+                  {
+                    label: "URBAN UTILITY",
+                    desc: "Engineered for 60kmph motion, city commutes, and everyday routines.",
+                  },
+                  {
+                    label: "HEAT-READY WEAR",
+                    desc: "Lightweight fabrics tested in 45°C Nagpur summer conditions.",
+                  },
+                  {
+                    label: "DAILY EXPOSURE",
+                    desc: "Zero-gap protection calibrated for long outdoor exposure hours.",
+                  },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -161,8 +174,12 @@ function CollectionRoute() {
                     transition={{ delay: 0.4 + i * 0.05 }}
                     className="flex flex-col gap-2"
                   >
-                    <span className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#3a2a22] uppercase font-black">{item.label}</span>
-                    <p className="text-[0.875rem] text-[#a08f84] font-light leading-snug">{item.desc}</p>
+                    <span className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#3a2a22] uppercase font-black">
+                      {item.label}
+                    </span>
+                    <p className="text-[0.875rem] text-[#a08f84] font-light leading-snug">
+                      {item.desc}
+                    </p>
                   </motion.div>
                 ))}
               </div>
@@ -187,7 +204,6 @@ function CollectionRoute() {
       <section className="relative py-24 bg-white/40">
         <div className="mx-auto max-w-[1440px] px-6 sm:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-24 items-start">
-            
             {/* LEFT SIDE: Premium Product Gallery */}
             <div className="lg:col-span-7 flex flex-row gap-6">
               {/* Vertical Thumbnail Column - Amazon Style */}
@@ -197,8 +213,8 @@ function CollectionRoute() {
                     key={v.id}
                     onClick={() => setActiveVariant(v)}
                     className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-all duration-400 group ${
-                      activeVariant.id === v.id 
-                        ? "border-[#c76600] ring-4 ring-[#c76600]/5" 
+                      activeVariant.id === v.id
+                        ? "border-[#c76600] ring-4 ring-[#c76600]/5"
                         : "border-transparent opacity-50 hover:opacity-100 hover:border-[#3a2a22]/20"
                     }`}
                   >
@@ -235,7 +251,9 @@ function CollectionRoute() {
                       key={v.id}
                       onClick={() => setActiveVariant(v)}
                       className={`relative w-16 h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
-                        activeVariant.id === v.id ? "border-[#c76600]" : "border-transparent opacity-60"
+                        activeVariant.id === v.id
+                          ? "border-[#c76600]"
+                          : "border-transparent opacity-60"
                       }`}
                     >
                       <img src={v.image} className="w-full h-full object-cover" alt={v.name} />
@@ -251,10 +269,15 @@ function CollectionRoute() {
                 {/* 1. Header & Title */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold">Flagship Series</span>
+                    <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold">
+                      Flagship Series
+                    </span>
                     <div className="h-px w-8 bg-[#c76600]/30" />
                   </div>
-                  <h2 className="font-display text-[#3a2a22] leading-[1.1] tracking-tight uppercase" style={{ fontSize: "clamp(2.5rem, 4vw, 3.5rem)" }}>
+                  <h2
+                    className="font-display text-[#3a2a22] leading-[1.1] tracking-tight uppercase"
+                    style={{ fontSize: "clamp(2.5rem, 4vw, 3.5rem)" }}
+                  >
                     Soliva <span className="italic font-light text-[#c76600]/90">SunWrap™</span>
                   </h2>
                 </div>
@@ -262,8 +285,12 @@ function CollectionRoute() {
                 {/* 2. Price Section */}
                 <div className="flex items-center gap-6 border-y border-[#3a2a22]/5 py-6">
                   <div className="flex items-baseline gap-3">
-                    <span className="font-mono text-4xl text-[#3a2a22] font-semibold tracking-tighter">₹799</span>
-                    <span className="font-mono text-lg text-[#a08f84] line-through opacity-60">₹1,200</span>
+                    <span className="font-mono text-4xl text-[#3a2a22] font-semibold tracking-tighter">
+                      ₹799
+                    </span>
+                    <span className="font-mono text-lg text-[#a08f84] line-through opacity-60">
+                      ₹1,200
+                    </span>
                   </div>
                   <div className="px-4 py-1.5 rounded-full bg-[#c76600] text-white font-mono text-[0.5625rem] uppercase font-black tracking-widest shadow-sm">
                     Launch Edition
@@ -275,23 +302,29 @@ function CollectionRoute() {
                   {[
                     { label: "UPF 50+ Certified", icon: Shield },
                     { label: "Breathable Wear", icon: Wind },
-                    { label: "Indian Heat Ready", icon: Activity }
+                    { label: "Indian Heat Ready", icon: Activity },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-2">
                       <item.icon size={12} className="text-[#c76600]" />
-                      <span className="font-mono text-[0.5625rem] tracking-widest uppercase font-bold text-[#7b6a5f]">{item.label}</span>
+                      <span className="font-mono text-[0.5625rem] tracking-widest uppercase font-bold text-[#7b6a5f]">
+                        {item.label}
+                      </span>
                     </div>
                   ))}
                 </div>
 
                 {/* 4. Description */}
                 <p className="text-[1.125rem] text-[#7b6a5f] font-light leading-relaxed">
-                  A breathable textile shield engineered for urban movement. The SunWrap™ silhouette adapts to your form, deflecting UV while maintaining constant airflow through calibrated ventilation zones.
+                  A breathable textile shield engineered for urban movement. The SunWrap™ silhouette
+                  adapts to your form, deflecting UV while maintaining constant airflow through
+                  calibrated ventilation zones.
                 </p>
 
                 {/* 5. Usage Chips */}
                 <div className="space-y-4">
-                  <span className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#a08f84] uppercase font-black">Daily Context</span>
+                  <span className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#a08f84] uppercase font-black">
+                    Daily Context
+                  </span>
                   <div className="flex flex-wrap gap-2">
                     {[
                       "Women Commuters",
@@ -299,9 +332,12 @@ function CollectionRoute() {
                       "Long Outdoor Hours",
                       "Urban Exposure",
                       "Travel",
-                      "Daily Movement"
+                      "Daily Movement",
                     ].map((pill) => (
-                      <span key={pill} className="px-4 py-2.5 rounded-xl border border-[#3a2a22]/10 bg-[#3a2a22]/[0.02] text-[0.75rem] text-[#7b6a5f] font-medium tracking-tight hover:bg-white hover:shadow-sm transition-all cursor-default">
+                      <span
+                        key={pill}
+                        className="px-4 py-2.5 rounded-xl border border-[#3a2a22]/10 bg-[#3a2a22]/[0.02] text-[0.75rem] text-[#7b6a5f] font-medium tracking-tight hover:bg-white hover:shadow-sm transition-all cursor-default"
+                      >
                         {pill}
                       </span>
                     ))}
@@ -316,13 +352,20 @@ function CollectionRoute() {
                     { icon: Activity, title: "Stability", val: "60kmph Fit" },
                     { icon: Zap, title: "Weight", val: "Ultra-Light" },
                   ].map((f, i) => (
-                    <div key={i} className="flex flex-col gap-3 p-5 rounded-3xl bg-[#3a2a22]/[0.02] border border-[#3a2a22]/[0.04] hover:bg-white hover:shadow-soft transition-all duration-500">
+                    <div
+                      key={i}
+                      className="flex flex-col gap-3 p-5 rounded-3xl bg-[#3a2a22]/[0.02] border border-[#3a2a22]/[0.04] hover:bg-white hover:shadow-soft transition-all duration-500"
+                    >
                       <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
                         <f.icon size={16} className="text-[#c76600]" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-mono text-[0.5rem] tracking-[0.2em] text-[#a08f84] uppercase font-bold mb-0.5">{f.title}</span>
-                        <span className="text-[0.8125rem] text-[#3a2a22] font-semibold">{f.val}</span>
+                        <span className="font-mono text-[0.5rem] tracking-[0.2em] text-[#a08f84] uppercase font-bold mb-0.5">
+                          {f.title}
+                        </span>
+                        <span className="text-[0.8125rem] text-[#3a2a22] font-semibold">
+                          {f.val}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -332,16 +375,20 @@ function CollectionRoute() {
                 <div className="space-y-6 pt-6">
                   {/* Quantity Selector */}
                   <div className="flex items-center gap-6">
-                    <span className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#a08f84] uppercase font-black">Quantity</span>
+                    <span className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#a08f84] uppercase font-black">
+                      Quantity
+                    </span>
                     <div className="flex items-center border border-[#3a2a22]/10 rounded-full bg-white px-2">
-                      <button 
+                      <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
                         className="w-10 h-10 flex items-center justify-center text-[#7b6a5f] hover:text-[#3a2a22] transition-colors"
                       >
                         -
                       </button>
-                      <span className="w-8 text-center font-mono text-sm font-bold text-[#3a2a22]">{quantity}</span>
-                      <button 
+                      <span className="w-8 text-center font-mono text-sm font-bold text-[#3a2a22]">
+                        {quantity}
+                      </span>
+                      <button
                         onClick={() => setQuantity(quantity + 1)}
                         className="w-10 h-10 flex items-center justify-center text-[#7b6a5f] hover:text-[#3a2a22] transition-colors"
                       >
@@ -376,13 +423,17 @@ function CollectionRoute() {
                       </button>
                     </div>
 
-                    <a 
-                      href="https://wa.me/917350640608" 
-                      target="_blank" 
+                    <a
+                      href="https://wa.me/917350640608"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="w-full py-4 rounded-full border border-[#3a2a22]/10 bg-white flex items-center justify-center gap-3 font-mono text-[0.625rem] tracking-[0.2em] uppercase font-bold text-[#3a2a22] hover:bg-[#3a2a22]/[0.02] transition-all"
                     >
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className="w-4 h-4 opacity-70" />
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                        alt="WhatsApp"
+                        className="w-4 h-4 opacity-70"
+                      />
                       Quick Order on WhatsApp
                     </a>
                   </div>
@@ -393,7 +444,6 @@ function CollectionRoute() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -402,7 +452,7 @@ function CollectionRoute() {
       <section className="relative min-h-[60vh] py-[100px] flex items-center overflow-hidden bg-[#EAE2D8]">
         {/* Simplified Atmospheric Base */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
-        
+
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8 w-full relative z-10">
           <div className="flex flex-col lg:flex-row gap-24 items-center">
             {/* LEFT: 60% Content */}
@@ -415,7 +465,7 @@ function CollectionRoute() {
               >
                 SS/26 · VOLUME 01
               </motion.span>
-              
+
               <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -435,7 +485,8 @@ function CollectionRoute() {
                 transition={{ delay: 0.2, duration: 0.8 }}
                 className="text-[1.125rem] text-[#5c4d44] font-light leading-relaxed max-w-lg mb-12"
               >
-                Thoughtfully designed around the realities of Indian summers, movement, sunlight, and urban exposure.
+                Thoughtfully designed around the realities of Indian summers, movement, sunlight,
+                and urban exposure.
               </motion.p>
             </div>
 
@@ -479,13 +530,17 @@ function CollectionRoute() {
               >
                 MOVEMENT STORY
               </motion.span>
-              <h2 className="font-display text-[#3a2a22] tracking-tight leading-[1.1] mb-8" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
+              <h2
+                className="font-display text-[#3a2a22] tracking-tight leading-[1.1] mb-8"
+                style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+              >
                 Protection Designed <br /> For Daily Motion
               </h2>
               <p className="text-[1.125rem] text-[#7b6a5f] font-light leading-relaxed mb-10 max-w-md">
-                Built for movement through heat, travel, and everyday urban exposure — thoughtfully designed to move naturally with life.
+                Built for movement through heat, travel, and everyday urban exposure — thoughtfully
+                designed to move naturally with life.
               </p>
-              
+
               <div className="space-y-6 mb-12">
                 {[
                   "Crafted For Indian Summers",
@@ -551,11 +606,11 @@ function CollectionRoute() {
                       className="group relative py-4"
                     >
                       <div className="h-[2px] w-12 bg-[#3a2a22]/5 overflow-hidden rounded-full">
-                        <motion.div 
+                        <motion.div
                           className="h-full bg-[#c76600]"
                           initial={false}
-                          animate={{ 
-                            width: activeLifestyle === i ? "100%" : "0%" 
+                          animate={{
+                            width: activeLifestyle === i ? "100%" : "0%",
                           }}
                           transition={{ duration: 0.6 }}
                         />
@@ -573,33 +628,50 @@ function CollectionRoute() {
       <section className="relative py-[120px] bg-[#FAF7F3] overflow-hidden">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8 relative z-10">
           <div className="text-center mb-24">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              className="font-display text-[#3a2a22] tracking-tight leading-[1.1]" style={{ fontSize: "clamp(2.5rem, 7vw, 4.5rem)" }}>
+              className="font-display text-[#3a2a22] tracking-tight leading-[1.1]"
+              style={{ fontSize: "clamp(2.5rem, 7vw, 4.5rem)" }}
+            >
               Designed Around <span className="italic">Everyday</span> Movement
             </motion.h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
-              { 
-                title: "Women Commuters", 
+              {
+                title: "Women Commuters",
                 tag: "DAILY RIDES",
-                points: ["Daily scooter rides", "Office movement", "College travel", "Urban heat protection"],
+                points: [
+                  "Daily scooter rides",
+                  "Office movement",
+                  "College travel",
+                  "Urban heat protection",
+                ],
                 base: "bg-[#EAE2D8]",
                 glow: "rgba(225,160,120,0.1)",
               },
-              { 
-                title: "Young Girls", 
+              {
+                title: "Young Girls",
                 tag: "SCHOOL MOTION",
-                points: ["School commutes", "Outdoor activities", "Family travel", "Everyday comfort"],
+                points: [
+                  "School commutes",
+                  "Outdoor activities",
+                  "Family travel",
+                  "Everyday comfort",
+                ],
                 base: "bg-[#DFE3DA]",
                 glow: "rgba(140,170,140,0.1)",
               },
-              { 
-                title: "Long Outdoor Hours", 
+              {
+                title: "Long Outdoor Hours",
                 tag: "STAMINA",
-                points: ["Extended movement", "Breathable wear", "Summer duration", "Daily exposure shield"],
+                points: [
+                  "Extended movement",
+                  "Breathable wear",
+                  "Summer duration",
+                  "Daily exposure shield",
+                ],
                 base: "bg-[#E2DDD5]",
                 glow: "rgba(190,160,130,0.1)",
               },
@@ -612,9 +684,11 @@ function CollectionRoute() {
                   transition={{ delay: i * 0.08, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                   className={`group relative h-full min-h-[440px] border border-[#3a2a22]/5 rounded-[3.5rem] p-12 overflow-hidden transition-all duration-700 ${card.base} shadow-sm hover:-translate-y-1 will-change-transform`}
                 >
-                  <div 
+                  <div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                    style={{ background: `radial-gradient(circle at center, ${card.glow} 0%, transparent 70%)` }}
+                    style={{
+                      background: `radial-gradient(circle at center, ${card.glow} 0%, transparent 70%)`,
+                    }}
                   />
 
                   <div className="relative z-10 flex flex-col h-full">
@@ -624,12 +698,14 @@ function CollectionRoute() {
                     <h3 className="font-display text-3xl text-[#3a2a22] mb-12 leading-tight">
                       {card.title}
                     </h3>
-                    
+
                     <div className="space-y-6 flex-1">
                       {card.points.map((pt, j) => (
                         <div key={j} className="flex items-center gap-5">
                           <div className="h-[1px] w-4 bg-[#3a2a22]/10" />
-                          <span className="text-[0.9375rem] text-[#7b6a5f] font-light italic">{pt}</span>
+                          <span className="text-[0.9375rem] text-[#7b6a5f] font-light italic">
+                            {pt}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -676,7 +752,10 @@ function CollectionRoute() {
               <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold mb-6 block">
                 ROADMAP
               </span>
-              <h2 className="font-display text-[#3a2a22] tracking-tight leading-[1.1]" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}>
+              <h2
+                className="font-display text-[#3a2a22] tracking-tight leading-[1.1]"
+                style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)" }}
+              >
                 Thoughtfully <span className="italic">Growing</span>
               </h2>
             </div>
@@ -687,7 +766,11 @@ function CollectionRoute() {
               { title: "Soliva Men", badge: "In Progress", desc: "Masculine movement guards." },
               { title: "Soliva Kids", badge: "In Progress", desc: "Gentle school protection." },
               { title: "Neck Shield", badge: "In Progress", desc: "Integrated facial guard." },
-              { title: "Future Essentials", badge: "In Progress", desc: "Urban movement accessories." },
+              {
+                title: "Future Essentials",
+                badge: "In Progress",
+                desc: "Urban movement accessories.",
+              },
             ].map((card, i) => (
               <motion.div
                 key={card.title}
@@ -705,10 +788,10 @@ function CollectionRoute() {
                     <span className="font-mono text-[0.5rem] tracking-[0.2em] text-[#c76600] uppercase font-black mb-3 block">
                       {card.badge}
                     </span>
-                    <h4 className="font-display text-2xl text-[#3a2a22] mb-4">
-                      {card.title}
-                    </h4>
-                    <p className="text-[0.875rem] text-[#a08f84] font-light leading-snug">{card.desc}</p>
+                    <h4 className="font-display text-2xl text-[#3a2a22] mb-4">{card.title}</h4>
+                    <p className="text-[0.875rem] text-[#a08f84] font-light leading-snug">
+                      {card.desc}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -727,7 +810,10 @@ function CollectionRoute() {
             viewport={viewportOnce}
             transition={{ duration: 1.2 }}
           >
-            <h2 className="font-display text-[#3a2a22] leading-[1.1] mb-10" style={{ fontSize: "clamp(3rem, 8vw, 5.5rem)" }}>
+            <h2
+              className="font-display text-[#3a2a22] leading-[1.1] mb-10"
+              style={{ fontSize: "clamp(3rem, 8vw, 5.5rem)" }}
+            >
               Thoughtful Protection <br /> For Everyday Life
             </h2>
             <div className="flex flex-col sm:flex-row justify-center gap-6">

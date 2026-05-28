@@ -126,8 +126,8 @@ function OrderConfirmedRoute() {
             variants={fadeUp}
             className="text-ink-muted text-sm sm:text-base font-light leading-relaxed max-w-md mb-10"
           >
-            Your payment has been successfully processed and your order is now
-            confirmed. We're preparing it with care.
+            Your payment has been successfully processed and your order is now confirmed. We're
+            preparing it with care.
           </motion.p>
 
           {/* Order details — shown when available, page works without it */}
@@ -159,9 +159,7 @@ function OrderConfirmedRoute() {
                       />
                     </div>
                     <div className="flex-1 min-w-0 text-left">
-                      <p className="text-sm text-brown-deep font-medium truncate">
-                        {item.name}
-                      </p>
+                      <p className="text-sm text-brown-deep font-medium truncate">{item.name}</p>
                       <p className="text-micro-xs text-ink-muted/60 font-mono">
                         Qty {item.quantity}
                       </p>

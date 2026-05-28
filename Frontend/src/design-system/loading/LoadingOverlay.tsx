@@ -1,10 +1,10 @@
 /**
  * LoadingOverlay — cinematic atmospheric interaction veil.
- * 
+ *
  * Transforms async interaction states into a soft "cinematic pause".
- * Designed to preserve immersion and emotional continuity by veiling 
+ * Designed to preserve immersion and emotional continuity by veiling
  * the interface rather than aggressively blocking it.
- * 
+ *
  * Visuals: Lightweight warm-neutral dimming with restrained atmospheric blur.
  * Motion: Inertia-driven dissolves and subtle ambient breathing.
  */
@@ -36,13 +36,13 @@ export function LoadingOverlay({
 }: LoadingOverlayProps) {
   const shouldReduceMotion = useReducedMotion();
   const fadeDuration = overlay.fadeMs / 1000;
-  
+
   // Intelligent Escalation: Prevent flicker for fast operations
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
-    
+
     if (show) {
       // Wait for micro-threshold before showing the atmospheric veil
       timer = setTimeout(() => {
@@ -69,7 +69,7 @@ export function LoadingOverlay({
           className={cn(
             fixed ? "fixed" : "absolute",
             "inset-0 flex flex-col items-center justify-center select-none overflow-hidden",
-            className
+            className,
           )}
           style={{
             background: overlay.veil,
@@ -87,25 +87,26 @@ export function LoadingOverlay({
           {/* 2. Ambient Breathing Animation (Nearly Invisible) */}
           {!shouldReduceMotion && (
             <motion.div
-              animate={{ 
+              animate={{
                 opacity: [0.3, 0.5, 0.3],
-                scale: [1, 1.02, 1]
+                scale: [1, 1.02, 1],
               }}
               transition={{
                 duration: 6,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
               }}
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: "radial-gradient(circle at center, rgba(245, 130, 13, 0.02) 0%, transparent 80%)"
+                background:
+                  "radial-gradient(circle at center, rgba(245, 130, 13, 0.02) 0%, transparent 80%)",
               }}
             />
           )}
 
           {/* 3. Editorial Lockup */}
           {caption && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.8, ease: loadingMotion.ease }}
@@ -123,13 +124,13 @@ export function LoadingOverlay({
               {/* Atmospheric Drift Line */}
               {!shouldReduceMotion && (
                 <div className="h-px w-32 bg-brown-deep/[0.04] relative overflow-hidden">
-                  <motion.div 
+                  <motion.div
                     animate={{ x: ["-100%", "100%"] }}
-                    transition={{ 
-                      duration: 3, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
                       ease: "easeInOut",
-                      repeatDelay: 0.5
+                      repeatDelay: 0.5,
                     }}
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-brown-deep/[0.08] to-transparent"
                   />

@@ -99,9 +99,7 @@ export function ProblemSection() {
           </div>
 
           {/* RIGHT: Editorial typography content in a premium translucent panel */}
-          <div
-            className="flex flex-col space-y-12 md:space-y-14 order-1 md:order-2 bg-surface-panel border border-line-hairline rounded-panel-lg p-10 md:p-16 backdrop-blur-medium shadow-sm relative overflow-hidden"
-          >
+          <div className="flex flex-col space-y-12 md:space-y-14 order-1 md:order-2 bg-surface-panel border border-line-hairline rounded-panel-lg p-10 md:p-16 backdrop-blur-medium shadow-sm relative overflow-hidden">
             {/* Inner ambient glow for the text panel */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(245,130,13,0.02),transparent_40%),radial-gradient(circle_at_100%_100%,rgba(252,231,243,0.1),transparent_50%)] pointer-events-none" />
 
@@ -117,7 +115,10 @@ export function ProblemSection() {
               {/* Large serif headline */}
               <h2 className="font-display text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] leading-hero text-brown-deep tracking-tight">
                 The city is <br />
-                <span className="italic font-normal text-orange-glow opacity-90 drop-shadow-glow-soft">designed</span> to <br />
+                <span className="italic font-normal text-orange-glow opacity-90 drop-shadow-glow-soft">
+                  designed
+                </span>{" "}
+                to <br />
                 test you.
               </h2>
 

@@ -17,15 +17,13 @@ export function BrandLogo({ isScrolled = false, className }: BrandLogoProps) {
         "relative group flex items-center justify-between overflow-hidden transition-all duration-700 ease-in-out",
         "rounded-full border border-white/30 bg-surface-glass-strong backdrop-blur-strong",
         "shadow-card inset-shadow-line cursor-pointer",
-        isScrolled 
-          ? "h-9 px-4 min-w-[140px]" 
-          : "h-11 px-5 min-w-[170px]",
-        className
+        isScrolled ? "h-9 px-4 min-w-[140px]" : "h-11 px-5 min-w-[170px]",
+        className,
       )}
     >
       {/* Premium Surface Treatment: Glossy Reflection Layer */}
       <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
-      
+
       {/* Cinematic Shine Sweep */}
       <motion.div
         animate={{
@@ -67,7 +65,7 @@ export function BrandLogo({ isScrolled = false, className }: BrandLogoProps) {
             xmlns="http://www.w3.org/2000/svg"
             className={cn(
               "transition-all duration-500 text-orange-glow drop-shadow-glow-soft",
-              isScrolled ? "h-5 w-auto" : "h-6 w-auto"
+              isScrolled ? "h-5 w-auto" : "h-6 w-auto",
             )}
           >
             <path
@@ -82,10 +80,10 @@ export function BrandLogo({ isScrolled = false, className }: BrandLogoProps) {
 
         {/* RIGHT: SOLIVA wordmark */}
         <div className="flex-grow flex items-center justify-end">
-          <span 
+          <span
             className={cn(
               "font-mono uppercase tracking-[0.25em] text-ink-strong transition-all duration-500 select-none",
-              isScrolled ? "text-[10px]" : "text-[12px]"
+              isScrolled ? "text-[10px]" : "text-[12px]",
             )}
           >
             SOLIVA

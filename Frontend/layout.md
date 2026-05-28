@@ -75,6 +75,7 @@ y=11240 └───────────────────────
 ```
 
 ### Vertical rhythm cheat-sheet
+
 ```
 section padding-y          ┄┄┄  py-16  (64)  ◄── compact
                            ┄┄┄  py-20  (80)
@@ -87,6 +88,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 ```
 
 ### Radius scale (visual ladder)
+
 ```
 6px ▏ rounded-md       ── inputs, badges
 12  ▏▏rounded-xl       ── order rows, line items
@@ -101,6 +103,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 ```
 
 ### Color palette
+
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │  ▓▓ #f7f3ee  luxury-beige     ── base background                 │
@@ -117,7 +120,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 2. Header / Navigation        height 80 / scrolled 56
+## 2. Header / Navigation height 80 / scrolled 56
 
 ```
  sticky · top-0 · z-40 · bg-background/60 backdrop-blur-md · border-b border-border/40
@@ -141,6 +144,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 ```
 
 ### Right-action cluster (zoom)
+
 ```
                                                           ┌────── 280-ish px ──────┐
                                                           │                        │
@@ -159,7 +163,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 3. Hero Section          height = 900 (h-screen) · sticky inner
+## 3. Hero Section height = 900 (h-screen) · sticky inner
 
 ```
 ┌──────────────────────────── 1440 × 900 ────────────────────────────────────────────────┐
@@ -217,7 +221,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 4. Amber Bridge Ribbon          height = 56
+## 4. Amber Bridge Ribbon height = 56
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────┐
@@ -232,7 +236,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 5. Video Section          visible 900 · pin spacer +720 → 1620 px
+## 5. Video Section visible 900 · pin spacer +720 → 1620 px
 
 ```
 ┌────────────────────── pinned · z-0 · overflow-hidden ────────────────────────┐
@@ -272,7 +276,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 6. Urban Storytelling — Horizontal Pin     visible 900 · spacer +3600
+## 6. Urban Storytelling — Horizontal Pin visible 900 · spacer +3600
 
 ```
                           INNER TRACK · md:w-[200%] = 2880 px
@@ -289,7 +293,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
                   ↑ visible viewport = 1440 px window onto track
 ```
 
-### 6.1 PANEL 1 — Stressor Map      (720 × 900 visible)
+### 6.1 PANEL 1 — Stressor Map (720 × 900 visible)
 
 ```
 ┌── px-12 (48) ─────────────────────────────────────────────── px-12 (48) ──┐
@@ -331,7 +335,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 6.2 PANEL 2 — Rationale      (720 × 900 visible)
+### 6.2 PANEL 2 — Rationale (720 × 900 visible)
 
 ```
 ┌── px-20 (80) ─────────────────────────────────────────────── px-20 (80) ──┐
@@ -372,7 +376,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 7. Collection Section      height ≈ 922 px
+## 7. Collection Section height ≈ 922 px
 
 ```
 ┌─────────────── max-w-[90rem] · px-12 ─────────────────────────────────────────────────┐
@@ -425,7 +429,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 8. Compare Section      height ≈ 2047 px
+## 8. Compare Section height ≈ 2047 px
 
 ```
 ┌─────────── max-w-[90rem] · px-8 (32) ─────────────────────────────────────────────────┐
@@ -485,7 +489,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 9. Final CTA      height ≈ 1139 px
+## 9. Final CTA height ≈ 1139 px
 
 ```
 ┌──────────────────── full bleed · bg-cinematic-veil grain · py-20 ────────────────────┐
@@ -536,7 +540,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 
 ---
 
-## 10. Footer       (rendered on `_public` routes; **not** on `/` — FinalCTA is the closer)
+## 10. Footer (rendered on `_public` routes; **not** on `/` — FinalCTA is the closer)
 
 ```
 ┌─────────── mt-24 (96) · border-t border-border/40 · bg-background/60 ──────────────┐
@@ -603,6 +607,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 ```
 
 ### Heading max-widths
+
 ```
    max-w-2xl (672 px)  ┃ Hero mission strap · Compare subtext
    max-w-3xl (768 px)  ┃ VideoSection card · FinalCTA dossier
@@ -649,6 +654,7 @@ compare-card gap           ┄┄┄  gap-8  (32)
 ```
 
 ### Z-index audit
+
 ```
                                                        z
    Loader overlays         ████████████████████████  100  / 10 000
@@ -706,6 +712,7 @@ shadcn buttonVariants  (desktop · md+)
 ```
 
 ### Input system
+
 ```
   ┌────────── shadcn Input ────────────────────────────────────────────┐
   │  height 36 px desktop / 44 px mobile · px-3 py-1                   │
@@ -717,7 +724,7 @@ shadcn buttonVariants  (desktop · md+)
 
 ---
 
-## 14. Component Hierarchy Map  (full tree)
+## 14. Component Hierarchy Map (full tree)
 
 ```
 <RootShell>                                            src/routes/__root.tsx
@@ -866,4 +873,4 @@ GAP SCALE
 
 ---
 
-*Blueprint generated from live DOM measurements at `http://localhost:8083/` (viewport 1440 × 900) and source inspection across `src/components/*` + `src/routes/*`. ASCII column scale ≈ 14.4 px / col.*
+_Blueprint generated from live DOM measurements at `http://localhost:8083/` (viewport 1440 × 900) and source inspection across `src/components/_`+`src/routes/_`. ASCII column scale ≈ 14.4 px / col._

@@ -32,7 +32,7 @@ function CartRoute() {
         image: l.image,
         price: l.priceCents / 100,
         quantity: l.quantity,
-      }))
+      })),
     );
     navigate({ to: "/checkout" });
   }

@@ -35,16 +35,16 @@ function TermsRoute() {
 
         <h3 className="font-display text-lg text-foreground mt-6">1.1 Account</h3>
         <p className="text-sm leading-relaxed text-ink-soft">
-          By creating a Soliva account, you confirm that the information you provide is
-          accurate and that you are at least 18 years of age. You're responsible for the
-          activity on your account; keep your password private.
+          By creating a Soliva account, you confirm that the information you provide is accurate and
+          that you are at least 18 years of age. You're responsible for the activity on your
+          account; keep your password private.
         </p>
 
         <h3 className="font-display text-lg text-foreground mt-6">1.2 Orders &amp; Payment</h3>
         <p className="text-sm leading-relaxed text-ink-soft">
-          Orders placed through the storefront are subject to product availability. We
-          reserve the right to cancel any order. Payment is processed via Razorpay; we do
-          not store card numbers or CVVs on our servers.
+          Orders placed through the storefront are subject to product availability. We reserve the
+          right to cancel any order. Payment is processed via Razorpay; we do not store card numbers
+          or CVVs on our servers.
         </p>
 
         <h3 className="font-display text-lg text-foreground mt-6">1.3 Returns</h3>
@@ -55,8 +55,8 @@ function TermsRoute() {
 
         <h3 className="font-display text-lg text-foreground mt-6">1.4 Acceptable Use</h3>
         <p className="text-sm leading-relaxed text-ink-soft">
-          You agree not to use the service to violate any law, infringe the rights of
-          others, or attempt to disrupt the service.
+          You agree not to use the service to violate any law, infringe the rights of others, or
+          attempt to disrupt the service.
         </p>
       </section>
 
@@ -67,27 +67,27 @@ function TermsRoute() {
 
         <h3 className="font-display text-lg text-foreground mt-6">2.1 What we collect</h3>
         <p className="text-sm leading-relaxed text-ink-soft">
-          Account information (name, email, optional phone), order history, and shipping
-          addresses. Technical data such as IP address and device fingerprint is logged
-          for security and abuse prevention.
+          Account information (name, email, optional phone), order history, and shipping addresses.
+          Technical data such as IP address and device fingerprint is logged for security and abuse
+          prevention.
         </p>
 
         <h3 className="font-display text-lg text-foreground mt-6">2.2 How we use it</h3>
         <p className="text-sm leading-relaxed text-ink-soft">
-          To deliver your orders, send transactional emails (order confirmations,
-          shipping updates, OTPs), and improve the product. We do not sell your data.
+          To deliver your orders, send transactional emails (order confirmations, shipping updates,
+          OTPs), and improve the product. We do not sell your data.
         </p>
 
         <h3 className="font-display text-lg text-foreground mt-6">2.3 Cookies</h3>
         <p className="text-sm leading-relaxed text-ink-soft">
-          We set a single HTTP-only session cookie after sign-in. It expires after 30
-          days or when you sign out. No third-party advertising cookies.
+          We set a single HTTP-only session cookie after sign-in. It expires after 30 days or when
+          you sign out. No third-party advertising cookies.
         </p>
 
         <h3 className="font-display text-lg text-foreground mt-6">2.4 Your rights</h3>
         <p className="text-sm leading-relaxed text-ink-soft">
-          You may request a copy of your data, correct inaccuracies, or delete your
-          account at any time by writing to{" "}
+          You may request a copy of your data, correct inaccuracies, or delete your account at any
+          time by writing to{" "}
           <a
             href="mailto:privacy@solivaguard.com"
             className="text-foreground underline-offset-4 hover:underline"
@@ -110,8 +110,8 @@ function TermsRoute() {
       </section>
 
       <p className="mt-12 text-xs text-muted-foreground italic">
-        This page is a structural draft. Replace each section's copy with your
-        legally-reviewed text before launch.
+        This page is a structural draft. Replace each section's copy with your legally-reviewed text
+        before launch.
       </p>
     </div>
   );

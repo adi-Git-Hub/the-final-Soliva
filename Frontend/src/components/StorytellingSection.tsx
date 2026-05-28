@@ -100,7 +100,8 @@ export function StorytellingSection() {
                   </span>
                 </div>
                 <motion.h2 className="font-display text-4xl md:text-6xl text-brown-deep leading-hero mb-8 tracking-tight">
-                  Your daily environment is <span className="italic text-orange-glow">harsher than you think.</span>
+                  Your daily environment is{" "}
+                  <span className="italic text-orange-glow">harsher than you think.</span>
                 </motion.h2>
                 <motion.p className="text-lg text-ink-soft font-light leading-relaxed mb-12">
                   Daily exposure to pollution, UV rays, dust, and trapped heat affects comfort far
@@ -113,7 +114,9 @@ export function StorytellingSection() {
                       key={card.id}
                       className="group p-6 rounded-2xl border border-line-soft bg-surface-glass backdrop-blur-subtle transition-all hover:bg-surface-glass-strong cursor-default"
                     >
-                      <p className="text-xs font-mono text-ink-muted mb-2 font-bold group-hover:text-orange-glow transition-colors">0{card.id}</p>
+                      <p className="text-xs font-mono text-ink-muted mb-2 font-bold group-hover:text-orange-glow transition-colors">
+                        0{card.id}
+                      </p>
                       <h4 className="text-sm font-medium text-brown-deep tracking-wide uppercase">
                         {card.title}
                       </h4>
@@ -128,7 +131,7 @@ export function StorytellingSection() {
           <div className="relative flex h-full w-1/2 items-center px-6 md:px-24 bg-transparent">
             {/* Soft transitioning background gradient connecting panels */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/30 pointer-events-none" />
-            
+
             <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 items-center gap-12 py-20 relative z-10">
               {/* Left: Content */}
               <motion.div
@@ -142,7 +145,8 @@ export function StorytellingSection() {
                   </span>
                 </div>
                 <motion.h2 className="font-display text-4xl md:text-6xl text-brown-deep leading-hero mb-8 tracking-tight">
-                  Protection should never <span className="italic text-orange-glow">compromise comfort.</span>
+                  Protection should never{" "}
+                  <span className="italic text-orange-glow">compromise comfort.</span>
                 </motion.h2>
                 <motion.p className="text-lg text-ink-soft font-light leading-relaxed mb-12">
                   SOLIVA is designed to bridge the gap between breathable comfort, lightweight
@@ -151,7 +155,10 @@ export function StorytellingSection() {
 
                 <div className="grid grid-cols-2 gap-6">
                   {WHY_SOLIVA_FEATURES.map((feature, i) => (
-                    <motion.div key={feature.id} className="flex flex-col gap-3 group cursor-default">
+                    <motion.div
+                      key={feature.id}
+                      className="flex flex-col gap-3 group cursor-default"
+                    >
                       <div className="h-[2px] w-full bg-brown/10 mb-1 group-hover:bg-orange-glow transition-colors duration-500" />
                       <h4 className="text-body-xs font-bold text-brown-deep tracking-wide uppercase">
                         {feature.title}
@@ -237,7 +244,9 @@ export function StorytellingSection() {
             className="absolute inset-0 bg-orange-glow origin-left"
           />
         </div>
-        <span className="font-mono text-micro-sm tracking-eyebrow text-brown-deep font-bold">STORYLINE</span>
+        <span className="font-mono text-micro-sm tracking-eyebrow text-brown-deep font-bold">
+          STORYLINE
+        </span>
       </div>
     </section>
   );

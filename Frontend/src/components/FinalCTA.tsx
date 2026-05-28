@@ -16,7 +16,7 @@ export function FinalCTA() {
       className="relative w-full overflow-hidden bg-cinematic-veil grain py-12 sm:py-14 lg:py-16 xl:py-20 perspective-2000"
     >
       <Particles count={24} />
-      
+
       {/* Cinematic Background Atmosphere */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(245,130,13,0.12),transparent_75%)]" />

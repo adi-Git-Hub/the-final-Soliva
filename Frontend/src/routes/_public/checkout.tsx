@@ -128,11 +128,9 @@ function CheckoutRoute() {
     setItems(
       items
         .map((i) =>
-          i.productId === productId
-            ? { ...i, quantity: Math.max(0, i.quantity + delta) }
-            : i
+          i.productId === productId ? { ...i, quantity: Math.max(0, i.quantity + delta) } : i,
         )
-        .filter((i) => i.quantity > 0)
+        .filter((i) => i.quantity > 0),
     );
   }
 
@@ -154,14 +152,16 @@ function CheckoutRoute() {
           const { latitude, longitude } = position.coords;
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`,
-            { headers: { "Accept-Language": "en" } }
+            { headers: { "Accept-Language": "en" } },
           );
           const data = await res.json();
           const addr = data.address || {};
 
           setForm((prev) => ({
             ...prev,
-            address: [addr.road, addr.neighbourhood, addr.suburb].filter(Boolean).join(", ") || prev.address,
+            address:
+              [addr.road, addr.neighbourhood, addr.suburb].filter(Boolean).join(", ") ||
+              prev.address,
             city: addr.city || addr.town || addr.village || addr.county || prev.city,
             state: addr.state || prev.state,
             pinCode: addr.postcode || prev.pinCode,
@@ -183,7 +183,7 @@ function CheckoutRoute() {
           toast.error("Could not detect location. Please enter manually.");
         }
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 10000 },
     );
   }
 
@@ -216,9 +216,7 @@ function CheckoutRoute() {
         name: i.name,
         quantity: i.quantity,
         price: i.price,
-        image: i.image.startsWith("http")
-          ? i.image
-          : `${window.location.origin}${i.image}`,
+        image: i.image.startsWith("http") ? i.image : `${window.location.origin}${i.image}`,
       }));
 
       const res = await createOrder.mutateAsync({
@@ -314,11 +312,7 @@ function CheckoutRoute() {
     <div className="relative min-h-screen w-full safe-x">
       {/* SOLIVA branded background */}
       <div className="fixed inset-0">
-        <img
-          src="/luxury-bg.webp"
-          alt=""
-          className="h-full w-full object-cover"
-        />
+        <img src="/luxury-bg.webp" alt="" className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/20 to-white/40" />
         <div className="absolute inset-0 backdrop-blur-[2px]" />
       </div>
@@ -336,9 +330,7 @@ function CheckoutRoute() {
             className="group flex items-center gap-2.5 text-ink-muted hover:text-brown-deep transition-colors duration-500"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-500" />
-            <span className="font-mono text-micro-md tracking-cta uppercase font-bold">
-              Back
-            </span>
+            <span className="font-mono text-micro-md tracking-cta uppercase font-bold">Back</span>
           </button>
         </motion.div>
 
@@ -384,10 +376,30 @@ function CheckoutRoute() {
                       className="overflow-hidden"
                     >
                       <div className="pt-6 sm:pt-8 space-y-5">
-                        <LuxuryInput label="Full Name" value={form.name} onChange={(v) => updateField("name", v)} placeholder="Aditya Cloud" required />
+                        <LuxuryInput
+                          label="Full Name"
+                          value={form.name}
+                          onChange={(v) => updateField("name", v)}
+                          placeholder="Aditya Cloud"
+                          required
+                        />
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                          <LuxuryInput label="Email" type="email" value={form.email} onChange={(v) => updateField("email", v)} placeholder="aditya@soliva.in" required />
-                          <LuxuryInput label="Phone" type="tel" value={form.phone} onChange={(v) => updateField("phone", v)} placeholder="+91 9876543210" required />
+                          <LuxuryInput
+                            label="Email"
+                            type="email"
+                            value={form.email}
+                            onChange={(v) => updateField("email", v)}
+                            placeholder="aditya@soliva.in"
+                            required
+                          />
+                          <LuxuryInput
+                            label="Phone"
+                            type="tel"
+                            value={form.phone}
+                            onChange={(v) => updateField("phone", v)}
+                            placeholder="+91 9876543210"
+                            required
+                          />
                         </div>
                         <div className="pt-2">
                           <button
@@ -446,14 +458,44 @@ function CheckoutRoute() {
                           )}
                         </motion.button>
 
-                        <LuxuryInput label="Address" value={form.address} onChange={(v) => updateField("address", v)} placeholder="123, Civil Lines" required />
+                        <LuxuryInput
+                          label="Address"
+                          value={form.address}
+                          onChange={(v) => updateField("address", v)}
+                          placeholder="123, Civil Lines"
+                          required
+                        />
                         <div className="grid grid-cols-2 gap-5">
-                          <LuxuryInput label="City" value={form.city} onChange={(v) => updateField("city", v)} placeholder="Nagpur" required />
-                          <LuxuryInput label="State" value={form.state} onChange={(v) => updateField("state", v)} placeholder="Maharashtra" required />
+                          <LuxuryInput
+                            label="City"
+                            value={form.city}
+                            onChange={(v) => updateField("city", v)}
+                            placeholder="Nagpur"
+                            required
+                          />
+                          <LuxuryInput
+                            label="State"
+                            value={form.state}
+                            onChange={(v) => updateField("state", v)}
+                            placeholder="Maharashtra"
+                            required
+                          />
                         </div>
                         <div className="grid grid-cols-2 gap-5">
-                          <LuxuryInput label="PIN Code" value={form.pinCode} onChange={(v) => updateField("pinCode", v)} placeholder="440001" required />
-                          <LuxuryInput label="Country" value={form.country} onChange={(v) => updateField("country", v)} placeholder="India" required />
+                          <LuxuryInput
+                            label="PIN Code"
+                            value={form.pinCode}
+                            onChange={(v) => updateField("pinCode", v)}
+                            placeholder="440001"
+                            required
+                          />
+                          <LuxuryInput
+                            label="Country"
+                            value={form.country}
+                            onChange={(v) => updateField("country", v)}
+                            placeholder="India"
+                            required
+                          />
                         </div>
                         <div className="pt-2">
                           <button
@@ -530,7 +572,10 @@ function CheckoutRoute() {
                                 />
                                 <div className="flex items-center gap-3 pt-1">
                                   {["GPay", "PhonePe", "Paytm"].map((app) => (
-                                    <span key={app} className="px-3 py-1.5 rounded-full bg-white/60 border border-white/70 text-micro-xs font-mono tracking-cta text-ink-muted uppercase font-bold">
+                                    <span
+                                      key={app}
+                                      className="px-3 py-1.5 rounded-full bg-white/60 border border-white/70 text-micro-xs font-mono tracking-cta text-ink-muted uppercase font-bold"
+                                    >
                                       {app}
                                     </span>
                                   ))}
@@ -589,24 +634,42 @@ function CheckoutRoute() {
                   {items.map((item) => (
                     <div key={item.productId} className="flex gap-4">
                       <div className="h-20 w-[68px] shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-[#F0F4FF] via-[#DBEAFE] to-[#BFDBFE] border border-line-soft">
-                        <img src={item.image} alt={item.name} className="h-full w-full object-contain p-1.5" />
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-full w-full object-contain p-1.5"
+                        />
                       </div>
                       <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
                         <div>
-                          <p className="text-sm text-brown-deep font-medium leading-snug">{item.name}</p>
-                          <p className="text-micro-xs text-ink-muted/60 font-mono mt-0.5">Midnight Blue</p>
+                          <p className="text-sm text-brown-deep font-medium leading-snug">
+                            {item.name}
+                          </p>
+                          <p className="text-micro-xs text-ink-muted/60 font-mono mt-0.5">
+                            Midnight Blue
+                          </p>
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="inline-flex items-center gap-0 rounded-full border border-line-soft bg-white/60">
-                            <button onClick={() => updateQuantity(item.productId, -1)} className="h-7 w-7 flex items-center justify-center text-ink-muted hover:text-brown-deep transition-colors">
+                            <button
+                              onClick={() => updateQuantity(item.productId, -1)}
+                              className="h-7 w-7 flex items-center justify-center text-ink-muted hover:text-brown-deep transition-colors"
+                            >
                               <Minus className="h-3 w-3" />
                             </button>
-                            <span className="w-6 text-center text-micro-sm font-mono font-bold text-brown-deep">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.productId, 1)} className="h-7 w-7 flex items-center justify-center text-ink-muted hover:text-brown-deep transition-colors">
+                            <span className="w-6 text-center text-micro-sm font-mono font-bold text-brown-deep">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() => updateQuantity(item.productId, 1)}
+                              className="h-7 w-7 flex items-center justify-center text-ink-muted hover:text-brown-deep transition-colors"
+                            >
                               <Plus className="h-3 w-3" />
                             </button>
                           </div>
-                          <span className="font-mono text-sm text-brown-deep font-medium">₹{(item.price * item.quantity).toLocaleString("en-IN")}</span>
+                          <span className="font-mono text-sm text-brown-deep font-medium">
+                            ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -618,11 +681,15 @@ function CheckoutRoute() {
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-ink-muted font-light">Subtotal</span>
-                    <span className="text-brown-deep font-mono">₹{subtotal.toLocaleString("en-IN")}</span>
+                    <span className="text-brown-deep font-mono">
+                      ₹{subtotal.toLocaleString("en-IN")}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-ink-muted font-light">Shipping</span>
-                    <span className="text-orange-glow font-mono text-micro-sm tracking-cta uppercase font-bold">Free</span>
+                    <span className="text-orange-glow font-mono text-micro-sm tracking-cta uppercase font-bold">
+                      Free
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-ink-muted font-light">GST</span>
@@ -633,7 +700,9 @@ function CheckoutRoute() {
                 <div className="mt-6 pt-6 border-t border-line-soft">
                   <div className="flex items-baseline justify-between">
                     <span className="text-sm text-ink-muted font-light">Total</span>
-                    <span className="font-display text-3xl text-brown-deep tracking-tight">₹{total.toLocaleString("en-IN")}</span>
+                    <span className="font-display text-3xl text-brown-deep tracking-tight">
+                      ₹{total.toLocaleString("en-IN")}
+                    </span>
                   </div>
                 </div>
 
@@ -685,14 +754,20 @@ function CheckoutRoute() {
         <div className="bg-white/80 backdrop-blur-md border-t border-line-soft px-4 py-3 safe-x">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-ink-muted">Total</span>
-            <span className="font-display text-xl text-brown-deep">₹{total.toLocaleString("en-IN")}</span>
+            <span className="font-display text-xl text-brown-deep">
+              ₹{total.toLocaleString("en-IN")}
+            </span>
           </div>
           <button
             onClick={handlePay}
             disabled={paying || !isReadyToPay}
             className="w-full rounded-2xl bg-brown-deep py-4 text-white font-mono text-micro-sm tracking-cta uppercase font-bold disabled:opacity-30 transition-all duration-500"
           >
-            {paying ? "Processing..." : isReadyToPay ? `Pay ₹${total.toLocaleString("en-IN")}` : "Complete all fields"}
+            {paying
+              ? "Processing..."
+              : isReadyToPay
+                ? `Pay ₹${total.toLocaleString("en-IN")}`
+                : "Complete all fields"}
           </button>
         </div>
       </div>
@@ -772,7 +847,8 @@ function LuxuryInput({
         transition={{ duration: 0.25, ease: ease.luxe }}
         className="absolute left-5 top-4 origin-left font-mono text-micro-sm tracking-cta uppercase font-bold text-ink-muted pointer-events-none"
       >
-        {label}{required && " *"}
+        {label}
+        {required && " *"}
       </motion.label>
       <input
         type={type}
@@ -824,8 +900,12 @@ function PaymentMethodCard({
           <Check className="h-3 w-3 text-white" />
         </motion.div>
       )}
-      <Icon className={`h-5 w-5 mb-3 transition-colors duration-500 ${selected ? "text-orange-glow" : "text-ink-muted/50"}`} />
-      <p className={`text-sm font-medium transition-colors duration-500 ${selected ? "text-brown-deep" : "text-ink-muted"}`}>
+      <Icon
+        className={`h-5 w-5 mb-3 transition-colors duration-500 ${selected ? "text-orange-glow" : "text-ink-muted/50"}`}
+      />
+      <p
+        className={`text-sm font-medium transition-colors duration-500 ${selected ? "text-brown-deep" : "text-ink-muted"}`}
+      >
         {method.label}
       </p>
       <p className="text-micro-xs text-ink-muted/50 font-mono mt-0.5">{method.sub}</p>

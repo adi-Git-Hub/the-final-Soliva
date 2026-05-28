@@ -67,7 +67,8 @@ function ProductsRoute() {
               Shop all
             </h1>
             <p className="text-body-xs sm:text-sm md:text-base text-ink-soft font-light italic">
-              {products.length} {products.length === 1 ? "piece" : "pieces"} thoughtfully engineered for movement.
+              {products.length} {products.length === 1 ? "piece" : "pieces"} thoughtfully engineered
+              for movement.
             </p>
           </motion.div>
           <motion.div

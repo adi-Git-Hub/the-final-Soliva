@@ -116,9 +116,10 @@ export function CollectionSection() {
             transition={{ delay: 0.4 }}
             className="mt-4 max-w-2xl text-xs md:text-sm text-[#7b6a5f] leading-relaxed font-light italic"
           >
-            Protective essentials thoughtfully designed for everyday exposure — supporting different routines, movement, and life stages.
+            Protective essentials thoughtfully designed for everyday exposure — supporting different
+            routines, movement, and life stages.
           </motion.p>
-          
+
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -200,10 +201,26 @@ export function CollectionSection() {
                     {p.name}
                   </h3>
                   <div className="space-y-1 mb-4">
-                     {i === 0 && <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">☀️ Enhanced Protection</p>}
-                     {i === 1 && <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">🌬 Breathable Comfort</p>}
-                     {i === 2 && <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">🛵 Everyday Movement</p>}
-                     {i >= 3 && <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">🛡 Full Coverage</p>}
+                    {i === 0 && (
+                      <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">
+                        ☀️ Enhanced Protection
+                      </p>
+                    )}
+                    {i === 1 && (
+                      <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">
+                        🌬 Breathable Comfort
+                      </p>
+                    )}
+                    {i === 2 && (
+                      <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">
+                        🛵 Everyday Movement
+                      </p>
+                    )}
+                    {i >= 3 && (
+                      <p className="text-[0.75rem] text-[#7b6a5f] font-light italic">
+                        🛡 Full Coverage
+                      </p>
+                    )}
                   </div>
                   <p className="text-[0.8125rem] leading-relaxed text-[#7b6a5f] font-light line-clamp-2">
                     {p.desc}
@@ -216,16 +233,31 @@ export function CollectionSection() {
 
         {/* Fabric Philosophy Block */}
         <div className="mt-16 sm:mt-24 p-10 sm:p-16 rounded-[4rem] bg-[#EAE2D8]/40 border border-[#3a2a22]/5 text-center max-w-4xl mx-auto">
-          <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold mb-6 block">Thoughtfully Selected Protection System</span>
-          <h4 className="font-display text-3xl md:text-4xl text-[#3a2a22] mb-8 leading-tight">Carefully selected materials designed to balance protection, comfort, and everyday wearability.</h4>
-          <p className="text-[1.125rem] text-[#7b6a5f] font-light leading-relaxed mb-12">Helping reduce environmental exposure while remaining breathable and comfortable for long outdoor hours.</p>
-          
+          <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold mb-6 block">
+            Thoughtfully Selected Protection System
+          </span>
+          <h4 className="font-display text-3xl md:text-4xl text-[#3a2a22] mb-8 leading-tight">
+            Carefully selected materials designed to balance protection, comfort, and everyday
+            wearability.
+          </h4>
+          <p className="text-[1.125rem] text-[#7b6a5f] font-light leading-relaxed mb-12">
+            Helping reduce environmental exposure while remaining breathable and comfortable for
+            long outdoor hours.
+          </p>
+
           <div className="flex flex-wrap justify-center gap-10">
-            {["Blush Pink", "Classic Beige", "Citrus Green", "Deep Blue"].map(c => (
-              <span key={c} className="font-mono text-[0.625rem] tracking-[0.2em] text-[#3a2a22] uppercase font-black">{c}</span>
+            {["Blush Pink", "Classic Beige", "Citrus Green", "Deep Blue"].map((c) => (
+              <span
+                key={c}
+                className="font-mono text-[0.625rem] tracking-[0.2em] text-[#3a2a22] uppercase font-black"
+              >
+                {c}
+              </span>
             ))}
           </div>
-          <p className="mt-8 font-mono text-[0.5rem] tracking-[0.2em] text-[#a08f84] uppercase">Thoughtfully selected tones designed for everyday wearability.</p>
+          <p className="mt-8 font-mono text-[0.5rem] tracking-[0.2em] text-[#a08f84] uppercase">
+            Thoughtfully selected tones designed for everyday wearability.
+          </p>
         </div>
 
         {/* Bottom CTA Text */}
@@ -252,13 +284,14 @@ export function CollectionSection() {
                 <span className="text-xs sm:text-sm md:text-body tracking-eyebrow sm:tracking-luxe text-brown-deep/80 uppercase font-bold hover:text-orange-glow transition-colors duration-700 cursor-default">
                   {line}
                 </span>
-                <span className="text-orange-glow/70 text-xl sm:text-2xl font-serif leading-none">✦</span>
+                <span className="text-orange-glow/70 text-xl sm:text-2xl font-serif leading-none">
+                  ✦
+                </span>
               </div>
             ))}
           </motion.div>
         </div>
       </div>
-
     </section>
   );
 }

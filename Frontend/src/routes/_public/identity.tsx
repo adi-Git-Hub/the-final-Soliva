@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_public/identity")({
 
 function IdentityRoute() {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   return (
     <main ref={containerRef} className="relative w-full bg-[#FAF7F3] min-h-screen">
       <BrandNarrative />

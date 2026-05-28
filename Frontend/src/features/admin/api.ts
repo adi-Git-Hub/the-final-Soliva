@@ -30,9 +30,7 @@ export function useAdminStats() {
   return useQuery({
     queryKey: adminKeys.stats(),
     queryFn: async () => {
-      const res = await api.get<EnvelopedResponse<{ stats: AdminStats }>>(
-        "/admin/dashboard",
-      );
+      const res = await api.get<EnvelopedResponse<{ stats: AdminStats }>>("/admin/dashboard");
       return res.data.stats;
     },
     staleTime: 30_000,

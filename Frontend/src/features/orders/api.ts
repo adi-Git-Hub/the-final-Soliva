@@ -55,10 +55,7 @@ export function useCreateOrder() {
       // need to thread it through lib/api.ts. For now we send it in the body
       // as an extra field the controller currently ignores — the request
       // wrapper additions (custom headers) are a Phase-4 task.
-      const res = await api.post<EnvelopedResponse<CreateOrderResponse>>(
-        "/orders",
-        input,
-      );
+      const res = await api.post<EnvelopedResponse<CreateOrderResponse>>("/orders", input);
       return res.data;
     },
     onSuccess: () => {

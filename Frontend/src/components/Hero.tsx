@@ -17,7 +17,7 @@ export function Hero({ isRevealed = false }: { isRevealed?: boolean }) {
       className="relative w-full bg-[#FAF7F3] pt-12 md:pt-16 pb-4 overflow-hidden"
     >
       <div className="mx-auto max-w-[1720px] px-3 sm:px-6">
-        <motion.div 
+        <motion.div
           style={{ opacity: scrollOpacity }}
           className="relative h-[88vh] md:h-[96vh] w-full rounded-[4rem] md:rounded-[7rem] overflow-hidden shadow-cinematic bg-white border border-[#3a2a22]/5"
         >
@@ -51,17 +51,31 @@ export function Hero({ isRevealed = false }: { isRevealed?: boolean }) {
                 className="flex gap-14 items-center pr-14"
               >
                 {[
-                  "UPF 50+ Protection", "Dual-Layer Comfort", "Full Coverage Design",
-                  "Breathable in Heat", "Lightweight Daily Wear", "No Smudging", "No More Messy Hair"
-                ].concat([
-                  "UPF 50+ Protection", "Dual-Layer Comfort", "Full Coverage Design",
-                  "Breathable in Heat", "Lightweight Daily Wear", "No Smudging", "No More Messy Hair"
-                ]).map((t, i) => (
-                  <div key={i} className="flex items-center gap-14">
-                    <span className="text-micro-sm tracking-[0.2em] text-white/70 font-bold uppercase">{t}</span>
-                    <span className="text-[#c76600]/60 font-serif text-xl">✦</span>
-                  </div>
-                ))}
+                  "UPF 50+ Protection",
+                  "Dual-Layer Comfort",
+                  "Full Coverage Design",
+                  "Breathable in Heat",
+                  "Lightweight Daily Wear",
+                  "No Smudging",
+                  "No More Messy Hair",
+                ]
+                  .concat([
+                    "UPF 50+ Protection",
+                    "Dual-Layer Comfort",
+                    "Full Coverage Design",
+                    "Breathable in Heat",
+                    "Lightweight Daily Wear",
+                    "No Smudging",
+                    "No More Messy Hair",
+                  ])
+                  .map((t, i) => (
+                    <div key={i} className="flex items-center gap-14">
+                      <span className="text-micro-sm tracking-[0.2em] text-white/70 font-bold uppercase">
+                        {t}
+                      </span>
+                      <span className="text-[#c76600]/60 font-serif text-xl">✦</span>
+                    </div>
+                  ))}
               </motion.div>
             </div>
           </div>

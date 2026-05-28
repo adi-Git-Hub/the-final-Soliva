@@ -39,58 +39,58 @@
   /* --- Display (clamp-based, recalibrated to codebase ground truth) ------ */
   /* Tokens use pure vw scaling (matches measured implementation) — earlier  */
   /* `Nvw + Mrem` spec did not survive contact with the actual layout.       */
-  --text-display-hero:     clamp(2.5rem,  11vw,  10rem);   /* 40 → 160 — Hero SOLIVA       */
-  --text-display-mega:     clamp(2.25rem, 8vw,   6rem);    /* 36 → 96  — FinalCTA PREMIERE */
-  --text-display-xl:       clamp(1.85rem, 7vw,   4.5rem);  /* 30 → 72  — Compare h2        */
-  --text-display-lg:       clamp(1.85rem, 7vw,   3.75rem); /* 30 → 60  — Profile, slug     */
-  --text-display-md:       clamp(1.6rem,  6.5vw, 4.5rem);  /* 26 → 72  — Video headline    */
-  --text-display-sm:       clamp(1.5rem,  6vw,   3rem);    /* 24 → 48  — Compare h4        */
-  --text-display-metric:   clamp(1.6rem,  5vw,   2.75rem); /* 26 → 44  — Compare metrics   */
+  --text-display-hero: clamp(2.5rem, 11vw, 10rem); /* 40 → 160 — Hero SOLIVA       */
+  --text-display-mega: clamp(2.25rem, 8vw, 6rem); /* 36 → 96  — FinalCTA PREMIERE */
+  --text-display-xl: clamp(1.85rem, 7vw, 4.5rem); /* 30 → 72  — Compare h2        */
+  --text-display-lg: clamp(1.85rem, 7vw, 3.75rem); /* 30 → 60  — Profile, slug     */
+  --text-display-md: clamp(1.6rem, 6.5vw, 4.5rem); /* 26 → 72  — Video headline    */
+  --text-display-sm: clamp(1.5rem, 6vw, 3rem); /* 24 → 48  — Compare h4        */
+  --text-display-metric: clamp(1.6rem, 5vw, 2.75rem); /* 26 → 44  — Compare metrics   */
 
   /* --- Heading (section h2/h3/h4) ---------------------------------------- */
-  --text-h1:               2.625rem;   /* 42 — Collection h2 */
-  --text-h2:               2.25rem;    /* 36 — Compare LEFT h3, Collection h4 */
-  --text-h3:               1.75rem;    /* 28 */
-  --text-h4:               1.5rem;     /* 24 — wordmark */
-  --text-h5:               1.25rem;    /* 20 — rationale h4 */
-  --text-h6:               1.125rem;   /* 18 */
+  --text-h1: 2.625rem; /* 42 — Collection h2 */
+  --text-h2: 2.25rem; /* 36 — Compare LEFT h3, Collection h4 */
+  --text-h3: 1.75rem; /* 28 */
+  --text-h4: 1.5rem; /* 24 — wordmark */
+  --text-h5: 1.25rem; /* 20 — rationale h4 */
+  --text-h6: 1.125rem; /* 18 */
 
   /* --- Body --------------------------------------------------------------- */
-  --text-body-lg:          1.0625rem;  /* 17 */
-  --text-body:             1rem;       /* 16 — text-base */
-  --text-body-sm:          0.875rem;   /* 14 — text-sm */
-  --text-body-xs:          0.8125rem;  /* 13 — compare bullets */
-  --text-caption:          0.75rem;    /* 12 — text-xs */
+  --text-body-lg: 1.0625rem; /* 17 */
+  --text-body: 1rem; /* 16 — text-base */
+  --text-body-sm: 0.875rem; /* 14 — text-sm */
+  --text-body-xs: 0.8125rem; /* 13 — compare bullets */
+  --text-caption: 0.75rem; /* 12 — text-xs */
 
   /* --- Micro (eyebrows, labels, mono badges) ----------------------------- */
-  --text-micro-lg:         0.6875rem;  /* 11 — nav links, rationale body */
-  --text-micro-md:         0.625rem;   /* 10 — eyebrows, micro-labels */
-  --text-micro-sm:         0.5625rem;  /* 9  — metric values */
-  --text-micro-xs:         0.5rem;     /* 8  — editorial micro-labels */
+  --text-micro-lg: 0.6875rem; /* 11 — nav links, rationale body */
+  --text-micro-md: 0.625rem; /* 10 — eyebrows, micro-labels */
+  --text-micro-sm: 0.5625rem; /* 9  — metric values */
+  --text-micro-xs: 0.5rem; /* 8  — editorial micro-labels */
 
   /* --- Tracking (letter-spacing) — luxury cadence ------------------------- */
   /* Names are deliberately disjoint from Tailwind utility names              */
   /* (tracking-tight/-tighter/-wide/-wider/-widest) — those Tailwind defaults */
   /* remain in use as a complementary small-spacing scale.                   */
-  --tracking-display:      -0.03em;    /* display headlines */
-  --tracking-soft:         0.05em;
-  --tracking-nav:          0.15em;     /* navigation, italic body */
-  --tracking-cta:          0.2em;      /* CTAs, button labels */
-  --tracking-eyebrow:      0.3em;      /* eyebrows, micro-labels */
-  --tracking-luxe:         0.45em;     /* mono labels at body size */
-  --tracking-editorial:    0.6em;      /* sparse editorial eyebrows */
-  --tracking-runway:       0.8em;      /* runway-tier headers, sparingly */
+  --tracking-display: -0.03em; /* display headlines */
+  --tracking-soft: 0.05em;
+  --tracking-nav: 0.15em; /* navigation, italic body */
+  --tracking-cta: 0.2em; /* CTAs, button labels */
+  --tracking-eyebrow: 0.3em; /* eyebrows, micro-labels */
+  --tracking-luxe: 0.45em; /* mono labels at body size */
+  --tracking-editorial: 0.6em; /* sparse editorial eyebrows */
+  --tracking-runway: 0.8em; /* runway-tier headers, sparingly */
 
   /* --- Leading (line-height) — display tier only -------------------------- */
   /* Tailwind's leading-none/-tight/-snug/-relaxed/-loose handle body rhythm. */
-  --leading-hero:          1.05;            /* display, single-line headlines */
-  --leading-display-tight: 1.1;             /* multi-line h1/h2 */
-  --leading-display-snug:  1.2;             /* sub-headings with breath */
+  --leading-hero: 1.05; /* display, single-line headlines */
+  --leading-display-tight: 1.1; /* multi-line h1/h2 */
+  --leading-display-snug: 1.2; /* sub-headings with breath */
 
   /* --- Font families (mirror existing) ----------------------------------- */
-  --font-display-ds:       "Cormorant Garamond", "Times New Roman", serif;
-  --font-body-ds:          "Inter", system-ui, sans-serif;
-  --font-mono-ds:          "JetBrains Mono", ui-monospace, monospace;
+  --font-display-ds: "Cormorant Garamond", "Times New Roman", serif;
+  --font-body-ds: "Inter", system-ui, sans-serif;
+  --font-mono-ds: "JetBrains Mono", ui-monospace, monospace;
 
   /* ════════════════════════════════════════════════════════════════════════
    * 2. SPACING
@@ -102,74 +102,74 @@
    * ════════════════════════════════════════════════════════════════════════ */
 
   /* --- Atomic scale (8-pt base) ------------------------------------------ */
-  --space-0:               0;
-  --space-px:              1px;
-  --space-1:               0.25rem;    /* 4  */
-  --space-2:               0.5rem;     /* 8  */
-  --space-3:               0.75rem;    /* 12 */
-  --space-4:               1rem;       /* 16 */
-  --space-5:               1.25rem;    /* 20 */
-  --space-6:               1.5rem;     /* 24 */
-  --space-8:               2rem;       /* 32 */
-  --space-10:              2.5rem;     /* 40 */
-  --space-12:              3rem;       /* 48 */
-  --space-14:              3.5rem;     /* 56 */
-  --space-16:              4rem;       /* 64 */
-  --space-20:              5rem;       /* 80 */
-  --space-24:              6rem;       /* 96 */
-  --space-32:              8rem;       /* 128 */
-  --space-40:              10rem;      /* 160 */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-1: 0.25rem; /* 4  */
+  --space-2: 0.5rem; /* 8  */
+  --space-3: 0.75rem; /* 12 */
+  --space-4: 1rem; /* 16 */
+  --space-5: 1.25rem; /* 20 */
+  --space-6: 1.5rem; /* 24 */
+  --space-8: 2rem; /* 32 */
+  --space-10: 2.5rem; /* 40 */
+  --space-12: 3rem; /* 48 */
+  --space-14: 3.5rem; /* 56 */
+  --space-16: 4rem; /* 64 */
+  --space-20: 5rem; /* 80 */
+  --space-24: 6rem; /* 96 */
+  --space-32: 8rem; /* 128 */
+  --space-40: 10rem; /* 160 */
 
   /* --- Section rhythm (vertical) ----------------------------------------- */
-  --space-section-y-xs:    var(--space-12);  /* compact strip */
-  --space-section-y-sm:    var(--space-16);  /* default compact */
-  --space-section-y:       var(--space-20);  /* default */
-  --space-section-y-lg:    var(--space-24);  /* tall */
-  --space-section-y-xl:    var(--space-32);  /* hero-adjacent */
+  --space-section-y-xs: var(--space-12); /* compact strip */
+  --space-section-y-sm: var(--space-16); /* default compact */
+  --space-section-y: var(--space-20); /* default */
+  --space-section-y-lg: var(--space-24); /* tall */
+  --space-section-y-xl: var(--space-32); /* hero-adjacent */
 
   /* --- Inter-section gap (between two sections, when not flush) ---------- */
-  --space-section-gap:     var(--space-24);  /* 96 — used by footers, CTAs */
-  --space-section-gap-sm:  var(--space-16);
+  --space-section-gap: var(--space-24); /* 96 — used by footers, CTAs */
+  --space-section-gap-sm: var(--space-16);
 
   /* --- Stack rhythm (between elements within a section) ------------------ */
-  --space-stack-2xs:       var(--space-1);
-  --space-stack-xs:        var(--space-2);
-  --space-stack-sm:        var(--space-3);
-  --space-stack-md:        var(--space-4);
-  --space-stack-lg:        var(--space-6);
-  --space-stack-xl:        var(--space-8);
-  --space-stack-2xl:       var(--space-12);
-  --space-stack-3xl:       var(--space-20);
+  --space-stack-2xs: var(--space-1);
+  --space-stack-xs: var(--space-2);
+  --space-stack-sm: var(--space-3);
+  --space-stack-md: var(--space-4);
+  --space-stack-lg: var(--space-6);
+  --space-stack-xl: var(--space-8);
+  --space-stack-2xl: var(--space-12);
+  --space-stack-3xl: var(--space-20);
 
   /* --- Card interior padding --------------------------------------------- */
-  --space-card-sm:         var(--space-4);   /* badges, line items */
-  --space-card:            var(--space-6);   /* compact cards */
-  --space-card-lg:         var(--space-8);   /* standard cards */
-  --space-card-xl:         var(--space-10);  /* editorial panels */
-  --space-card-2xl:        var(--space-12);  /* large editorial */
-  --space-card-3xl:        var(--space-16);  /* hero shells */
+  --space-card-sm: var(--space-4); /* badges, line items */
+  --space-card: var(--space-6); /* compact cards */
+  --space-card-lg: var(--space-8); /* standard cards */
+  --space-card-xl: var(--space-10); /* editorial panels */
+  --space-card-2xl: var(--space-12); /* large editorial */
+  --space-card-3xl: var(--space-16); /* hero shells */
 
   /* --- Grid gap (between siblings in a grid) ----------------------------- */
-  --space-grid-tight:      var(--space-3);   /* metric grids */
-  --space-grid-sm:         var(--space-4);   /* collection cards */
-  --space-grid:            var(--space-6);   /* 5-up stressor grid */
-  --space-grid-lg:         var(--space-8);   /* compare 2-up */
-  --space-grid-xl:         var(--space-10);  /* header nav, footer columns */
-  --space-grid-2xl:        var(--space-20);  /* storytelling 2-up */
+  --space-grid-tight: var(--space-3); /* metric grids */
+  --space-grid-sm: var(--space-4); /* collection cards */
+  --space-grid: var(--space-6); /* 5-up stressor grid */
+  --space-grid-lg: var(--space-8); /* compare 2-up */
+  --space-grid-xl: var(--space-10); /* header nav, footer columns */
+  --space-grid-2xl: var(--space-20); /* storytelling 2-up */
 
   /* --- Rail (horizontal gutter — section padding-x) ---------------------- */
-  --space-rail-tight:      var(--space-4);   /* mobile */
-  --space-rail-sm:         var(--space-6);
-  --space-rail:            var(--space-8);   /* default */
-  --space-rail-lg:         var(--space-12);  /* catalog */
-  --space-rail-xl:         var(--space-20);  /* hero navbar */
+  --space-rail-tight: var(--space-4); /* mobile */
+  --space-rail-sm: var(--space-6);
+  --space-rail: var(--space-8); /* default */
+  --space-rail-lg: var(--space-12); /* catalog */
+  --space-rail-xl: var(--space-20); /* hero navbar */
 
   /* --- Container widths -------------------------------------------------- */
-  --container-content:     80rem;            /* 1280 — max-w-7xl */
-  --container-editorial:   90rem;            /* 1440 — max-w-[90rem] */
-  --container-prose:       48rem;            /* 768  — max-w-3xl */
-  --container-reading:     42rem;            /* 672  — max-w-2xl */
-  --container-narrow:      28rem;            /* 448  — max-w-md  */
+  --container-content: 80rem; /* 1280 — max-w-7xl */
+  --container-editorial: 90rem; /* 1440 — max-w-[90rem] */
+  --container-prose: 48rem; /* 768  — max-w-3xl */
+  --container-reading: 42rem; /* 672  — max-w-2xl */
+  --container-narrow: 28rem; /* 448  — max-w-md  */
 
   /* ════════════════════════════════════════════════════════════════════════
    * 3. COLOR — Semantic tokens layered over the raw palette
@@ -184,57 +184,57 @@
    * ════════════════════════════════════════════════════════════════════════ */
 
   /* --- Raw palette references (mirror styles.css) ------------------------ */
-  --ds-luxury-beige:       #f7f3ee;
-  --ds-cream:              #f3ece2;
-  --ds-secondary:          #efe6da;
-  --ds-brown:              #7b6a5f;
-  --ds-brown-deep:         #3a2a22;
-  --ds-orange-glow:        #f5820d;
-  --ds-orange-deep:        #c76600;
-  --ds-muted-foreground:   #a08f84;
+  --ds-luxury-beige: #f7f3ee;
+  --ds-cream: #f3ece2;
+  --ds-secondary: #efe6da;
+  --ds-brown: #7b6a5f;
+  --ds-brown-deep: #3a2a22;
+  --ds-orange-glow: #f5820d;
+  --ds-orange-deep: #c76600;
+  --ds-muted-foreground: #a08f84;
 
   /* --- Surfaces (backgrounds) -------------------------------------------- */
-  --surface-base:          var(--ds-luxury-beige);
-  --surface-raised:        var(--ds-cream);
-  --surface-muted:         var(--ds-secondary);
-  --surface-panel:         rgba(255, 255, 255, 0.10);
-  --surface-panel-strong:  rgba(255, 255, 255, 0.20);
-  --surface-glass:         rgba(255, 255, 255, 0.25);
-  --surface-glass-strong:  rgba(255, 255, 255, 0.40);
-  --surface-glass-ghost:   rgba(255, 255, 255, 0.05);
-  --surface-cream-veil:    rgba(243, 236, 226, 0.30);
+  --surface-base: var(--ds-luxury-beige);
+  --surface-raised: var(--ds-cream);
+  --surface-muted: var(--ds-secondary);
+  --surface-panel: rgba(255, 255, 255, 0.1);
+  --surface-panel-strong: rgba(255, 255, 255, 0.2);
+  --surface-glass: rgba(255, 255, 255, 0.25);
+  --surface-glass-strong: rgba(255, 255, 255, 0.4);
+  --surface-glass-ghost: rgba(255, 255, 255, 0.05);
+  --surface-cream-veil: rgba(243, 236, 226, 0.3);
 
   /* Scrims (overlay washes on imagery / dark CTAs) ------------------------ */
-  --surface-scrim-light:   rgba(58, 42, 34, 0.20);
-  --surface-scrim-medium:  rgba(58, 42, 34, 0.40);
-  --surface-scrim-dark:    rgba(58, 42, 34, 0.82);
-  --surface-scrim-cinema:  rgba(42, 30, 23, 0.86);
+  --surface-scrim-light: rgba(58, 42, 34, 0.2);
+  --surface-scrim-medium: rgba(58, 42, 34, 0.4);
+  --surface-scrim-dark: rgba(58, 42, 34, 0.82);
+  --surface-scrim-cinema: rgba(42, 30, 23, 0.86);
 
   /* --- Ink (foregrounds) — readability-first ----------------------------- */
-  --ink-strong:            var(--ds-brown-deep);                /* headings */
-  --ink-default:           var(--ds-brown);                     /* body */
-  --ink-soft:              rgba(123, 106, 95, 0.80);            /* secondary */
-  --ink-muted:             var(--ds-muted-foreground);          /* tertiary */
-  --ink-faint:             rgba(58, 42, 34, 0.50);              /* labels at rest */
-  --ink-disabled:          rgba(58, 42, 34, 0.30);
-  --ink-on-dark:           var(--ds-luxury-beige);              /* text on dark veil */
-  --ink-on-accent:         #ffffff;                             /* text on orange */
+  --ink-strong: var(--ds-brown-deep); /* headings */
+  --ink-default: var(--ds-brown); /* body */
+  --ink-soft: rgba(123, 106, 95, 0.8); /* secondary */
+  --ink-muted: var(--ds-muted-foreground); /* tertiary */
+  --ink-faint: rgba(58, 42, 34, 0.5); /* labels at rest */
+  --ink-disabled: rgba(58, 42, 34, 0.3);
+  --ink-on-dark: var(--ds-luxury-beige); /* text on dark veil */
+  --ink-on-accent: #ffffff; /* text on orange */
 
   /* --- Line (borders / hairlines) ---------------------------------------- */
-  --line-hairline:         rgba(58, 42, 34, 0.06);              /* faintest */
-  --line-soft:             rgba(58, 42, 34, 0.10);              /* default card */
-  --line-medium:           rgba(58, 42, 34, 0.15);              /* marquees, dividers */
-  --line-strong:           rgba(58, 42, 34, 0.25);              /* emphasis */
-  --line-accent:           rgba(245, 130, 13, 0.30);            /* CTA outlines */
-  --line-on-dark:          rgba(247, 243, 238, 0.10);
+  --line-hairline: rgba(58, 42, 34, 0.06); /* faintest */
+  --line-soft: rgba(58, 42, 34, 0.1); /* default card */
+  --line-medium: rgba(58, 42, 34, 0.15); /* marquees, dividers */
+  --line-strong: rgba(58, 42, 34, 0.25); /* emphasis */
+  --line-accent: rgba(245, 130, 13, 0.3); /* CTA outlines */
+  --line-on-dark: rgba(247, 243, 238, 0.1);
 
   /* --- Accent (orange glow + variants) ----------------------------------- */
-  --accent:                var(--ds-orange-glow);
-  --accent-strong:         var(--ds-orange-deep);
-  --accent-soft:           rgba(245, 130, 13, 0.60);
-  --accent-faint:          rgba(245, 130, 13, 0.20);
-  --accent-ghost:          rgba(245, 130, 13, 0.06);
-  --accent-glow-aura:      rgba(245, 130, 13, 0.40);            /* hover halo */
+  --accent: var(--ds-orange-glow);
+  --accent-strong: var(--ds-orange-deep);
+  --accent-soft: rgba(245, 130, 13, 0.6);
+  --accent-faint: rgba(245, 130, 13, 0.2);
+  --accent-ghost: rgba(245, 130, 13, 0.06);
+  --accent-glow-aura: rgba(245, 130, 13, 0.4); /* hover halo */
 
   /* ════════════════════════════════════════════════════════════════════════
    * 4. RADIUS — Editorial corner ladder
@@ -243,17 +243,17 @@
    * every panel of that role across the site.
    * ════════════════════════════════════════════════════════════════════════ */
 
-  --radius-ds-none:        0;
-  --radius-ds-sm:          0.375rem;   /* 6  — inputs, badges */
-  --radius-ds-md:          0.75rem;    /* 12 — order rows, line items */
-  --radius-ds-lg:          1rem;       /* 16 — thumbnails, mini cards */
-  --radius-ds-xl:          1.5rem;     /* 24 — stressor cards */
-  --radius-ds-panel-sm:    2rem;       /* 32 — small editorial */
-  --radius-ds-panel:       2.5rem;     /* 40 — panels */
-  --radius-ds-panel-lg:    3rem;       /* 48 — most editorial panels */
-  --radius-ds-shell:       3.5rem;     /* 56 — gallery shell */
-  --radius-ds-shell-lg:    4rem;       /* 64 — compare outer shell */
-  --radius-ds-pill:        9999px;     /* pills, badges, CTAs */
+  --radius-ds-none: 0;
+  --radius-ds-sm: 0.375rem; /* 6  — inputs, badges */
+  --radius-ds-md: 0.75rem; /* 12 — order rows, line items */
+  --radius-ds-lg: 1rem; /* 16 — thumbnails, mini cards */
+  --radius-ds-xl: 1.5rem; /* 24 — stressor cards */
+  --radius-ds-panel-sm: 2rem; /* 32 — small editorial */
+  --radius-ds-panel: 2.5rem; /* 40 — panels */
+  --radius-ds-panel-lg: 3rem; /* 48 — most editorial panels */
+  --radius-ds-shell: 3.5rem; /* 56 — gallery shell */
+  --radius-ds-shell-lg: 4rem; /* 64 — compare outer shell */
+  --radius-ds-pill: 9999px; /* pills, badges, CTAs */
 
   /* ════════════════════════════════════════════════════════════════════════
    * 5. SHADOW — Elevation ladder (cleaner depth, less muddy)
@@ -263,25 +263,25 @@
    * Inset shadows preserve the inner-cream highlight on luxury panels.
    * ════════════════════════════════════════════════════════════════════════ */
 
-  --shadow-ds-none:        none;
-  --shadow-ds-hairline:    0 1px 0 0 rgba(58, 42, 34, 0.04);
-  --shadow-ds-soft:        0 4px 16px -8px rgba(58, 42, 34, 0.08);
-  --shadow-ds-card:        0 8px 24px -12px rgba(58, 42, 34, 0.12);
-  --shadow-ds-floating:    0 16px 40px -16px rgba(58, 42, 34, 0.16);
-  --shadow-ds-editorial:   0 40px 100px -40px rgba(58, 42, 34, 0.18);
-  --shadow-ds-cinematic:   0 40px 100px -20px rgba(0, 0, 0, 0.40);
+  --shadow-ds-none: none;
+  --shadow-ds-hairline: 0 1px 0 0 rgba(58, 42, 34, 0.04);
+  --shadow-ds-soft: 0 4px 16px -8px rgba(58, 42, 34, 0.08);
+  --shadow-ds-card: 0 8px 24px -12px rgba(58, 42, 34, 0.12);
+  --shadow-ds-floating: 0 16px 40px -16px rgba(58, 42, 34, 0.16);
+  --shadow-ds-editorial: 0 40px 100px -40px rgba(58, 42, 34, 0.18);
+  --shadow-ds-cinematic: 0 40px 100px -20px rgba(0, 0, 0, 0.4);
 
   /* Inset highlight — luxury panel inner glow ----------------------------- */
-  --shadow-ds-inset-cream: inset 0 0 80px rgba(243, 236, 226, 0.30);
-  --shadow-ds-inset-line:  inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  --shadow-ds-inset-cream: inset 0 0 80px rgba(243, 236, 226, 0.3);
+  --shadow-ds-inset-line: inset 0 1px 0 rgba(255, 255, 255, 0.45);
 
   /* Accent glow — focus/hover on orange CTAs ------------------------------ */
-  --shadow-ds-glow-soft:   0 0 24px rgba(245, 130, 13, 0.18);
-  --shadow-ds-glow:        0 12px 32px -8px rgba(245, 130, 13, 0.32);
-  --shadow-ds-glow-strong: 0 16px 40px -8px rgba(245, 130, 13, 0.40);
+  --shadow-ds-glow-soft: 0 0 24px rgba(245, 130, 13, 0.18);
+  --shadow-ds-glow: 0 12px 32px -8px rgba(245, 130, 13, 0.32);
+  --shadow-ds-glow-strong: 0 16px 40px -8px rgba(245, 130, 13, 0.4);
 
   /* Strip shadow — footer / marquee transition ---------------------------- */
-  --shadow-ds-strip-top:   0 -10px 40px rgba(58, 42, 34, 0.05);
+  --shadow-ds-strip-top: 0 -10px 40px rgba(58, 42, 34, 0.05);
 
   /* ════════════════════════════════════════════════════════════════════════
    * 6. BLUR — Backdrop ladder (restraint over excess)
@@ -291,42 +291,42 @@
    * specific moments (hero atmospherics, dark veil CTAs).
    * ════════════════════════════════════════════════════════════════════════ */
 
-  --blur-ds-none:          0;
-  --blur-ds-subtle:        4px;        /* hint of frost */
-  --blur-ds-soft:          8px;        /* default glass */
-  --blur-ds-medium:        12px;       /* editorial panels */
-  --blur-ds-strong:        20px;       /* hero rails */
-  --blur-ds-atmospheric:   40px;       /* backdrop atmosphere only */
+  --blur-ds-none: 0;
+  --blur-ds-subtle: 4px; /* hint of frost */
+  --blur-ds-soft: 8px; /* default glass */
+  --blur-ds-medium: 12px; /* editorial panels */
+  --blur-ds-strong: 20px; /* hero rails */
+  --blur-ds-atmospheric: 40px; /* backdrop atmosphere only */
 
   /* ════════════════════════════════════════════════════════════════════════
    * 7. MOTION — Easings + durations for luxury rhythm
    * ════════════════════════════════════════════════════════════════════════ */
 
-  --ease-standard:         cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out-editorial:    cubic-bezier(0.19, 1, 0.22, 1);     /* slow tail */
-  --ease-in-editorial:     cubic-bezier(0.78, 0, 0.81, 0);
-  --ease-bounce:           cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-editorial: cubic-bezier(0.19, 1, 0.22, 1); /* slow tail */
+  --ease-in-editorial: cubic-bezier(0.78, 0, 0.81, 0);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --dur-instant:           120ms;
-  --dur-fast:              200ms;
-  --dur-base:              320ms;
-  --dur-slow:              500ms;
-  --dur-cinema:            800ms;
-  --dur-reveal:            1200ms;
+  --dur-instant: 120ms;
+  --dur-fast: 200ms;
+  --dur-base: 320ms;
+  --dur-slow: 500ms;
+  --dur-cinema: 800ms;
+  --dur-reveal: 1200ms;
 
   /* ════════════════════════════════════════════════════════════════════════
    * 8. Z-INDEX — Depth audit (matches layout.md §12)
    * ════════════════════════════════════════════════════════════════════════ */
 
-  --z-bg-image:            -10;
-  --z-atmosphere:          0;
-  --z-section-content:     10;
-  --z-rails:               20;
-  --z-header:              40;
-  --z-storytelling-strip:  50;
-  --z-loader:              100;
-  --z-modal:               200;
-  --z-toast:               300;
+  --z-bg-image: -10;
+  --z-atmosphere: 0;
+  --z-section-content: 10;
+  --z-rails: 20;
+  --z-header: 40;
+  --z-storytelling-strip: 50;
+  --z-loader: 100;
+  --z-modal: 200;
+  --z-toast: 300;
 }
 
 /* ============================================================================

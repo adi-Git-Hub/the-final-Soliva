@@ -1,10 +1,10 @@
 /**
  * SkeletonCard — cinematic atmospheric placeholder.
- * 
+ *
  * Transforms data-fetch states into editorial "preview" surfaces.
  * Eschews utility-grade gray bars for warm, layered neutral tones and
  * high-inertia atmospheric shimmer.
- * 
+ *
  * Design: Material-aware glass depth and soft highlight falloff.
  * Motion: Inertia-driven shimmer (2.4s cycle) using GPU-accelerated transforms.
  */
@@ -29,11 +29,7 @@ const VARIANT_DIMENSIONS: Record<SkeletonVariant, { aspect?: string; minHeight?:
   block: { minHeight: "14rem" },
 };
 
-export function SkeletonCard({
-  variant = "product",
-  className,
-  aspectRatio,
-}: SkeletonCardProps) {
+export function SkeletonCard({ variant = "product", className, aspectRatio }: SkeletonCardProps) {
   const dims = VARIANT_DIMENSIONS[variant];
   const shouldReduceMotion = useReducedMotion();
 
@@ -42,7 +38,7 @@ export function SkeletonCard({
       className={cn(
         "relative overflow-hidden border border-line-hairline bg-surface-muted",
         "shadow-inner-highlight", // Atmospheric depth layer
-        className
+        className,
       )}
       style={{
         aspectRatio: aspectRatio ?? dims.aspect,
@@ -69,7 +65,8 @@ export function SkeletonCard({
           }}
           className="absolute inset-0 w-1/2 pointer-events-none"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)",
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)",
           }}
         />
       )}

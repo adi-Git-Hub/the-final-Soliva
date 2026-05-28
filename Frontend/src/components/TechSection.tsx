@@ -47,12 +47,12 @@ export function TechSection() {
       {/* LUXURY EDITORIAL BACKGROUND SYSTEM */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Drifting Mesh Gradients */}
-        <div 
-          className="absolute top-0 left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_20%_30%,rgba(245,130,13,0.04),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(252,231,243,0.5),transparent_60%)] opacity-80 transition-transform duration-1000" 
+        <div
+          className="absolute top-0 left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_20%_30%,rgba(245,130,13,0.04),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(252,231,243,0.5),transparent_60%)] opacity-80 transition-transform duration-1000"
           style={{ transform: `translate3d(0, ${scrollY * 0.05}px, 0)` }}
         />
-        <div 
-          className="absolute bottom-[-10%] right-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_70%_80%,rgba(243,236,226,1),transparent_50%),radial-gradient(circle_at_30%_90%,rgba(245,130,13,0.06),transparent_40%)] opacity-70 transition-transform duration-1000" 
+        <div
+          className="absolute bottom-[-10%] right-[-10%] w-[120%] h-[120%] bg-[radial-gradient(circle_at_70%_80%,rgba(243,236,226,1),transparent_50%),radial-gradient(circle_at_30%_90%,rgba(245,130,13,0.06),transparent_40%)] opacity-70 transition-transform duration-1000"
           style={{ transform: `translate3d(0, ${scrollY * -0.05}px, 0)` }}
         />
         <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
@@ -67,11 +67,13 @@ export function TechSection() {
             </span>
             <div className="h-px w-8 bg-brown/20" />
           </div>
-          
+
           <h2 className="font-display text-4xl md:text-6xl lg:text-7xl text-brown-deep leading-hero tracking-tight">
             Engineered as a
             <br />
-            <span className="italic font-serif text-orange-glow drop-shadow-glow-soft">single layer of relief.</span>
+            <span className="italic font-serif text-orange-glow drop-shadow-glow-soft">
+              single layer of relief.
+            </span>
           </h2>
         </div>
 

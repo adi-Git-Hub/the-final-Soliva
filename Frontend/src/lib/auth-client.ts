@@ -105,11 +105,7 @@ export const authClient = {
   },
 
   /** Resets password and signs the user in (backend issues JWT cookie). */
-  async resetPassword(input: {
-    email: string;
-    otp: string;
-    password: string;
-  }): Promise<Session> {
+  async resetPassword(input: { email: string; otp: string; password: string }): Promise<Session> {
     const res = await api.post<SendTokenResponse>("/auth/reset-password", input);
     return { user: normalizeUser(res.user) };
   },

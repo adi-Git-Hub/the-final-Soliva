@@ -192,13 +192,15 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
       toast.error("Product loading, please try again");
       return;
     }
-    setCheckoutItems([{
-      productId,
-      name: product.name,
-      image: product.image,
-      price: product.priceCents / 100,
-      quantity: 1,
-    }]);
+    setCheckoutItems([
+      {
+        productId,
+        name: product.name,
+        image: product.image,
+        price: product.priceCents / 100,
+        quantity: 1,
+      },
+    ]);
     navigate({ to: "/checkout" });
   }
 
@@ -217,11 +219,17 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
           transition={{ duration: 0.6 }}
           className="mb-8 sm:mb-12 flex items-center gap-1.5 sm:gap-2 font-mono text-micro-md tracking-cta text-ink-muted uppercase font-bold"
         >
-          <Link to="/" className="hover:text-brown-deep transition-colors">Home</Link>
+          <Link to="/" className="hover:text-brown-deep transition-colors">
+            Home
+          </Link>
           <ChevronRight className="h-3 w-3 opacity-50" />
-          <Link to="/collection" className="hover:text-brown-deep transition-colors">Collection</Link>
+          <Link to="/collection" className="hover:text-brown-deep transition-colors">
+            Collection
+          </Link>
           <ChevronRight className="h-3 w-3 opacity-50" />
-          <span className="text-brown-deep truncate max-w-[50vw] sm:max-w-none">{product.name}</span>
+          <span className="text-brown-deep truncate max-w-[50vw] sm:max-w-none">
+            {product.name}
+          </span>
         </motion.nav>
 
         {/* Split layout */}
@@ -259,13 +267,19 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
                 {/* Edition chip */}
                 <div className="absolute top-5 sm:top-6 left-5 sm:left-6 bg-surface-glass-strong backdrop-blur-subtle rounded-2xl px-3 py-2 shadow-sm">
                   <div className="flex flex-col items-center gap-0.5">
-                    <span className="font-mono text-micro-xs tracking-cta text-brown-deep/60 uppercase font-bold">Edition</span>
-                    <span className="font-mono text-sm tracking-tighter text-brown-deep font-bold">{editionId}</span>
+                    <span className="font-mono text-micro-xs tracking-cta text-brown-deep/60 uppercase font-bold">
+                      Edition
+                    </span>
+                    <span className="font-mono text-sm tracking-tighter text-brown-deep font-bold">
+                      {editionId}
+                    </span>
                   </div>
                 </div>
 
                 <div className="absolute top-5 sm:top-6 right-5 sm:right-6 bg-surface-glass-strong backdrop-blur-subtle rounded-full px-3 py-1.5 shadow-sm">
-                  <span className="font-mono text-micro-xs tracking-cta text-orange-glow uppercase font-bold">Launch</span>
+                  <span className="font-mono text-micro-xs tracking-cta text-orange-glow uppercase font-bold">
+                    Launch
+                  </span>
                 </div>
               </div>
             </div>
@@ -389,9 +403,7 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
                   <dt className="font-mono text-micro-xs tracking-cta text-ink-muted uppercase font-bold">
                     {spec.label}
                   </dt>
-                  <dd className="font-display text-base text-brown-deep italic">
-                    {spec.value}
-                  </dd>
+                  <dd className="font-display text-base text-brown-deep italic">{spec.value}</dd>
                 </div>
               ))}
             </div>
@@ -444,13 +456,15 @@ function ApiProductDetail({ slug }: { slug: string }) {
       toast.message("Sign in to continue");
       return;
     }
-    setCheckoutItems([{
-      productId: product.id,
-      name: product.name,
-      image: product.images[0],
-      price: product.priceCents / 100,
-      quantity: 1,
-    }]);
+    setCheckoutItems([
+      {
+        productId: product.id,
+        name: product.name,
+        image: product.images[0],
+        price: product.priceCents / 100,
+        quantity: 1,
+      },
+    ]);
     navigate({ to: "/checkout" });
   }
 
@@ -466,7 +480,9 @@ function ApiProductDetail({ slug }: { slug: string }) {
           animate={{ opacity: 1 }}
           className="mb-8 sm:mb-12 flex items-center gap-1.5 sm:gap-2 font-mono text-micro-md tracking-cta text-ink-muted uppercase font-bold"
         >
-          <Link to="/" className="hover:text-brown-deep transition-colors">Home</Link>
+          <Link to="/" className="hover:text-brown-deep transition-colors">
+            Home
+          </Link>
           <ChevronRight className="h-3 w-3 opacity-50" />
           <span className="text-brown-deep truncate">{product.name}</span>
         </motion.nav>

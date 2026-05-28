@@ -179,12 +179,7 @@ export function RegisterForm({ redirectTo: _redirectTo }: { redirectTo?: string 
             title="SMS delivery coming soon — we'll keep the OTP via email for now"
             className="flex cursor-not-allowed items-center gap-2 rounded-md border border-border/40 px-3 py-2 text-sm text-muted-foreground/60 opacity-70"
           >
-            <input
-              type="radio"
-              value="phone"
-              disabled
-              className="accent-foreground"
-            />
+            <input type="radio" value="phone" disabled className="accent-foreground" />
             Phone
             <span className="ml-auto rounded-full bg-muted px-1.5 py-0.5 text-[9px] uppercase tracking-wider">
               Soon
@@ -206,12 +201,7 @@ export function RegisterForm({ redirectTo: _redirectTo }: { redirectTo?: string 
 
       <div className="space-y-1.5">
         <Label htmlFor="confirm">Confirm password</Label>
-        <Input
-          id="confirm"
-          type="password"
-          autoComplete="new-password"
-          {...register("confirm")}
-        />
+        <Input id="confirm" type="password" autoComplete="new-password" {...register("confirm")} />
         {errors.confirm && <p className="text-xs text-destructive">{errors.confirm.message}</p>}
       </div>
 
@@ -221,9 +211,7 @@ export function RegisterForm({ redirectTo: _redirectTo }: { redirectTo?: string 
         <Checkbox
           id="agreeToTerms"
           checked={!!agreed}
-          onCheckedChange={(v) =>
-            setValue("agreeToTerms", v === true, { shouldValidate: true })
-          }
+          onCheckedChange={(v) => setValue("agreeToTerms", v === true, { shouldValidate: true })}
           className="mt-0.5"
         />
         <div className="space-y-1">

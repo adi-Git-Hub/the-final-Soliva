@@ -38,10 +38,15 @@ export function VideoSection() {
   useEffect(() => {
     if (shouldLoadVideo) videoRef.current?.load();
   }, [shouldLoadVideo]);
-  
+
   const trustItems = [
-    "ADVANCED UV DEFENSE", "DUAL-LAYER COMFORT", "FULL COVERAGE DESIGN",
-    "BREATHABLE IN HEAT", "LIGHTWEIGHT DAILY WEAR", "NO SMUDGING", "NO MORE MESSY HAIR",
+    "ADVANCED UV DEFENSE",
+    "DUAL-LAYER COMFORT",
+    "FULL COVERAGE DESIGN",
+    "BREATHABLE IN HEAT",
+    "LIGHTWEIGHT DAILY WEAR",
+    "NO SMUDGING",
+    "NO MORE MESSY HAIR",
   ];
   const loop = [...trustItems, ...trustItems];
 
@@ -71,22 +76,39 @@ export function VideoSection() {
         });
 
         // Video scale-in / border-radius / border / shadow easing — untouched.
-        tl.fromTo(videoContainerRef.current,
-          { scale: 0.65, borderRadius: "4rem", border: "2px solid rgba(245,130,13,0.3)", boxShadow: "0 40px 100px rgba(58,42,34,0.15)" },
-          { scale: 1, borderRadius: "0rem", border: "0px solid rgba(245,130,13,0)", boxShadow: "0 0 0 rgba(0,0,0,0)", duration: 1, ease: easeGsap.power2InOut }
+        tl.fromTo(
+          videoContainerRef.current,
+          {
+            scale: 0.65,
+            borderRadius: "4rem",
+            border: "2px solid rgba(245,130,13,0.3)",
+            boxShadow: "0 40px 100px rgba(58,42,34,0.15)",
+          },
+          {
+            scale: 1,
+            borderRadius: "0rem",
+            border: "0px solid rgba(245,130,13,0)",
+            boxShadow: "0 0 0 rgba(0,0,0,0)",
+            duration: 1,
+            ease: easeGsap.power2InOut,
+          },
         );
 
         if (textContentRef.current) {
           // Middle-ground exit — softer than the 200vh-era pin, more present
           // than the no-pin flow, so it reads cinematic in ~80vh of scrub.
-          tl.to(textContentRef.current, {
-            autoAlpha: 0,
-            y: -100,
-            scale: 0.93,
-            filter: "blur(8px)",
-            duration: 0.7,
-            ease: easeGsap.power2InOut
-          }, 0);
+          tl.to(
+            textContentRef.current,
+            {
+              autoAlpha: 0,
+              y: -100,
+              scale: 0.93,
+              filter: "blur(8px)",
+              duration: 0.7,
+              ease: easeGsap.power2InOut,
+            },
+            0,
+          );
         }
       }
     }, sectionRef);
@@ -96,14 +118,22 @@ export function VideoSection() {
 
   return (
     <>
-      <section ref={sectionRef} id="video-section" className="relative w-full h-screen overflow-hidden bg-transparent z-0">
+      <section
+        ref={sectionRef}
+        id="video-section"
+        className="relative w-full h-screen overflow-hidden bg-transparent z-0"
+      >
         <div className="absolute inset-0 z-[1] pointer-events-none">
           <div className="video-ambient-drift" />
           <div className="video-orb video-orb-1 -top-32 -left-32 w-[32rem] h-[32rem]" />
           <div className="video-orb video-orb-2 -bottom-32 -right-32 w-[36rem] h-[36rem]" />
         </div>
 
-        <div ref={videoContainerRef} className="absolute inset-0 z-10 w-full h-full overflow-hidden bg-black" style={{ willChange: "transform, border-radius" }}>
+        <div
+          ref={videoContainerRef}
+          className="absolute inset-0 z-10 w-full h-full overflow-hidden bg-black"
+          style={{ willChange: "transform, border-radius" }}
+        >
           <video
             ref={videoRef}
             autoPlay
@@ -121,7 +151,10 @@ export function VideoSection() {
         <div className="absolute bottom-0 inset-x-0 z-30 border-t border-line-soft bg-surface-panel-strong backdrop-blur-medium py-3 sm:py-4 overflow-hidden shadow-strip-top">
           <div className="marquee flex w-max gap-10 sm:gap-16 whitespace-nowrap">
             {loop.map((t, i) => (
-              <span key={i} className="flex items-center gap-10 sm:gap-16 text-micro-xs sm:text-micro-sm tracking-eyebrow sm:tracking-luxe text-brown-deep/60 font-bold uppercase">
+              <span
+                key={i}
+                className="flex items-center gap-10 sm:gap-16 text-micro-xs sm:text-micro-sm tracking-eyebrow sm:tracking-luxe text-brown-deep/60 font-bold uppercase"
+              >
                 {t}
                 <span className="h-1.5 w-1.5 rounded-full bg-accent-soft" />
               </span>

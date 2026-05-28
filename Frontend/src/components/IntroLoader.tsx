@@ -107,10 +107,14 @@ export function IntroLoader() {
 
           {/* ─── Atmosphere layer (behind UI, slow drift) ────────────── */}
           <motion.div
-            animate={rm ? {} : {
-              opacity: [0.45, 0.75, 0.45],
-              scale: [1, 1.06, 1],
-            }}
+            animate={
+              rm
+                ? {}
+                : {
+                    opacity: [0.45, 0.75, 0.45],
+                    scale: [1, 1.06, 1],
+                  }
+            }
             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
             className="pointer-events-none absolute inset-0"
             style={{ opacity: 0.55 }}
@@ -163,7 +167,8 @@ export function IntroLoader() {
           <div
             className="pointer-events-none absolute inset-0"
             style={{
-              background: "radial-gradient(ellipse 68% 62% at 50% 46%, transparent 30%, rgba(58,42,34,0.1) 100%)",
+              background:
+                "radial-gradient(ellipse 68% 62% at 50% 46%, transparent 30%, rgba(58,42,34,0.1) 100%)",
             }}
           />
 
@@ -184,9 +189,7 @@ export function IntroLoader() {
               <motion.div
                 aria-hidden
                 animate={
-                  rm
-                    ? { opacity: 0.3 }
-                    : { opacity: [0.18, 0.48, 0.18], scale: [1, 1.14, 1] }
+                  rm ? { opacity: 0.3 } : { opacity: [0.18, 0.48, 0.18], scale: [1, 1.14, 1] }
                 }
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-0 -m-28 rounded-full pointer-events-none"
@@ -218,7 +221,8 @@ export function IntroLoader() {
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute -bottom-9 left-1/2 -translate-x-1/2 w-full h-[10px] rounded-full pointer-events-none"
                 style={{
-                  background: "radial-gradient(ellipse at 50% 0%, rgba(245,130,13,0.22), transparent 65%)",
+                  background:
+                    "radial-gradient(ellipse at 50% 0%, rgba(245,130,13,0.22), transparent 65%)",
                   filter: "blur(5px)",
                   opacity: 0.12,
                 }}
@@ -343,7 +347,8 @@ export function IntroLoader() {
                   <div
                     className="absolute top-0 left-[5%] right-[5%] h-[1px]"
                     style={{
-                      background: "linear-gradient(to right, transparent 5%, rgba(255,245,225,0.6) 30%, rgba(255,245,225,0.7) 50%, rgba(255,245,225,0.6) 70%, transparent 95%)",
+                      background:
+                        "linear-gradient(to right, transparent 5%, rgba(255,245,225,0.6) 30%, rgba(255,245,225,0.7) 50%, rgba(255,245,225,0.6) 70%, transparent 95%)",
                     }}
                   />
                 </motion.div>
@@ -403,7 +408,8 @@ export function IntroLoader() {
               <div
                 className="absolute top-[13px] left-[6%] right-[6%] h-[8px] rounded-full pointer-events-none"
                 style={{
-                  background: "radial-gradient(ellipse at 50% 0%, rgba(58,42,34,0.09), transparent 60%)",
+                  background:
+                    "radial-gradient(ellipse at 50% 0%, rgba(58,42,34,0.09), transparent 60%)",
                   filter: "blur(5px)",
                 }}
               />

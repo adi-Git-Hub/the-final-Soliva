@@ -1,8 +1,8 @@
-import React, { useRef, useMemo, Suspense } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Float, PerspectiveCamera, Environment } from '@react-three/drei';
-import * as THREE from 'three';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useMemo, Suspense } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Float, PerspectiveCamera, Environment } from "@react-three/drei";
+import * as THREE from "three";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 /**
  * ═══ SHADER: SUBTLE FLOWING FABRIC ═══
@@ -11,7 +11,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 const FabricShader = {
   uniforms: {
     uTime: { value: 0 },
-    uColor: { value: new THREE.Color('#FAF7F3') },
+    uColor: { value: new THREE.Color("#FAF7F3") },
     uOpacity: { value: 0.15 },
   },
   vertexShader: `
@@ -45,7 +45,11 @@ const FabricShader = {
   `,
 };
 
-function Fabric({ position = [0, 0, 0] as [number, number, number], scale = [5, 5, 1] as [number, number, number], rotation = [0, 0, 0] as [number, number, number] }) {
+function Fabric({
+  position = [0, 0, 0] as [number, number, number],
+  scale = [5, 5, 1] as [number, number, number],
+  rotation = [0, 0, 0] as [number, number, number],
+}) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
 
@@ -104,13 +108,7 @@ function DustParticles({ count = 40 }) {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial
-        size={0.015}
-        color="#c76600"
-        transparent
-        opacity={0.2}
-        sizeAttenuation
-      />
+      <pointsMaterial size={0.015} color="#c76600" transparent opacity={0.2} sizeAttenuation />
     </points>
   );
 }
@@ -139,28 +137,28 @@ function LightRays() {
 /**
  * ═══ CORE ENGINE COMPONENT ═══
  */
-export function AtmosphericEngine({ 
-  type = 'story', // 'story' or 'tech'
-  className = "" 
+export function AtmosphericEngine({
+  type = "story", // 'story' or 'tech'
+  className = "",
 }) {
   return (
     <div className={`absolute inset-0 pointer-events-none z-0 ${className}`}>
       <Canvas alpha dpr={[1, 2]}>
         <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
         <ambientLight intensity={0.5} />
-        
+
         <Suspense fallback={null}>
           {/* Global Environmental Depth */}
-          <DustParticles count={type === 'story' ? 60 : 30} />
-          
-          {type === 'story' && (
+          <DustParticles count={type === "story" ? 60 : 30} />
+
+          {type === "story" && (
             <>
               <LightRays />
               <Fabric position={[0, 0, -2]} scale={[12, 8, 1]} rotation={[0.2, 0, 0]} />
             </>
           )}
-          
-          {type === 'tech' && (
+
+          {type === "tech" && (
             <group position={[0, 0, -1]}>
               {/* Layered material feel */}
               <Fabric position={[0, 0.5, 0]} scale={[10, 4, 1]} />
@@ -179,7 +177,7 @@ export function AtmosphericEngine({
  */
 export function InteractiveCard3D({ children, className = "" }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -187,25 +185,25 @@ export function InteractiveCard3D({ children, className = "" }) {
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    
+
     const rotateX = (y - centerY) / 25;
     const rotateY = (centerX - x) / 25;
-    
+
     cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
   };
-  
+
   const handleMouseLeave = () => {
     if (!cardRef.current) return;
     cardRef.current.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
   };
 
   return (
-    <div 
+    <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`transition-transform duration-500 ease-out will-change-transform ${className}`}
-      style={{ transformStyle: 'preserve-3d' }}
+      style={{ transformStyle: "preserve-3d" }}
     >
       {children}
     </div>

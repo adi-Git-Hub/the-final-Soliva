@@ -5,7 +5,7 @@ type LoadingState = "idle" | "suppressed" | "overlay" | "escalated";
 
 /**
  * useLoadingEscalation — intelligent loading state orchestrator.
- * 
+ *
  * Manages operation duration to decide the appropriate loader level:
  * 1. 0-150ms: idle/suppressed (no visual change)
  * 2. 150ms-2s: overlay (atmospheric veil)
@@ -30,7 +30,6 @@ export function useLoadingEscalation(isLoading: boolean) {
         timer = setTimeout(() => {
           setState("escalated");
         }, loadingHierarchy.mediumThresholdMs - loadingHierarchy.microThresholdMs);
-
       }, loadingHierarchy.microThresholdMs);
     } else {
       setState("idle");

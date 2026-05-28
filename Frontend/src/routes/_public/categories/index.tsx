@@ -33,8 +33,7 @@ const categories = [
       { icon: "layers", text: "Dual-Layer System" },
     ],
     materials: "Nano-weave polyamide blend with moisture-wicking inner layer",
-    philosophy:
-      "Every stitch calculated for Indian heat — where protection meets breathability.",
+    philosophy: "Every stitch calculated for Indian heat — where protection meets breathability.",
   },
   {
     id: "airflow",
@@ -57,8 +56,7 @@ const categories = [
       { icon: "sun", text: "Thermal Regulation" },
     ],
     materials: "Next-gen mesh composite with directional ventilation zones",
-    philosophy:
-      "Heat dissipation reimagined — channels that respond to body temperature.",
+    philosophy: "Heat dissipation reimagined — channels that respond to body temperature.",
   },
   {
     id: "urbanshade",
@@ -81,8 +79,7 @@ const categories = [
       { icon: "layers", text: "Commute-Ready" },
     ],
     materials: "Ultralight ripstop with integrated reflective micro-thread",
-    philosophy:
-      "Protection that folds into your day — invisible until you need it.",
+    philosophy: "Protection that folds into your day — invisible until you need it.",
   },
   {
     id: "veilform",
@@ -105,8 +102,7 @@ const categories = [
       { icon: "shield", text: "Invisible Defence" },
     ],
     materials: "Bonded construction with zero-seam architecture",
-    philosophy:
-      "Where tailoring meets technology — coverage you wear, not carry.",
+    philosophy: "Where tailoring meets technology — coverage you wear, not carry.",
   },
 ];
 
@@ -263,8 +259,8 @@ function CategoriesRoute() {
             transition={{ delay: 0.25, duration: 1 }}
             className="mt-4 max-w-lg text-[0.9rem] sm:text-[0.95rem] text-[#7b6a5f]/80 font-light italic leading-relaxed"
           >
-            Curated product systems — each designed for a distinct rhythm of
-            protection. More collections arrive as the line expands.
+            Curated product systems — each designed for a distinct rhythm of protection. More
+            collections arrive as the line expands.
           </motion.p>
 
           {/* Engineering stats strip */}
@@ -312,9 +308,7 @@ function CategoriesRoute() {
           {categories.map((cat, i) => (
             <div key={cat.id}>
               <CategoryPanel category={cat} index={i} />
-              {i < categories.length - 1 && (
-                <SectionTransition index={i} />
-              )}
+              {i < categories.length - 1 && <SectionTransition index={i} />}
             </div>
           ))}
         </div>
@@ -330,8 +324,7 @@ function CategoriesRoute() {
           <div
             className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-[#3a2a22]/5 px-8 sm:px-12 py-10 sm:py-14"
             style={{
-              background:
-                "linear-gradient(135deg, rgba(255,255,255,0.4), rgba(243,236,226,0.3))",
+              background: "linear-gradient(135deg, rgba(255,255,255,0.4), rgba(243,236,226,0.3))",
             }}
           >
             {/* Animated inner glow */}
@@ -386,10 +379,9 @@ function CategoriesRoute() {
               transition={{ delay: 0.3, duration: 0.9 }}
               className="mt-3 max-w-lg text-[0.8rem] sm:text-[0.84rem] text-[#7b6a5f]/55 leading-relaxed font-light"
             >
-              Each Soliva category begins with a specific human need — the
-              commute, the afternoon walk, the outdoor session — and engineers
-              backward from there. Materials, coverage, and airflow are
-              calibrated to the exact conditions of Indian climate.
+              Each Soliva category begins with a specific human need — the commute, the afternoon
+              walk, the outdoor session — and engineers backward from there. Materials, coverage,
+              and airflow are calibrated to the exact conditions of Indian climate.
             </motion.p>
 
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
@@ -603,9 +595,7 @@ function CategoryPanel({ category, index }: { category: Cat; index: number }) {
               <div
                 className="mt-1 w-1 h-1 rounded-full bg-[#f5820d]/40 shrink-0"
                 style={{
-                  animation: category.active
-                    ? "cat-glow-pulse 4s ease-in-out infinite"
-                    : undefined,
+                  animation: category.active ? "cat-glow-pulse 4s ease-in-out infinite" : undefined,
                 }}
               />
               <p className="text-[0.65rem] sm:text-[0.7rem] text-[#7b6a5f]/45 leading-relaxed font-light">

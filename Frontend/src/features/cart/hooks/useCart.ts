@@ -48,7 +48,7 @@ export function useCart(): CartFacade {
   const removeMut = useRemoveServerCartItem();
   const clearMut = useClearServerCart();
 
-  const lines: CartLine[] = isSignedIn ? serverQuery.data ?? [] : guestLines;
+  const lines: CartLine[] = isSignedIn ? (serverQuery.data ?? []) : guestLines;
 
   const { itemCount, subtotalCents } = useMemo(() => {
     let count = 0;

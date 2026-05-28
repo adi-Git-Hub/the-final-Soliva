@@ -113,7 +113,7 @@ async function fetchProducts(query: ProductListQuery): Promise<Product[]> {
   if (query.limit) params.set("limit", String(query.limit));
 
   const res = await api.get<EnvelopedResponse<{ products: RawProduct[] }>>(
-    `/products?${params.toString()}`
+    `/products?${params.toString()}`,
   );
   return (res.data.products || []).map(normalizeProduct);
 }
@@ -126,7 +126,7 @@ async function fetchProduct(idOrSlug: string): Promise<Product> {
     return p;
   }
   const res = await api.get<EnvelopedResponse<{ product: RawProduct }>>(
-    `/products/${encodeURIComponent(idOrSlug)}`
+    `/products/${encodeURIComponent(idOrSlug)}`,
   );
   return normalizeProduct(res.data.product);
 }
@@ -136,9 +136,7 @@ async function fetchCategories(): Promise<Category[]> {
     await delay();
     return mockCategories;
   }
-  const res = await api.get<EnvelopedResponse<{ categories: RawCategory[] }>>(
-    `/categories`
-  );
+  const res = await api.get<EnvelopedResponse<{ categories: RawCategory[] }>>(`/categories`);
   return (res.data.categories || []).map(normalizeCategory);
 }
 

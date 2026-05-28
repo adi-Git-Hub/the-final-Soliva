@@ -65,111 +65,111 @@
    * ════════════════════════════════════════════════════════════════════════ */
 
   /* — Typography sizes (text-h1 / text-body / text-micro-* / etc.) — */
-  --text-h1:               var(--text-h1);
-  --text-h2:               var(--text-h2);
-  --text-h3:               var(--text-h3);
-  --text-h4:               var(--text-h4);
-  --text-h5:               var(--text-h5);
-  --text-h6:               var(--text-h6);
-  --text-body-lg:          var(--text-body-lg);
-  --text-body:             var(--text-body);
-  --text-body-sm:          var(--text-body-sm);
-  --text-body-xs:          var(--text-body-xs);
-  --text-caption:          var(--text-caption);
-  --text-micro-lg:         var(--text-micro-lg);
-  --text-micro-md:         var(--text-micro-md);
-  --text-micro-sm:         var(--text-micro-sm);
-  --text-micro-xs:         var(--text-micro-xs);
+  --text-h1: var(--text-h1);
+  --text-h2: var(--text-h2);
+  --text-h3: var(--text-h3);
+  --text-h4: var(--text-h4);
+  --text-h5: var(--text-h5);
+  --text-h6: var(--text-h6);
+  --text-body-lg: var(--text-body-lg);
+  --text-body: var(--text-body);
+  --text-body-sm: var(--text-body-sm);
+  --text-body-xs: var(--text-body-xs);
+  --text-caption: var(--text-caption);
+  --text-micro-lg: var(--text-micro-lg);
+  --text-micro-md: var(--text-micro-md);
+  --text-micro-sm: var(--text-micro-sm);
+  --text-micro-xs: var(--text-micro-xs);
 
   /* — Display typography (text-display-hero / -mega / -xl / etc.) — */
-  --text-display-hero:     var(--text-display-hero);
-  --text-display-mega:     var(--text-display-mega);
-  --text-display-xl:       var(--text-display-xl);
-  --text-display-lg:       var(--text-display-lg);
-  --text-display-md:       var(--text-display-md);
-  --text-display-sm:       var(--text-display-sm);
-  --text-display-metric:   var(--text-display-metric);
+  --text-display-hero: var(--text-display-hero);
+  --text-display-mega: var(--text-display-mega);
+  --text-display-xl: var(--text-display-xl);
+  --text-display-lg: var(--text-display-lg);
+  --text-display-md: var(--text-display-md);
+  --text-display-sm: var(--text-display-sm);
+  --text-display-metric: var(--text-display-metric);
 
   /* — Tracking (renamed to avoid Tailwind collisions; see design-system.css) — */
-  --tracking-display:      var(--tracking-display);
-  --tracking-soft:         var(--tracking-soft);
-  --tracking-nav:          var(--tracking-nav);
-  --tracking-cta:          var(--tracking-cta);
-  --tracking-eyebrow:      var(--tracking-eyebrow);
-  --tracking-luxe:         var(--tracking-luxe);
-  --tracking-editorial:    var(--tracking-editorial);
-  --tracking-runway:       var(--tracking-runway);
+  --tracking-display: var(--tracking-display);
+  --tracking-soft: var(--tracking-soft);
+  --tracking-nav: var(--tracking-nav);
+  --tracking-cta: var(--tracking-cta);
+  --tracking-eyebrow: var(--tracking-eyebrow);
+  --tracking-luxe: var(--tracking-luxe);
+  --tracking-editorial: var(--tracking-editorial);
+  --tracking-runway: var(--tracking-runway);
 
   /* — Leading (display tier; Tailwind defaults cover body tier) — */
-  --leading-hero:          var(--leading-hero);
+  --leading-hero: var(--leading-hero);
   --leading-display-tight: var(--leading-display-tight);
-  --leading-display-snug:  var(--leading-display-snug);
+  --leading-display-snug: var(--leading-display-snug);
 
   /* — Radius (panel / shell — beyond Tailwind's sm/md/lg/xl) — */
-  --radius-panel-sm:       var(--radius-ds-panel-sm);
-  --radius-panel:          var(--radius-ds-panel);
-  --radius-panel-lg:       var(--radius-ds-panel-lg);
-  --radius-shell:          var(--radius-ds-shell);
-  --radius-shell-lg:       var(--radius-ds-shell-lg);
+  --radius-panel-sm: var(--radius-ds-panel-sm);
+  --radius-panel: var(--radius-ds-panel);
+  --radius-panel-lg: var(--radius-ds-panel-lg);
+  --radius-shell: var(--radius-ds-shell);
+  --radius-shell-lg: var(--radius-ds-shell-lg);
 
   /* — Shadows (regular box-shadow) — */
-  --shadow-hairline:       var(--shadow-ds-hairline);
-  --shadow-soft:           var(--shadow-ds-soft);
-  --shadow-card:           var(--shadow-ds-card);
-  --shadow-floating:       var(--shadow-ds-floating);
-  --shadow-editorial:      var(--shadow-ds-editorial);
-  --shadow-cinematic:      var(--shadow-ds-cinematic);
-  --shadow-glow-soft:      var(--shadow-ds-glow-soft);
-  --shadow-glow:           var(--shadow-ds-glow);
-  --shadow-glow-strong:    var(--shadow-ds-glow-strong);
-  --shadow-strip-top:      var(--shadow-ds-strip-top);
+  --shadow-hairline: var(--shadow-ds-hairline);
+  --shadow-soft: var(--shadow-ds-soft);
+  --shadow-card: var(--shadow-ds-card);
+  --shadow-floating: var(--shadow-ds-floating);
+  --shadow-editorial: var(--shadow-ds-editorial);
+  --shadow-cinematic: var(--shadow-ds-cinematic);
+  --shadow-glow-soft: var(--shadow-ds-glow-soft);
+  --shadow-glow: var(--shadow-ds-glow);
+  --shadow-glow-strong: var(--shadow-ds-glow-strong);
+  --shadow-strip-top: var(--shadow-ds-strip-top);
 
   /* — Inset shadows (compose with regular shadow utilities) — */
-  --inset-shadow-cream:    var(--shadow-ds-inset-cream);
-  --inset-shadow-line:     var(--shadow-ds-inset-line);
+  --inset-shadow-cream: var(--shadow-ds-inset-cream);
+  --inset-shadow-line: var(--shadow-ds-inset-line);
 
   /* — Blur (filter + backdrop share the namespace in Tailwind v4) — */
-  --blur-subtle:           var(--blur-ds-subtle);
-  --blur-soft:             var(--blur-ds-soft);
-  --blur-medium:           var(--blur-ds-medium);
-  --blur-strong:           var(--blur-ds-strong);
-  --blur-atmospheric:      var(--blur-ds-atmospheric);
+  --blur-subtle: var(--blur-ds-subtle);
+  --blur-soft: var(--blur-ds-soft);
+  --blur-medium: var(--blur-ds-medium);
+  --blur-strong: var(--blur-ds-strong);
+  --blur-atmospheric: var(--blur-ds-atmospheric);
 
   /* — Semantic colors: surfaces — */
-  --color-surface-base:           var(--surface-base);
-  --color-surface-raised:         var(--surface-raised);
-  --color-surface-muted:          var(--surface-muted);
-  --color-surface-panel:          var(--surface-panel);
-  --color-surface-panel-strong:   var(--surface-panel-strong);
-  --color-surface-glass:          var(--surface-glass);
-  --color-surface-glass-strong:   var(--surface-glass-strong);
-  --color-surface-glass-ghost:    var(--surface-glass-ghost);
-  --color-surface-cream-veil:     var(--surface-cream-veil);
+  --color-surface-base: var(--surface-base);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-panel: var(--surface-panel);
+  --color-surface-panel-strong: var(--surface-panel-strong);
+  --color-surface-glass: var(--surface-glass);
+  --color-surface-glass-strong: var(--surface-glass-strong);
+  --color-surface-glass-ghost: var(--surface-glass-ghost);
+  --color-surface-cream-veil: var(--surface-cream-veil);
 
   /* — Semantic colors: ink (foreground) — */
-  --color-ink-strong:      var(--ink-strong);
-  --color-ink-default:     var(--ink-default);
-  --color-ink-soft:        var(--ink-soft);
-  --color-ink-muted:       var(--ink-muted);
-  --color-ink-faint:       var(--ink-faint);
-  --color-ink-disabled:    var(--ink-disabled);
-  --color-ink-on-dark:     var(--ink-on-dark);
-  --color-ink-on-accent:   var(--ink-on-accent);
+  --color-ink-strong: var(--ink-strong);
+  --color-ink-default: var(--ink-default);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-ink-disabled: var(--ink-disabled);
+  --color-ink-on-dark: var(--ink-on-dark);
+  --color-ink-on-accent: var(--ink-on-accent);
 
   /* — Semantic colors: lines (borders / hairlines) — */
-  --color-line-hairline:   var(--line-hairline);
-  --color-line-soft:       var(--line-soft);
-  --color-line-medium:     var(--line-medium);
-  --color-line-strong:     var(--line-strong);
-  --color-line-accent:     var(--line-accent);
-  --color-line-on-dark:    var(--line-on-dark);
+  --color-line-hairline: var(--line-hairline);
+  --color-line-soft: var(--line-soft);
+  --color-line-medium: var(--line-medium);
+  --color-line-strong: var(--line-strong);
+  --color-line-accent: var(--line-accent);
+  --color-line-on-dark: var(--line-on-dark);
 
   /* — Semantic colors: accent variants — */
-  --color-accent-strong:     var(--accent-strong);
-  --color-accent-soft:       var(--accent-soft);
-  --color-accent-faint:      var(--accent-faint);
-  --color-accent-ghost:      var(--accent-ghost);
-  --color-accent-glow-aura:  var(--accent-glow-aura);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-faint: var(--accent-faint);
+  --color-accent-ghost: var(--accent-ghost);
+  --color-accent-glow-aura: var(--accent-glow-aura);
 }
 
 :root {

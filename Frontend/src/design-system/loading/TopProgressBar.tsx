@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 /**
  * TopProgressBar — a simple, premium, visible loading indicator.
  * Appears at the very top of the viewport during route transitions.
- * 
+ *
  * FIX: Implements minimum visibility duration (500ms) to ensure
  * feedback is perceptible even for fast navigations.
  */
@@ -47,14 +47,14 @@ export function TopProgressBar() {
           {/* Main Progress Line */}
           <motion.div
             initial={{ width: "0%", opacity: 0 }}
-            animate={{ 
+            animate={{
               width: ["0%", "40%", "80%", "94%"],
-              opacity: 1 
+              opacity: 1,
             }}
-            exit={{ 
+            exit={{
               width: "100%",
               opacity: 0,
-              transition: { duration: 0.3, ease: "easeOut" }
+              transition: { duration: 0.3, ease: "easeOut" },
             }}
             transition={{
               duration: 12, // Slower crawl for long fetches, but exit is fast
@@ -63,7 +63,7 @@ export function TopProgressBar() {
             }}
             className="h-[2px] bg-orange-glow shadow-[0_0_8px_rgba(245,130,13,0.4)]"
           />
-          
+
           {/* Soft Atmospheric Glow Overlay — Lightweight Refinement */}
           <motion.div
             initial={{ opacity: 0 }}

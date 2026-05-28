@@ -51,9 +51,7 @@ export function loadRazorpaySdk(): Promise<boolean> {
   if (sdkPromise) return sdkPromise;
 
   sdkPromise = new Promise<boolean>((resolve) => {
-    const existing = document.querySelector<HTMLScriptElement>(
-      `script[src="${SDK_URL}"]`,
-    );
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${SDK_URL}"]`);
     if (existing) {
       existing.addEventListener("load", () => resolve(true));
       existing.addEventListener("error", () => resolve(false));

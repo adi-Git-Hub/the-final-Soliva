@@ -41,8 +41,15 @@ function VerifyEmailRoute() {
       <div className="space-y-3 text-center">
         <h1 className="font-display text-3xl text-foreground">Verify email</h1>
         <p className="text-sm text-muted-foreground">
-          Start from <Link to="/register" className="text-foreground hover:underline">create an
-          account</Link> or <Link to="/login" className="text-foreground hover:underline">sign in</Link>.
+          Start from{" "}
+          <Link to="/register" className="text-foreground hover:underline">
+            create an account
+          </Link>{" "}
+          or{" "}
+          <Link to="/login" className="text-foreground hover:underline">
+            sign in
+          </Link>
+          .
         </p>
       </div>
     );

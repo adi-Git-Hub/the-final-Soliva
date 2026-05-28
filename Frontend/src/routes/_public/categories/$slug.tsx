@@ -35,13 +35,17 @@ function CategoryRoute() {
           Categories
         </Link>
         <ChevronRight className="h-3 w-3" />
-        <span className="truncate max-w-[60vw] sm:max-w-none text-foreground">{category?.name ?? "…"}</span>
+        <span className="truncate max-w-[60vw] sm:max-w-none text-foreground">
+          {category?.name ?? "…"}
+        </span>
       </nav>
 
       <header className="mb-8 sm:mb-10">
         {category ? (
           <>
-            <h1 className="font-display text-3xl sm:text-4xl text-foreground md:text-5xl">{category.name}</h1>
+            <h1 className="font-display text-3xl sm:text-4xl text-foreground md:text-5xl">
+              {category.name}
+            </h1>
             <p className="mt-2 max-w-xl text-sm text-muted-foreground">{category.description}</p>
           </>
         ) : (
