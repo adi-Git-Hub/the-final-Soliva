@@ -38,7 +38,7 @@ const primaryLinks: readonly { to: string; label: string; search?: Record<string
   { to: "/collection", label: "Collection" },
   { to: "/categories", label: "Categories" },
   { to: "/story", label: "Story" },
-  { to: "/technology", label: "Technology" },
+  { to: "/technology", label: "How It Works" },
   { to: "/identity", label: "Identity" },
 ];
 

@@ -1,0 +1,9 @@
+# gstack tooling / analytics (local only)
+.gstack/
+
+# dependencies (defensive — also covered by subdir .gitignores)
+**/node_modules/
+
+# misc local
+.DS_Store
+*.local

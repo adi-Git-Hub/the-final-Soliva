@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { viewportOnce, viewportOnceEarly, ease, useIsMobile } from "@/design-system";
 import { useCart } from "@/features/cart/hooks/useCart";
 import { Plus, Check, Wind, Shield, Activity, Zap } from "lucide-react";
-import { AtmosphericEngine, InteractiveCard3D } from "@/components/AtmosphericEngine";
+import { InteractiveCard3D } from "@/components/AtmosphericEngine";
 
 export const Route = createFileRoute("/_public/collection")({
   component: CollectionRoute,
@@ -86,9 +86,6 @@ function CollectionRoute() {
 
   return (
     <div ref={containerRef} className="relative w-full bg-[#FAF7F3] overflow-x-hidden">
-      {/* Cinematic Background Layer */}
-      <AtmosphericEngine type="story" className="opacity-20" />
-
       {/* ═══ SECTION 1: THE COLLECTION (Editorial Intro) ═══ */}
       <section className="relative min-h-screen pt-32 pb-[120px] flex items-center overflow-hidden">
         <div className="mx-auto max-w-[1320px] px-5 sm:px-8 w-full">
@@ -676,22 +673,15 @@ function CollectionRoute() {
                 glow: "rgba(190,160,130,0.1)",
               },
             ].map((card, i) => (
-              <InteractiveCard3D key={i}>
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewportOnceEarly}
-                  transition={{ delay: i * 0.08, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                  className={`group relative h-full min-h-[440px] border border-[#3a2a22]/5 rounded-[3.5rem] p-12 overflow-hidden transition-all duration-700 ${card.base} shadow-sm hover:-translate-y-1 will-change-transform`}
-                >
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                    style={{
-                      background: `radial-gradient(circle at center, ${card.glow} 0%, transparent 70%)`,
-                    }}
-                  />
-
-                  <div className="relative z-10 flex flex-col h-full">
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewportOnceEarly}
+                transition={{ delay: i * 0.08, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className={`group relative h-full min-h-[440px] border border-[#3a2a22]/5 rounded-[3.5rem] p-12 overflow-hidden transition-[transform,box-shadow] duration-500 ${card.base} shadow-sm hover:-translate-y-1 hover:shadow-md`}
+              >
+                <div className="relative z-10 flex flex-col h-full">
                     <span className="font-mono text-[0.5625rem] tracking-[0.3em] text-[#c76600] uppercase font-black mb-6 block opacity-70">
                       {card.tag}
                     </span>
@@ -710,8 +700,7 @@ function CollectionRoute() {
                       ))}
                     </div>
                   </div>
-                </motion.div>
-              </InteractiveCard3D>
+              </motion.div>
             ))}
           </div>
 
@@ -778,10 +767,10 @@ function CollectionRoute() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={viewportOnceEarly}
                 transition={{ delay: i * 0.05, duration: 0.8 }}
-                className="group relative bg-[#EDEBE8]/30 border border-[#3a2a22]/5 rounded-[2.5rem] p-10 transition-all duration-700 hover:bg-[#EDEBE8]/60 will-change-transform"
+                className="group relative bg-[#EDEBE8]/30 border border-[#3a2a22]/5 rounded-[2.5rem] p-10 transition-colors duration-500 hover:bg-[#EDEBE8]/60"
               >
                 <div className="flex flex-col gap-10 text-left h-full">
-                  <div className="w-12 h-12 rounded-2xl bg-[#3a2a22]/5 flex items-center justify-center group-hover:bg-white transition-all duration-500">
+                  <div className="w-12 h-12 rounded-2xl bg-[#3a2a22]/5 flex items-center justify-center group-hover:bg-white transition-colors duration-300">
                     <Plus size={18} className="text-[#3a2a22]/30 group-hover:text-[#c76600]" />
                   </div>
                   <div className="mt-auto">
@@ -817,7 +806,7 @@ function CollectionRoute() {
               Thoughtful Protection <br /> For Everyday Life
             </h2>
             <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <button className="px-14 py-6 rounded-full bg-[#3a2a22] text-[#f7f3ee] font-mono text-[0.75rem] tracking-[0.25em] uppercase font-black transition-all duration-500 hover:-translate-y-1">
+              <button className="px-14 py-6 rounded-full bg-[#3a2a22] text-[#f7f3ee] font-mono text-[0.75rem] tracking-[0.25em] uppercase font-black transition-transform duration-300 hover:-translate-y-1">
                 Explore Collection
               </button>
             </div>

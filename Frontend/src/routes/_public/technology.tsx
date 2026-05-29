@@ -1,491 +1,513 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { viewportOnce, viewportOnceEarly, ease, useIsMobile } from "@/design-system";
-import { ChevronRight, Wind, Layers, Maximize2, Shield, Activity } from "lucide-react";
-import { AtmosphericEngine, InteractiveCard3D } from "@/components/AtmosphericEngine";
+import { motion } from "framer-motion";
+import { viewportOnce, viewportOnceEarly, ease } from "@/design-system";
 
 export const Route = createFileRoute("/_public/technology")({
-  component: TechnologyRoute,
+  component: HowItWorksRoute,
 });
 
-function TechnologyRoute() {
-  const isMobile = useIsMobile();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+/* ─── Editorial image placeholder ─────────────────────────────── */
+function StoryImage({
+  label,
+  caption,
+  src,
+  alt = "",
+  aspect = "aspect-[4/5]",
+  rounded = "rounded-[2.25rem]",
+  tone = "warm",
+  className = "",
+}: {
+  label: string;
+  caption?: string;
+  src?: string;
+  alt?: string;
+  aspect?: string;
+  rounded?: string;
+  tone?: "warm" | "dark";
+  className?: string;
+}) {
+  const t =
+    tone === "dark"
+      ? {
+          bg: "bg-[#2a1d16]",
+          border: "border-white/8",
+          rule: "bg-[#d9b27a]/40",
+          label: "text-[#d9b27a]/80",
+          sub: "text-white/30",
+          captionRule: "bg-[#d9b27a]/40",
+          caption: "text-white/40",
+        }
+      : {
+          bg: "bg-[#EDE6D8]",
+          border: "border-[#3a2a22]/8",
+          rule: "bg-[#c76600]/30",
+          label: "text-[#c76600]/70",
+          sub: "text-[#3a2a22]/30",
+          captionRule: "bg-[#c76600]/40",
+          caption: "text-[#3a2a22]/50",
+        };
+  return (
+    <figure className={`relative w-full ${className}`}>
+      <div className={`relative ${aspect} w-full overflow-hidden ${rounded} ${t.bg} border ${t.border}`}>
+        {src ? (
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className={`block h-px w-10 ${t.rule} mb-3`} />
+            <span className={`font-mono text-[0.625rem] tracking-[0.4em] uppercase font-medium ${t.label}`}>
+              {label}
+            </span>
+            <span className={`font-mono text-[0.5rem] tracking-[0.32em] mt-1.5 uppercase ${t.sub}`}>
+              Image · placeholder
+            </span>
+          </div>
+        )}
+      </div>
+      {caption && (
+        <figcaption className="mt-4 flex items-start gap-3 max-w-md">
+          <span className={`mt-2 block h-px w-6 ${t.captionRule} flex-shrink-0`} />
+          <p className={`font-mono text-[0.625rem] tracking-[0.2em] uppercase leading-[1.7] ${t.caption}`}>
+            {caption}
+          </p>
+        </figcaption>
+      )}
+    </figure>
+  );
+}
 
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -100]);
+/* ─── Eyebrow / chapter marker ────────────────────────────────── */
+function Chapter({
+  number,
+  title,
+  tone = "warm",
+}: {
+  number: string;
+  title: string;
+  tone?: "warm" | "ivory";
+}) {
+  const color = tone === "ivory" ? "text-[#d9b27a]" : "text-[#c76600]";
+  const line = tone === "ivory" ? "bg-[#d9b27a]/40" : "bg-[#c76600]/40";
+  return (
+    <div className="flex items-center gap-3 mb-6">
+      <span className={`block h-px w-8 ${line}`} />
+      <span className={`font-mono text-[0.625rem] tracking-[0.42em] uppercase font-bold ${color}`}>
+        {number} · {title}
+      </span>
+    </div>
+  );
+}
+
+function HowItWorksRoute() {
+  /* Enable section-by-section scroll snap only while this page is mounted. */
+  useEffect(() => {
+    const html = document.documentElement;
+    const prevSnap = html.style.scrollSnapType;
+    const prevPad = html.style.scrollPaddingTop;
+    html.style.scrollSnapType = "y mandatory";
+    html.style.scrollPaddingTop = "0px";
+    return () => {
+      html.style.scrollSnapType = prevSnap;
+      html.style.scrollPaddingTop = prevPad;
+    };
+  }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full bg-[#FAF7F3] overflow-x-hidden">
-      {/* 3D Atmospheric Background Layer */}
-      <AtmosphericEngine type="tech" className="opacity-40" />
-
-      {/* ═══ SECTION 1: TECHNOLOGY HERO ═══ */}
-      <section className="relative h-[80vh] w-full flex items-center justify-center overflow-hidden">
-        {/* Cinematic Background */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(245,130,13,0.08),transparent_70%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_60%,rgba(243,236,226,0.6),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
-
-          <motion.div style={{ y: parallaxY }} className="absolute inset-0 z-0">
-            {/* Floating blurred orbs move with parallax */}
+    <div className="relative w-full bg-[#FAF7F3] overflow-x-hidden text-[#3a2a22]">
+      {/* ════════════════════════════════════════════════════════════════
+         SECTION 01 — INTRO · DESIGNED TO PROTECT
+         ════════════════════════════════════════════════════════════════ */}
+      <section className="relative snap-start pt-24 pb-12 sm:pt-28 sm:pb-16">
+        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-20 items-center">
+            {/* LEFT — Narrative */}
             <motion.div
-              animate={{
-                y: [0, -20, 0],
-                opacity: [0.4, 0.6, 0.4],
-              }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-[20%] right-[15%] w-96 h-96 rounded-full bg-[#f4d2c6]/30 blur-[100px]"
-            />
-            <motion.div
-              animate={{
-                y: [0, 30, 0],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-[10%] left-[10%] w-[500px] h-[500px] rounded-full bg-[#f3ece2]/40 blur-[120px]"
-            />
-          </motion.div>
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-[1320px] px-5 sm:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: ease.smooth }}
-          >
-            <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold mb-6 block">
-              TECHNOLOGY
-            </span>
-            <h1
-              className="font-display text-[#3a2a22] leading-[1.05] tracking-tight mb-8"
-              style={{ fontSize: "clamp(2.5rem, 8vw, 5.5rem)" }}
-            >
-              Advanced UV Defense. <br />
-              <span className="italic text-[#c76600]/80">Dual-layer.</span>
-            </h1>
-            <p className="max-w-2xl mx-auto text-[1.0625rem] sm:text-[1.25rem] text-[#7b6a5f] font-light leading-relaxed mb-12">
-              The science behind the wrap — breathable architecture, ventilation, and
-              movement-focused comfort engineered for Indian summers.
-            </p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 1 }}
-              className="flex justify-center"
-            >
-              <div className="h-20 w-px bg-gradient-to-b from-[#c76600]/40 to-transparent" />
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ═══ SECTION 2: ENGINEERED FOR INDIAN HEAT ═══ */}
-      <section className="relative py-[70px] sm:py-[90px] md:py-[120px]">
-        <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
-            {/* LEFT: Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
-              transition={{ duration: 1, ease: ease.smooth }}
-              className="flex flex-col text-left"
+              transition={{ duration: 1.1, ease: ease.smooth }}
             >
-              <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold mb-6">
-                BREATHABLE ARCHITECTURE
-              </span>
-              <h2
-                className="font-display text-[#3a2a22] tracking-tight leading-[1.1] mb-8"
-                style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+              <Chapter number="CHAPTER ONE" title="The Idea" />
+              <h1
+                className="font-display leading-[1.02] tracking-tight mb-10"
+                style={{ fontSize: "clamp(2.4rem, 6.4vw, 5rem)" }}
               >
-                Engineered For Long <br /> Summer Movement
-              </h2>
-              <p className="text-[1.0625rem] text-[#7b6a5f] font-light leading-relaxed mb-10 max-w-lg">
-                Designed to reduce heat discomfort during long outdoor exposure through breathable
-                layering and movement-first construction.
-              </p>
+                Designed to Protect.
+                <span className="block italic font-light text-[#c76600] mt-1">
+                  Built for everyday life.
+                </span>
+              </h1>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12">
-                {[
-                  { icon: Wind, text: "Lightweight airflow structure" },
-                  { icon: Shield, text: "Reduced heat trapping" },
-                  { icon: Activity, text: "Everyday outdoor comfort" },
-                  { icon: Layers, text: "Soft breathable layering" },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 group">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm border border-[#3a2a22]/5 group-hover:border-[#c76600]/20 transition-all duration-500">
-                      <item.icon
-                        size={16}
-                        className="text-[#c76600]/60 group-hover:text-[#c76600]"
-                      />
-                    </div>
-                    <span className="text-[0.875rem] text-[#3a2a22]/80 font-medium">
-                      {item.text}
-                    </span>
-                  </div>
-                ))}
+              <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
+                <p>
+                  Every day, your skin is exposed to sun, dust, heat, and pollution. Yet most
+                  coverings were never designed to actually solve these challenges.
+                </p>
+                <p>
+                  Soliva was created to rethink everyday protection — through thoughtful coverage,
+                  breathable comfort, and effortless wearability for the way India moves.
+                </p>
+              </div>
+
+              <div className="mt-12 flex items-center gap-4">
+                <span className="block h-px w-10 bg-[#c76600]/40" />
+                <span className="font-mono text-[0.6875rem] tracking-[0.32em] uppercase text-[#3a2a22]/60 font-bold">
+                  How it works · The thinking behind Soliva
+                </span>
               </div>
             </motion.div>
 
-            {/* RIGHT: Fabric Visualization */}
-            <InteractiveCard3D>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={viewportOnce}
-                transition={{ duration: 1.2, ease: ease.smooth }}
-                className="relative aspect-square rounded-[3rem] overflow-hidden bg-white/40 border border-[#3a2a22]/5 backdrop-blur-sm group shadow-editorial"
-              >
-                <img
-                  src="/breathable-architecture.webp"
-                  alt="Soliva Breathable Architecture"
-                  className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#3a2a22]/20 via-transparent to-[#c76600]/5 pointer-events-none" />
-                <div className="absolute inset-4 border border-white/20 rounded-[2.5rem] pointer-events-none" />
-                <div className="absolute bottom-8 left-8 right-8 text-center z-10">
-                  <span className="font-mono text-[0.5rem] tracking-[0.3em] text-white/60 uppercase font-bold">
-                    SIMULATED AIRFLOW MODEL v.04
-                  </span>
-                </div>
-              </motion.div>
-            </InteractiveCard3D>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ SECTION 3: DUAL-LAYER COMFORT SYSTEM ═══ */}
-      <section className="relative py-[70px] sm:py-[90px] md:py-[120px] bg-white/20">
-        <div className="mx-auto max-w-[1320px] px-5 sm:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1, ease: ease.smooth }}
-            className="mb-20"
-          >
-            <h2
-              className="font-display text-[#3a2a22] tracking-tight leading-[1.1]"
-              style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+            {/* RIGHT — Lifestyle image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={viewportOnce}
+              transition={{ duration: 1.3, ease: ease.smooth, delay: 0.1 }}
             >
-              Dual-Layer Comfort System
-            </h2>
-            <p className="mt-6 max-w-xl mx-auto text-[1.0625rem] text-[#7b6a5f] font-light leading-relaxed">
-              Every edition features a high-performance dual-layer architecture designed to maximize
-              protection while enabling constant airflow.
-            </p>
-          </motion.div>
-
-          {/* Layered Visualization */}
-          <div className="relative h-[500px] flex items-center justify-center perspective(2000px)">
-            <div className="relative w-full max-w-3xl h-full flex flex-col items-center justify-between py-12">
-              {/* Outer Layer */}
-              <motion.div
-                initial={{ opacity: 0, y: 40, rotateX: 20 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 30 }}
-                viewport={viewportOnceEarly}
-                transition={{ duration: 1, ease: ease.smooth }}
-                className="w-[80%] h-24 bg-gradient-to-br from-[#c76600]/10 to-[#f3ece2] border border-[#c76600]/20 rounded-2xl shadow-sm flex items-center justify-center backdrop-blur-sm z-30"
-              >
-                <div className="text-center">
-                  <span className="font-mono text-[0.5625rem] tracking-[0.25em] text-[#c76600] uppercase font-black block mb-1">
-                    LAYER 01
-                  </span>
-                  <span className="font-display text-xl text-[#3a2a22]">Outer Shield</span>
-                </div>
-              </motion.div>
-
-              {/* Air Gap */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={viewportOnceEarly}
-                transition={{ delay: 0.3, duration: 1 }}
-                className="relative w-full flex flex-col items-center gap-3 z-20"
-              >
-                <div className="h-16 w-px bg-dashed border-l border-dashed border-[#c76600]/30" />
-                <div className="px-6 py-2 rounded-full border border-[#c76600]/10 bg-white/50 backdrop-blur-md">
-                  <span className="font-mono text-[0.5rem] tracking-[0.3em] text-[#c76600] uppercase font-bold italic">
-                    Breathable Air Gap
-                  </span>
-                </div>
-                <div className="h-16 w-px bg-dashed border-l border-dashed border-[#c76600]/30" />
-              </motion.div>
-
-              {/* Inner Layer */}
-              <motion.div
-                initial={{ opacity: 0, y: -40, rotateX: 20 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 30 }}
-                viewport={viewportOnceEarly}
-                transition={{ delay: 0.5, duration: 1, ease: ease.smooth }}
-                className="w-[80%] h-24 bg-gradient-to-br from-white to-[#f3ece2]/50 border border-[#3a2a22]/10 rounded-2xl shadow-inner-soft flex items-center justify-center backdrop-blur-sm z-10"
-              >
-                <div className="text-center">
-                  <span className="font-mono text-[0.5625rem] tracking-[0.25em] text-[#3a2a22]/40 uppercase font-black block mb-1">
-                    LAYER 02
-                  </span>
-                  <span className="font-display text-xl text-[#3a2a22]">Inner Comfort</span>
-                </div>
-              </motion.div>
-
-              {/* Atmospheric Background Glow */}
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,130,13,0.04),transparent_70%)] pointer-events-none" />
-            </div>
+              <div className="max-w-[26rem] mx-auto lg:mx-0 lg:ml-auto">
+                <StoryImage
+                  label="WARM SUNLIGHT · COMMUTE"
+                  aspect="aspect-[4/5]"
+                  caption="Calm confidence · 8:14 AM"
+                />
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ═══ SECTION 4: MOVEMENT VENTILATION ZONES ═══ */}
-      <section className="relative py-[70px] sm:py-[90px] md:py-[120px]">
-        <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            {/* LEFT: Lifestyle Visualization */}
+      {/* ════════════════════════════════════════════════════════════════
+         SECTION 02 — PROTECTION, BY DESIGN
+         ════════════════════════════════════════════════════════════════ */}
+      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#F3ECE2]/50 border-y border-[#3a2a22]/8 py-14">
+        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-20 items-center">
+            {/* LEFT — Fabric closeup */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={viewportOnce}
               transition={{ duration: 1.2, ease: ease.smooth }}
-              className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-cinematic border border-[#3a2a22]/5"
+              className="max-w-[26rem] mx-auto lg:mx-0"
             >
-              <img
-                src="/DSC05485.JPG"
-                alt="Movement Comfort"
-                className="w-full h-full object-cover grayscale-[0.2] contrast-[1.05]"
+              <StoryImage
+                label="FABRIC · CLOSE-UP"
+                aspect="aspect-[4/5]"
+                caption="Weave · sunlight interaction"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#3a2a22]/20 via-transparent to-[#c76600]/10" />
+            </motion.div>
 
-              {/* Overlay Flow Lines */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{
-                      x: [0, 400],
-                      opacity: [0, 0.3, 0],
-                      y: [0, 20, 0],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      delay: i * 0.5,
-                      ease: "linear",
-                    }}
-                    className="absolute h-px w-20 bg-gradient-to-r from-transparent via-white to-transparent"
-                    style={{
-                      top: `${10 + i * 8}%`,
-                      left: `-20%`,
-                      transform: "rotate(-10deg)",
-                    }}
-                  />
-                ))}
+            {/* RIGHT — Editorial copy */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewportOnce}
+              transition={{ duration: 1.1, ease: ease.smooth, delay: 0.1 }}
+            >
+              <Chapter number="CHAPTER TWO" title="Protection, By Design" />
+              <h2
+                className="font-display leading-[1.05] tracking-tight mb-8"
+                style={{ fontSize: "clamp(2rem, 5.2vw, 4rem)" }}
+              >
+                Protection begins
+                <span className="block italic font-light text-[#c76600]">
+                  with thoughtful design.
+                </span>
+              </h2>
+
+              <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
+                <p>
+                  Soliva incorporates UPF 50+ protective fabric to help reduce everyday UV
+                  exposure during daily commutes, errands, and long outdoor hours.
+                </p>
+                <p className="font-display italic text-[#3a2a22]/80 text-[1.15rem] md:text-[1.25rem] leading-[1.6]">
+                  Not an afterthought. A foundation.
+                </p>
+                <p>
+                  Protection is built into the fabric itself — quietly, consistently, and from
+                  the first thread up.
+                </p>
               </div>
 
-              <div className="absolute top-8 left-8 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30">
-                <span className="font-mono text-[0.5rem] tracking-[0.2em] text-white uppercase font-bold">
-                  KINETIC FLOW MAPPING
+              <div className="mt-10 inline-flex items-center gap-4 border-t border-[#3a2a22]/12 pt-5">
+                <span className="font-mono text-[0.625rem] tracking-[0.42em] uppercase text-[#c76600] font-bold">
+                  UPF 50+
+                </span>
+                <span className="block h-px w-6 bg-[#3a2a22]/20" />
+                <span className="font-mono text-[0.625rem] tracking-[0.32em] uppercase text-[#3a2a22]/55 font-bold">
+                  Everyday UV defence
                 </span>
               </div>
             </motion.div>
-
-            {/* RIGHT: Feature Storytelling */}
-            <div className="flex flex-col text-left">
-              <span className="font-mono text-[0.625rem] tracking-[0.4em] text-[#c76600] uppercase font-bold mb-6">
-                DAILY MOTION
-              </span>
-              <h2
-                className="font-display text-[#3a2a22] tracking-tight leading-[1.1] mb-8"
-                style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
-              >
-                Designed Around <br /> Daily Motion
-              </h2>
-
-              <div className="space-y-8">
-                {[
-                  {
-                    title: "Ventilation airflow zones",
-                    desc: "Strategically placed micro-openings that enable heat release without compromising coverage.",
-                  },
-                  {
-                    title: "Heat release structure",
-                    desc: "Engineered to prevent sweat trapping, ensuring skin remains cool during high-exposure hours.",
-                  },
-                  {
-                    title: "Long-hour outdoor comfort",
-                    desc: "Featherweight materials designed for 8+ hours of continuous wear in harsh urban climates.",
-                  },
-                  {
-                    title: "Lightweight movement support",
-                    desc: "Flexible architecture that moves naturally with your body's silhouette during commutes.",
-                  },
-                  {
-                    title: "Breathable wearability",
-                    desc: "A fabric weight ratio under 180g, focused on a 'barely there' feel for daily routines.",
-                  },
-                ].map((f, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={viewportOnceEarly}
-                    transition={{ delay: i * 0.1, duration: 0.8 }}
-                    className="group"
-                  >
-                    <div className="flex items-start gap-5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#c76600]/40 mt-2.5 transition-all duration-500 group-hover:scale-150 group-hover:bg-[#c76600]" />
-                      <div>
-                        <h4 className="font-display text-xl text-[#3a2a22] mb-2">{f.title}</h4>
-                        <p className="text-[0.875rem] text-[#7b6a5f] font-light leading-relaxed max-w-md">
-                          {f.desc}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* ═══ SECTION 5: BUILT FOR DAILY EXPOSURE ═══ */}
-      <section className="relative py-[70px] sm:py-[90px] md:py-[120px] bg-luxury-beige/40">
-        <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-          <div className="text-center mb-16">
-            <h2
-              className="font-display text-[#3a2a22] tracking-tight leading-[1.1]"
-              style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
-            >
-              Built For Everyday Exposure
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { title: "Urban Commuting", image: "/hero-image.webp", tag: "MOTION" },
-              { title: "Long Outdoor Hours", image: "/DSC05476.JPG", tag: "STAMINA" },
-              { title: "Summer Daily Movement", image: "/hero-banner-2.webp", tag: "FREEDOM" },
-            ].map((card, i) => (
-              <InteractiveCard3D key={i}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewportOnceEarly}
-                  transition={{ delay: i * 0.1, duration: 1, ease: ease.smooth }}
-                  className="group relative h-[450px] rounded-[2.5rem] overflow-hidden shadow-editorial transition-all duration-700 hover:shadow-cinematic"
-                >
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#3a2a22]/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
-
-                  <div className="absolute inset-x-8 bottom-8 flex flex-col items-start text-left">
-                    <span className="font-mono text-[0.5rem] tracking-[0.3em] text-white/60 uppercase font-black mb-2">
-                      {card.tag}
-                    </span>
-                    <h3 className="font-display text-2xl text-white mb-4">{card.title}</h3>
-                    <div className="h-px w-0 bg-white/40 group-hover:w-full transition-all duration-700" />
-                  </div>
-                </motion.div>
-              </InteractiveCard3D>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ SECTION 6: MATERIAL PHILOSOPHY ═══ */}
-      <section className="relative py-[70px] sm:py-[90px] md:py-[120px]">
-        <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2
-              className="font-display text-[#3a2a22] tracking-tight leading-[1.1] mb-6"
-              style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
-            >
-              Thoughtful Material Philosophy
-            </h2>
-            <p className="text-[1.0625rem] text-[#7b6a5f] font-light leading-relaxed">
-              Every layer is designed around comfort, movement, airflow, and long-hour wearability
-              for Indian climates.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-x-12 gap-y-8 border-y border-[#3a2a22]/10 py-12">
-            {[
-              "Lightweight Layering",
-              "Breathable Comfort",
-              "Movement First Design",
-              "Soft Everyday Wear",
-              "Heat Conscious Construction",
-            ].map((f, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={viewportOnceEarly}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="flex flex-col items-center group cursor-default"
-              >
-                <div className="w-1 h-1 rounded-full bg-[#c76600]/40 mb-4 group-hover:scale-150 group-hover:bg-[#c76600] transition-all duration-500" />
-                <span className="font-mono text-[0.625rem] tracking-[0.2em] text-[#3a2a22]/60 uppercase font-bold group-hover:text-[#3a2a22] transition-colors duration-500">
-                  {f}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ SECTION 7: FINAL CINEMATIC CTA ═══ */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        {/* Atmospheric Background */}
-        <div className="absolute inset-0 bg-[#FAF7F3]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(245,130,13,0.06),transparent_70%)]" />
-        <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
-
-        {/* Layered Lighting */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#3a2a22]/10 to-transparent" />
-
-        <div className="relative z-10 mx-auto max-w-[800px] px-5 text-center">
+      {/* ════════════════════════════════════════════════════════════════
+         SECTION 03 — COMFORT WITHOUT COMPROMISE
+         ════════════════════════════════════════════════════════════════ */}
+      <section className="relative snap-start py-12 sm:py-16">
+        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
-            transition={{ duration: 1.5, ease: ease.smooth }}
+            transition={{ duration: 1, ease: ease.smooth }}
+            className="max-w-3xl mb-10 sm:mb-12 text-center mx-auto"
           >
+            <div className="flex justify-center">
+              <Chapter number="CHAPTER THREE" title="Comfort Without Compromise" />
+            </div>
             <h2
-              className="font-display text-[#3a2a22] leading-[1.1] mb-8"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)" }}
+              className="font-display leading-[1.04] tracking-tight"
+              style={{ fontSize: "clamp(1.95rem, 4.6vw, 3.5rem)" }}
             >
-              Technology Designed <br /> Around Real Life.
+              Protection should never feel
+              <span className="block italic font-light text-[#c76600]">
+                heavy, restrictive, or worn.
+              </span>
             </h2>
-            <p className="text-[1.125rem] text-[#7b6a5f] font-light leading-relaxed mb-12 max-w-xl mx-auto italic">
-              “Built for movement, warmth, long hours, and modern Indian routines.”
+            <p className="mt-5 max-w-xl mx-auto text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light leading-[1.7]">
+              A thoughtfully layered construction balances coverage and breathability — so Soliva
+              remains calm and unobtrusive through every hour of daily wear.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnceEarly}
+            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-7 max-w-5xl mx-auto"
+          >
+            {[
+              { label: "AIRFLOW · BREATH", caption: "Breathable layers" },
+              { label: "MOTION · FABRIC", caption: "Natural movement" },
+              { label: "LIGHTWEIGHT · WEAR", caption: "All-day comfort" },
+            ].map((img) => (
+              <motion.div
+                key={img.label}
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 1, ease: ease.smooth }}
+              >
+                <StoryImage
+                  label={img.label}
+                  caption={img.caption}
+                  aspect="aspect-[3/4]"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="mt-10 sm:mt-12 max-w-2xl mx-auto text-center font-display italic text-[#3a2a22]/70 leading-[1.5]"
+            style={{ fontSize: "clamp(1rem, 1.6vw, 1.25rem)" }}
+          >
+            Comfort isn't the absence of protection — it's the quiet evidence of it.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+         SECTION 04 — COVERAGE WHERE IT MATTERS
+         ════════════════════════════════════════════════════════════════ */}
+      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#F3ECE2]/40 border-y border-[#3a2a22]/8 py-14">
+        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-20 items-center">
+            {/* LEFT — Editorial copy + coverage pillars */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewportOnce}
+              transition={{ duration: 1.1, ease: ease.smooth }}
+            >
+              <Chapter number="CHAPTER FOUR" title="Coverage Where It Matters" />
+              <h2
+                className="font-display leading-[1.04] tracking-tight mb-8"
+                style={{ fontSize: "clamp(2rem, 5.2vw, 3.85rem)" }}
+              >
+                Where makeshift solutions
+                <span className="block italic font-light text-[#c76600]">
+                  quietly leave gaps.
+                </span>
+              </h2>
+
+              <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
+                <p>
+                  Soliva is intentionally shaped to help cover the face, nose, ears, neck, and
+                  back — the areas most commonly exposed during everyday movement.
+                </p>
+                <p className="font-display italic text-[#3a2a22]/80 text-[1.1rem] md:text-[1.2rem] leading-[1.55]">
+                  A more complete protection experience, by design.
+                </p>
+              </div>
+
+              <ul className="mt-10 grid grid-cols-2 gap-x-8 gap-y-3 max-w-md">
+                {["Face", "Nose", "Ears", "Neck", "Back", "Shoulders"].map((zone, i) => (
+                  <li
+                    key={zone}
+                    className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.32em] uppercase text-[#3a2a22]/55 font-bold"
+                  >
+                    <span className="block h-px w-4 bg-[#c76600]/40" />
+                    0{i + 1} · {zone}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* RIGHT — Coverage visualization */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={viewportOnce}
+              transition={{ duration: 1.2, ease: ease.smooth, delay: 0.1 }}
+              className="max-w-[26rem] mx-auto lg:mx-0 lg:ml-auto"
+            >
+              <StoryImage
+                label="COVERAGE · ZONES"
+                aspect="aspect-[4/5]"
+                caption="Front · side · back"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+         SECTION 05 — BUILT FOR INDIAN CONDITIONS (dark statement)
+         ════════════════════════════════════════════════════════════════ */}
+      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#3a2a22] text-[#FAF7F3] overflow-hidden py-14">
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.08),transparent_55%)]" />
+
+        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1.1, ease: ease.smooth }}
+            className="text-center max-w-4xl mx-auto mb-10 sm:mb-12"
+          >
+            <Chapter number="CHAPTER FIVE" title="Built for Indian Conditions" tone="ivory" />
+            <h2
+              className="font-display leading-[1.02] tracking-tight"
+              style={{ fontSize: "clamp(2.2rem, 6.4vw, 5rem)" }}
+            >
+              Heat. Dust. Pollution.
+              <span className="block italic font-light text-[#d9b27a] mt-2">
+                Movement.
+              </span>
+            </h2>
+            <p className="mt-8 max-w-xl mx-auto text-[1rem] md:text-[1.0625rem] text-white/70 font-light leading-[1.75]">
+              From daily commutes and college rides to errands and long outdoor hours, Soliva is
+              designed for the realities of Indian environments — not generalised conditions, but
+              the ones people actually face every day.
             </p>
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link
-                to="/collection"
-                className="px-10 py-5 rounded-full bg-[#3a2a22] text-[#f7f3ee] font-mono text-[0.625rem] tracking-[0.25em] uppercase font-bold transition-all duration-700 hover:bg-[#4a3a32] hover:shadow-floating hover:-translate-y-1"
-              >
-                Explore Collection
-              </Link>
-              <button className="px-10 py-5 rounded-full border border-[#3a2a22]/20 bg-white/30 backdrop-blur-md text-[#3a2a22] font-mono text-[0.625rem] tracking-[0.25em] uppercase font-bold transition-all duration-700 hover:bg-white/60 hover:-translate-y-1">
-                Discover The System
-              </button>
+            <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3">
+              {["Daily Commutes", "Urban Movement", "Long Outdoor Hours", "Everyday Exposure"].map(
+                (line) => (
+                  <span
+                    key={line}
+                    className="font-mono text-[0.6875rem] tracking-[0.32em] uppercase text-[#d9b27a]/85 font-bold"
+                  >
+                    {line}
+                  </span>
+                ),
+              )}
             </div>
           </motion.div>
-        </div>
 
-        {/* Closing Texture Layer */}
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#FAF7F3] to-transparent z-20" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1.3, ease: ease.smooth, delay: 0.1 }}
+            className="mx-auto max-w-[1040px]"
+          >
+            <StoryImage
+              label="INDIAN URBAN · COMMUTE"
+              aspect="aspect-[21/9]"
+              rounded="rounded-[2.5rem]"
+              caption="Real-world environments · daily"
+              tone="dark"
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+         SECTION 06 — CLOSING · THOUGHTFULLY LAYERED, EFFORTLESSLY WORN
+         ════════════════════════════════════════════════════════════════ */}
+      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#3a2a22] text-[#FAF7F3] overflow-hidden py-14">
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.07),transparent_60%)]" />
+
+        <div className="relative z-10 mx-auto max-w-[1340px] w-full px-5 sm:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1.2, ease: ease.smooth }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            <Chapter number="EPILOGUE" title="The Promise" tone="ivory" />
+            <h2
+              className="font-display leading-[1.02] tracking-tight"
+              style={{ fontSize: "clamp(2.4rem, 7.4vw, 5.75rem)" }}
+            >
+              Thoughtfully layered.
+              <span className="block italic font-light text-[#d9b27a] mt-2">
+                Effortlessly worn.
+              </span>
+            </h2>
+            <p className="mt-8 max-w-xl mx-auto text-[1rem] md:text-[1.0625rem] text-white/65 font-light italic leading-[1.75]">
+              Because protection should feel as natural as stepping out.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1.3, ease: ease.smooth, delay: 0.1 }}
+            className="mt-10 sm:mt-12 mx-auto max-w-[1040px]"
+          >
+            <StoryImage
+              label="SOLIVA · WORN EFFORTLESSLY"
+              aspect="aspect-[21/9]"
+              rounded="rounded-[2.5rem]"
+              caption="On the road · everyday"
+              tone="dark"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="mt-10 sm:mt-12 flex justify-center"
+          >
+            <Link
+              to="/collection"
+              className="px-12 py-5 rounded-full bg-[#FAF7F3] text-[#3a2a22] font-mono text-[0.625rem] tracking-[0.32em] uppercase font-bold transition-[transform,background-color] duration-300 hover:bg-[#d9b27a] hover:-translate-y-0.5"
+            >
+              Explore the Collection
+            </Link>
+          </motion.div>
+        </div>
       </section>
     </div>
   );
