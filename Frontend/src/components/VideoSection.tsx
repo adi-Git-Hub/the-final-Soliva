@@ -118,6 +118,16 @@ export function VideoSection() {
 
   return (
     <>
+      {/* Section headline — one line, big & bold, sits above the video */}
+      <header className="relative w-full bg-transparent px-6 pt-10 md:pt-14 pb-2 md:pb-3 text-center">
+        <h2
+          className="font-display font-extrabold text-[#3a2a22] tracking-tight leading-none whitespace-nowrap"
+          style={{ fontSize: "clamp(1.5rem, 5.5vw, 4.25rem)" }}
+        >
+          Beyond coverage. <span className="text-[#c76600]">Beyond ordinary.</span>
+        </h2>
+      </header>
+
       <section
         ref={sectionRef}
         id="video-section"

@@ -130,8 +130,8 @@ export function Header() {
           "before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:pointer-events-none",
           "after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none",
           isScrolled
-            ? "h-14 w-[min(96vw,1100px)] px-6 mt-2 rounded-2xl border border-white/20 bg-white/40 shadow-editorial"
-            : "h-16 w-full px-8 mt-0 rounded-none border-transparent bg-white/40 shadow-none",
+            ? "h-[68px] w-[min(96vw,1100px)] px-6 mt-2 rounded-2xl border border-white/20 bg-white/40 shadow-editorial"
+            : "h-[84px] w-full px-8 mt-0 rounded-none border-transparent bg-white/40 shadow-none",
         )}
       >
         <div
@@ -141,13 +141,14 @@ export function Header() {
           )}
         >
           <div className="flex items-center gap-8 lg:gap-12 h-full">
-            {/* Soliva Branding — Left aligned, increased to ~20% of navbar length */}
-            <Link to="/" className="flex items-center outline-none group h-full py-2">
+            {/* Soliva Branding — fills the navbar height with small breathing room,
+                so the full logo stays visible (never cropped). */}
+            <Link to="/" className="flex items-center outline-none group h-full py-1.5">
               <img
-                src="/logo-new.png"
+                src="/soliva-nav.webp"
                 alt="Soliva"
                 className={cn(
-                  "object-contain transition-all duration-700 ease-in-out h-full w-auto max-w-[200px] lg:max-w-[240px]",
+                  "object-contain transition-all duration-700 ease-in-out h-full w-auto max-w-[260px] lg:max-w-[300px]",
                 )}
               />
             </Link>

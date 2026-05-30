@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { setLenis } from "@/lib/smooth-scroll";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -40,6 +41,7 @@ function Index() {
       touchMultiplier: 1.5,
       infinite: false,
     });
+    setLenis(lenis);
 
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -62,6 +64,7 @@ function Index() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      setLenis(null);
       lenis.destroy();
       gsap.ticker.remove(lenis.raf);
     };

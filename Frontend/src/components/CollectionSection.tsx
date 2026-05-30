@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "@tanstack/react-router";
-import { viewportOnce, viewportOnceEarly } from "@/design-system";
+import { viewportOnce, ease } from "@/design-system";
 import { EverydayInsightHorizontal } from "./EverydayInsightHorizontal";
 
 const products = [
@@ -54,129 +54,208 @@ const trustLines = [
   "Everyday Essential",
 ];
 
+const routines = [
+  "Daily commuting",
+  "College travel",
+  "Work movement",
+  "Outdoor hours",
+  "Weekend journeys",
+];
+
+const insightCards = [
+  { no: "01", title: "Built for movement", desc: "Protection designed around everyday mobility and natural motion." },
+  { no: "02", title: "Breathable comfort", desc: "Engineered to remain comfortable through long outdoor hours." },
+  { no: "03", title: "Thoughtful coverage", desc: "Full face, neck, and back protection designed for daily exposure." },
+  { no: "04", title: "Everyday wearability", desc: "Created to become part of routine rather than interrupt it." },
+];
+
 export function CollectionSection() {
-  const navigate = useNavigate();
+  // Layered stage: which variant sits centred (changes on CLICK only) and which
+  // one is hovered (lifts in place, never re-centres — that prevents the flicker).
+  const [active, setActive] = useState(2);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [entered, setEntered] = useState(false);
+  // After the staggered entry finishes, drop the per-card delay so hover is instant.
+  const [settled, setSettled] = useState(false);
+
+  useEffect(() => {
+    if (!entered) return;
+    const t = setTimeout(() => setSettled(true), 1200);
+    return () => clearTimeout(t);
+  }, [entered]);
+
+  // Editorial fan transform for each variant relative to the active one.
+  const fanStyle = (i: number): React.CSSProperties => {
+    const pos = i - active;
+    const dist = Math.min(Math.abs(pos), 3);
+    const isHovered = i === hovered;
+    // Hover lifts & enlarges the card IN PLACE — translateX depends only on `active`,
+    // so a hovered side-card never shifts the fan and no neighbour slides under the
+    // cursor to re-trigger hover. Re-centring happens on click instead.
+    const lift = isHovered ? -32 : 0;
+    const bump = isHovered ? 0.08 : 0;
+    const tilt = isHovered ? 0 : pos * 5;
+    return {
+      transform: `translateX(${pos * 168}px) translateY(${dist * 18 + lift}px) rotate(${tilt}deg) scale(${1 - dist * 0.1 + bump})`,
+      opacity: entered ? 1 - dist * 0.16 : 0,
+      zIndex: isHovered ? 50 : 20 - dist,
+      transitionDelay: entered && !settled ? `${i * 80}ms` : "0ms",
+    };
+  };
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-luxury-beige/60 pt-2 md:pt-3 pb-0 z-20"
+      className="relative w-full overflow-hidden bg-transparent pt-2 md:pt-3 pb-0 z-20"
     >
-      {/* Background — single static gradient, no overlays */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_30%,rgba(245,130,13,0.04),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(252,231,243,0.4),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(243,236,226,0.8),transparent_55%)]" />
 
-      <div className="relative mx-auto max-w-[90rem] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 z-10 md:min-h-screen md:flex md:flex-col md:justify-center md:py-6">
-        {/* Header Section */}
+      {/* ═══ EDITORIAL BRIDGE — One design. Five expressions of movement. ═══ */}
+      <div className="relative w-full">
+        {/* Soft warm glow that reduces toward the bottom → seamless hand-off */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.05),transparent_60%)] [mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_100%)]"
+        />
+
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          onViewportEnter={() => setEntered(true)}
+          initial={{ opacity: 0, y: 28, scale: 0.975 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={viewportOnce}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.1 } },
-          }}
-          className="flex flex-col items-center text-center mb-4 md:mb-5 bg-surface-panel border border-line-hairline rounded-[1.75rem] sm:rounded-panel px-5 sm:px-8 py-3 sm:py-2 md:py-2.5"
+          transition={{ duration: 1.1, ease: ease.luxe }}
+          className="relative z-10 mx-auto max-w-[80rem] px-5 sm:px-8 lg:px-10 pt-16 md:pt-24 pb-14 md:pb-20"
         >
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            className="flex items-center gap-3 sm:gap-4 mb-3"
-          >
-            <div className="h-px w-6 sm:w-8 bg-[#c76600]/20" />
-            <span className="text-micro-sm sm:text-micro-md tracking-luxe sm:tracking-editorial text-[#c76600] uppercase font-bold">
+          {/* ── Header ── */}
+          <div className="flex flex-col items-center text-center">
+            <span className="font-mono text-[0.625rem] sm:text-[0.6875rem] tracking-[0.34em] uppercase text-[#c76600] font-bold">
               Soliva SunWrap™
             </span>
-            <div className="h-px w-6 sm:w-8 bg-[#c76600]/20" />
-          </motion.div>
-
-          <motion.h2
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            className="font-display text-h4 md:text-h1 text-[#3a2a22] leading-display-snug tracking-tight md:whitespace-nowrap"
-          >
-            One Product. <span className="italic text-[#c76600]">Five Colours.</span>
-          </motion.h2>
-
-          <div className="mt-3 h-[2px] w-16 bg-gradient-to-r from-transparent via-[#3a2a22]/20 to-transparent" />
-
-          <motion.p
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-            className="mt-4 max-w-2xl text-xs md:text-sm text-[#7b6a5f] leading-relaxed font-light italic"
-          >
-            Protective essentials thoughtfully designed for everyday exposure — supporting different
-            routines, movement, and life stages.
-          </motion.p>
-
-          <motion.span
-            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-            className="mt-4 font-mono text-[0.625rem] tracking-[0.2em] text-[#3a2a22]/60 uppercase font-bold"
-          >
-            Designed for commuting, outdoor exposure, travel, work, college, and everyday movement.
-          </motion.span>
-        </motion.div>
-
-        {/* Collection Cards Grid */}
-        <div className="flex overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:pb-0 md:-mt-4 md:items-end lg:grid-cols-4 xl:grid-cols-5">
-          {products.map((p, i) => (
-            <motion.article
-              key={p.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportOnceEarly}
-              transition={{ delay: i * 0.1, duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-              onClick={() => navigate({ to: "/products/$slug", params: { slug: p.slug } })}
-              className="flex-none w-[85vw] snap-center px-3 md:w-full md:px-0 group cursor-pointer"
+            <h2
+              className="mt-4 font-display text-[#3a2a22] tracking-tight leading-[1.12]"
+              style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)" }}
             >
-              <div className="relative flex flex-col h-full">
-                {/* Image Container */}
-                <div className={`relative aspect-[4/5.2] md:aspect-[4/4.4] md:max-h-[42vh] overflow-hidden rounded-panel border border-[#3a2a22]/5 bg-gradient-to-br ${p.tone} transition-[transform,box-shadow] duration-500 group-hover:-translate-y-1 group-hover:shadow-floating`}>
-                  {/* Edition Badge */}
-                  <div className="absolute top-6 left-6 z-20 bg-white/70 rounded-2xl p-2.5 shadow-sm border border-[#3a2a22]/5">
-                    <div className="flex flex-col gap-0.5 items-center">
-                      <span className="font-mono text-[0.5rem] tracking-[0.2em] text-[#3a2a22]/40 uppercase font-bold">
-                        VARIANT
+              One design.
+              <span className="block italic font-light text-[#c76600]/90">
+                Five expressions of movement.
+              </span>
+            </h2>
+
+            <p className="mt-6 text-[0.95rem] md:text-[1.05rem] text-[#3a2a22]/80 font-light">
+              Every routine is different.
+            </p>
+
+            {/* Routines — editorial inline list */}
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+              {routines.map((r, i) => (
+                <span key={r} className="flex items-center gap-3">
+                  <span className="font-mono text-[0.625rem] md:text-[0.6875rem] tracking-[0.16em] uppercase text-[#7b6a5f] font-semibold">
+                    {r}
+                  </span>
+                  {i < routines.length - 1 && (
+                    <span className="text-[#c76600]/40 text-[0.5rem]" aria-hidden>
+                      ✦
+                    </span>
+                  )}
+                </span>
+              ))}
+            </div>
+
+            <p className="mt-6 max-w-[640px] text-[0.875rem] md:text-[0.95rem] text-[#7b6a5f] font-light leading-relaxed">
+              The same thoughtful protection system adapts across different lifestyles while
+              maintaining comfort, coverage, and breathable wearability.
+            </p>
+
+            <p className="mt-5 font-display text-[#3a2a22] tracking-tight leading-snug text-lg md:text-xl">
+              Designed once.{" "}
+              <span className="italic font-light text-[#c76600]/90">Experienced differently.</span>
+            </p>
+          </div>
+
+          {/* ── Layered editorial stage — all five variants, one centred ── */}
+          <div className="relative mx-auto mt-10 md:mt-12 h-[440px] sm:h-[540px] lg:h-[640px] w-full">
+            <div className="absolute inset-0 flex items-center justify-center scale-[0.6] sm:scale-[0.84] lg:scale-100 origin-center">
+              {products.map((p, i) => (
+                <div
+                  key={p.id}
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
+                  onClick={() => setActive(i)}
+                  style={fanStyle(i)}
+                  className="absolute left-1/2 top-1/2 -ml-[150px] -mt-[200px] h-[400px] w-[300px] cursor-pointer transition-[transform,opacity] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
+                >
+                  <div
+                    className={`relative h-full w-full overflow-hidden rounded-[1.6rem] border border-[#3a2a22]/8 bg-gradient-to-br ${p.tone} transition-shadow duration-[700ms] ${
+                      i === active || i === hovered
+                        ? "shadow-[0_40px_70px_-30px_rgba(58,42,34,0.5)]"
+                        : "shadow-[0_18px_36px_-26px_rgba(58,42,34,0.4)]"
+                    }`}
+                  >
+                    <span className="absolute top-4 left-4 z-10 flex flex-col items-center bg-white/70 rounded-xl px-2 py-1.5 border border-[#3a2a22]/5">
+                      <span className="font-mono text-[0.45rem] tracking-[0.22em] text-[#3a2a22]/40 uppercase font-bold">
+                        Variant
                       </span>
-                      <span className="font-mono text-sm tracking-tighter text-[#3a2a22] font-bold">
+                      <span className="font-mono text-[0.8125rem] text-[#3a2a22] font-bold leading-none">
                         {p.id}
+                      </span>
+                    </span>
+                    <div className="absolute inset-0 flex items-center justify-center p-6">
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="max-h-full max-w-full object-contain drop-shadow-floating"
+                      />
+                    </div>
+                    <div className="absolute bottom-0 inset-x-0 p-3 text-center bg-gradient-to-t from-white/55 to-transparent">
+                      <span className="font-display text-[0.95rem] text-[#3a2a22] tracking-tight">
+                        {p.name}
                       </span>
                     </div>
                   </div>
-
-                  {/* Product Image */}
-                  <div className="absolute inset-0 flex items-center justify-center p-6 md:p-8 z-10">
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="max-w-full max-h-full object-contain drop-shadow-floating"
-                    />
-                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                {/* Content */}
-                <div className="mt-3 text-center md:text-left px-2 py-2">
-                  <h3 className="font-display text-xl text-[#3a2a22] tracking-tight mb-2 font-medium">
-                    {p.name}
-                  </h3>
-                  <p className="text-[0.75rem] text-[#7b6a5f] font-light italic mb-3">
-                    {i === 0 && "☀️ Enhanced Protection"}
-                    {i === 1 && "🌬 Breathable Comfort"}
-                    {i === 2 && "🛵 Everyday Movement"}
-                    {i >= 3 && "🛡 Full Coverage"}
-                  </p>
-                  <p className="text-[0.8125rem] leading-relaxed text-[#7b6a5f] font-light line-clamp-2">
-                    {p.desc}
-                  </p>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
+          {/* ── Four feature insight cards ── */}
+          <div className="mt-12 md:mt-16 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            {insightCards.map((c, i) => (
+              <motion.div
+                key={c.no}
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewportOnce}
+                transition={{ duration: 0.8, delay: i * 0.08, ease: ease.luxe }}
+                className="group rounded-[1.25rem] border border-[#3a2a22]/8 bg-white/45 p-5 md:p-6 transition-[transform,box-shadow,background-color] duration-500 ease-out hover:-translate-y-1 hover:bg-white hover:shadow-[0_22px_44px_-26px_rgba(58,42,34,0.42)]"
+              >
+                <span className="font-mono text-[0.5625rem] tracking-[0.3em] uppercase text-[#c76600]/70 font-bold">
+                  {c.no}
+                </span>
+                <h3 className="mt-3 font-display text-[1.05rem] md:text-lg text-[#3a2a22] leading-snug">
+                  {c.title}
+                </h3>
+                <p className="mt-2 text-[0.78rem] md:text-[0.8125rem] text-[#7b6a5f] font-light leading-relaxed">
+                  {c.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
 
-        {/* Bottom CTA Text */}
-        <div className="mt-6 md:mt-8 text-center">
-          <button className="px-12 py-4 rounded-full bg-[#3a2a22] text-[#f7f3ee] font-mono text-[0.75rem] tracking-[0.25em] uppercase font-black transition-[transform,background-color] duration-300 hover:bg-[#4a3a32] hover:-translate-y-1 shadow-editorial">
-            Explore Product →
-          </button>
-        </div>
+          {/* ── Micro editorial statement ── */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1, ease: ease.luxe }}
+            className="mt-12 md:mt-16 text-center font-display text-[#3a2a22] tracking-tight leading-snug"
+            style={{ fontSize: "clamp(1.25rem, 2.4vw, 1.85rem)" }}
+          >
+            Protection should adapt to life.
+            <span className="block italic font-light text-[#c76600]/90">
+              Not the other way around.
+            </span>
+          </motion.p>
+        </motion.div>
       </div>
 
       {/* ═══ EVERYDAY INSIGHT — 2-Panel Horizontal Storytelling ═══ */}

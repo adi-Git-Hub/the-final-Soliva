@@ -39,16 +39,20 @@ export function EverydayInsightHorizontal() {
 
   const handleChange = useCallback((index: number) => setActive(index), []);
 
-  // Smooth, scroll-tied horizontal pan — panels pan as the user scrolls.
+  // Locked chapters (same as UrbanStorytelling): the section smoothly freezes at
+  // full screen and each scroll slides in exactly ONE page from the right — no
+  // skipping, no auto-slide, vertical scroll only on entry/exit.
   useHorizontalStory({
     sectionRef,
     trackRef: containerRef,
     slideCount: PANEL_COUNT,
     enabled: !isMobile,
     onChange: handleChange,
+    mode: "lock",
   });
 
-  // Active-page focus: current page fully lit, neighbour dimmed; content lifts in.
+  // Active-page focus — opacity only. Animating `filter: blur()` on full-screen
+  // panels during the scroll-driven pan was the heaviest repaint cost; removed.
   useEffect(() => {
     if (isMobile) return;
     const section = sectionRef.current;
@@ -57,9 +61,8 @@ export function EverydayInsightHorizontal() {
       const panels = gsap.utils.toArray<HTMLElement>(".ei-panel", section);
       panels.forEach((panel, i) => {
         gsap.to(panel, {
-          opacity: i === active ? 1 : 0.35,
-          filter: i === active ? "blur(0px)" : "blur(2px)",
-          duration: 0.7,
+          opacity: i === active ? 1 : 0.4,
+          duration: 0.6,
           ease: "power2.out",
           overwrite: "auto",
         });
@@ -70,12 +73,12 @@ export function EverydayInsightHorizontal() {
         if (reveals.length) {
           gsap.fromTo(
             reveals,
-            { opacity: 0, filter: "blur(6px)" },
+            { opacity: 0, y: 16 },
             {
               opacity: 1,
-              filter: "blur(0px)",
-              duration: 0.7,
-              stagger: 0.07,
+              y: 0,
+              duration: 0.6,
+              stagger: 0.06,
               ease: "power3.out",
               overwrite: "auto",
             },
@@ -93,24 +96,11 @@ export function EverydayInsightHorizontal() {
         id="everyday-insight"
         className="relative w-full overflow-hidden min-h-screen md:h-screen bg-[#3a2a22]"
       >
-        {/* ═══ Ambient warm atmosphere ═══ */}
+        {/* ═══ Ambient warm atmosphere — static, GPU-cheap ═══ */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <motion.div
-            animate={{ opacity: [0.32, 0.44, 0.32] }}
-            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-            className="ei-bg-warm absolute top-[-12%] -left-[10%] w-[52%] h-[60%] rounded-full bg-[radial-gradient(circle_at_center,#f3e3cc,transparent_70%)] blur-[120px]"
-          />
-          <motion.div
-            animate={{ opacity: [0.20, 0.32, 0.20] }}
-            transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-            className="ei-bg-sun absolute top-[-5%] right-[-6%] w-[42%] h-[58%] rounded-full bg-[radial-gradient(circle_at_center,rgba(220,150,70,0.35),transparent_65%)] blur-[110px]"
-          />
-          <motion.div
-            animate={{ opacity: [0.15, 0.22, 0.15] }}
-            transition={{ duration: 30, repeat: Infinity, ease: "easeInOut", delay: 7 }}
-            className="absolute bottom-[-12%] left-[18%] w-[58%] h-[35%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(199,102,0,0.18),transparent_70%)] blur-[100px]"
-          />
-          <div className="absolute inset-0 opacity-[0.025] mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
+          <div className="ei-bg-warm absolute top-[-12%] -left-[10%] w-[52%] h-[60%] rounded-full opacity-[0.4] bg-[radial-gradient(circle_at_center,#f3e3cc,transparent_70%)] blur-[120px]" />
+          <div className="ei-bg-sun absolute top-[-5%] right-[-6%] w-[42%] h-[58%] rounded-full opacity-[0.28] bg-[radial-gradient(circle_at_center,rgba(220,150,70,0.35),transparent_65%)] blur-[110px]" />
+          <div className="absolute bottom-[-12%] left-[18%] w-[58%] h-[35%] rounded-full opacity-[0.2] bg-[radial-gradient(ellipse_at_center,rgba(199,102,0,0.18),transparent_70%)] blur-[100px]" />
         </div>
 
         <div
@@ -119,12 +109,10 @@ export function EverydayInsightHorizontal() {
         >
           {/* ═══ PAGE 01 — RETHINKING PROTECTION (grounded editorial frame) ═══ */}
           <div className="ei-panel relative flex flex-col w-full md:h-full md:w-1/2 justify-center px-6 md:px-10 lg:px-16 pt-20 md:pt-20 pb-10 md:pb-12 flex-shrink-0 overflow-hidden">
-            {/* Cinematic outer frame — subtle warm border, soft radius, atmospheric shadow */}
-            <motion.div
+            {/* Cinematic outer frame — static */}
+            <div
               aria-hidden
-              animate={{ opacity: [0.55, 0.85, 0.55] }}
-              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-4 md:inset-6 rounded-[2.5rem] border border-[#c08b4f]/20 shadow-[0_40px_100px_-40px_rgba(58,42,34,0.22),inset_0_0_60px_rgba(243,227,204,0.08)] pointer-events-none z-0"
+              className="absolute inset-4 md:inset-6 rounded-[2.5rem] opacity-70 border border-[#c08b4f]/20 shadow-[0_40px_100px_-40px_rgba(58,42,34,0.22),inset_0_0_60px_rgba(243,227,204,0.08)] pointer-events-none z-0"
             />
             <div className="relative z-10 max-w-[1240px] mx-auto w-full">
               {/* — Top centered tagline + micro line — */}
@@ -266,7 +254,7 @@ export function EverydayInsightHorizontal() {
                   transition={{ duration: 1.2, delay: 0.15, ease: ease.smooth }}
                   className="relative"
                 >
-                  <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_55%_45%,rgba(220,150,70,0.22),transparent_72%)] blur-3xl pointer-events-none" />
+                  <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_55%_45%,rgba(220,150,70,0.22),transparent_72%)] pointer-events-none" />
                   <div className="ei-p1-img relative aspect-[4/5] max-h-[48vh] w-full max-w-[22rem] mx-auto lg:mx-0 overflow-hidden rounded-[1.75rem] shadow-cinematic border border-[#3a2a22]/5 will-change-transform">
                     <img
                       src="/soliva-commute.webp"
@@ -284,11 +272,9 @@ export function EverydayInsightHorizontal() {
                     <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_72%_18%,rgba(245,200,130,0.28),transparent_55%)] mix-blend-screen" />
                     <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-[#3a2a22]/30 via-transparent to-[#c08b4f]/10 mix-blend-multiply" />
                     <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_60%,rgba(58,42,34,0.4)_100%)]" />
-                    <motion.div
+                    <div
                       aria-hidden
-                      animate={{ y: [0, -10, 0], opacity: [0.55, 0.75, 0.55] }}
-                      transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-                      className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none bg-gradient-to-t from-[#f3ecd9]/35 via-[#f3ecd9]/10 to-transparent"
+                      className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none opacity-65 bg-gradient-to-t from-[#f3ecd9]/35 via-[#f3ecd9]/10 to-transparent"
                     />
                   </div>
                 </motion.div>
@@ -298,40 +284,30 @@ export function EverydayInsightHorizontal() {
 
           {/* ═══ PAGE 02 — FREEDOM & EVERYDAY LIFE (lighter, more open) ═══ */}
           <div className="ei-panel relative flex flex-col w-full md:h-full md:w-1/2 justify-center px-6 md:px-10 lg:px-16 pt-20 md:pt-20 pb-10 md:pb-12 flex-shrink-0 overflow-hidden">
-            {/* Elegant cinematic vertical divider — gradient hairline with breathing glow */}
-            <motion.div
+            {/* Vertical divider — static */}
+            <div
               aria-hidden
-              animate={{ opacity: [0.5, 0.9, 0.5] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="hidden md:block absolute left-0 top-[12%] bottom-[12%] w-px bg-gradient-to-b from-transparent via-[#c08b4f]/40 to-transparent pointer-events-none z-20"
+              className="hidden md:block absolute left-0 top-[12%] bottom-[12%] w-px opacity-70 bg-gradient-to-b from-transparent via-[#c08b4f]/40 to-transparent pointer-events-none z-20"
             />
-            {/* Softer, more breathable outer frame */}
-            <motion.div
+            {/* Outer frame — static */}
+            <div
               aria-hidden
-              animate={{ opacity: [0.4, 0.65, 0.4] }}
-              transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-              className="absolute inset-4 md:inset-8 rounded-[2.5rem] border border-[#c08b4f]/10 pointer-events-none z-0"
+              className="absolute inset-4 md:inset-8 rounded-[2.5rem] opacity-[0.55] border border-[#c08b4f]/10 pointer-events-none z-0"
             />
-            {/* — Floating background type — subtle editorial atmosphere — */}
+            {/* — Floating background type — static editorial atmosphere — */}
             <div
               aria-hidden
               className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden"
             >
-              <motion.span
-                animate={{ opacity: [0.05, 0.09, 0.05] }}
-                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                className="font-display italic text-[#FAF7F3] text-[22vw] leading-none tracking-tight whitespace-nowrap select-none"
-              >
+              <span className="font-display italic text-[#FAF7F3]/[0.07] text-[22vw] leading-none tracking-tight whitespace-nowrap select-none">
                 freedom
-              </motion.span>
+              </span>
             </div>
 
-            {/* — Soft warm light streaks — */}
-            <motion.div
+            {/* — Soft warm light streak — static — */}
+            <div
               aria-hidden
-              animate={{ x: ["-4%", "4%", "-4%"], opacity: [0.4, 0.6, 0.4] }}
-              transition={{ duration: 60, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-[8%] right-[6%] w-[36%] h-[40%] pointer-events-none"
+              className="absolute top-[8%] right-[6%] w-[36%] h-[40%] opacity-50 pointer-events-none"
               style={{
                 background:
                   "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(245,205,140,0.18), transparent 75%)",
@@ -387,7 +363,7 @@ export function EverydayInsightHorizontal() {
                         visible: { opacity: 1, y: 0 },
                       }}
                       transition={{ duration: 1.0, ease: ease.smooth }}
-                      className="group relative bg-white/15 border border-[#c08b4f]/15 px-5 py-4 rounded-[1rem] backdrop-blur-[3px] shadow-[0_8px_28px_rgba(58,42,34,0.04)] transition-[box-shadow,background,border-color,transform] duration-700 hover:bg-white/25 hover:border-[#c08b4f]/30 hover:shadow-[0_18px_45px_rgba(58,42,34,0.10)] hover:-translate-y-0.5"
+                      className="group relative bg-white/15 border border-[#c08b4f]/15 px-5 py-4 rounded-[1rem] shadow-[0_8px_28px_rgba(58,42,34,0.04)] transition-[box-shadow,background,border-color,transform] duration-700 hover:bg-white/25 hover:border-[#c08b4f]/30 hover:shadow-[0_18px_45px_rgba(58,42,34,0.10)] hover:-translate-y-0.5"
                     >
                       <div className="flex items-center gap-2.5 mb-2">
                         <span className="font-mono text-[11px] tracking-[0.34em] text-[#c08b4f] font-medium">
@@ -414,7 +390,7 @@ export function EverydayInsightHorizontal() {
                   className="relative flex items-center justify-center"
                 >
                   {/* Warm atmospheric wash behind */}
-                  <div className="absolute -inset-6 bg-[radial-gradient(ellipse_at_55%_45%,rgba(220,150,70,0.28),transparent_72%)] blur-3xl pointer-events-none" />
+                  <div className="absolute -inset-6 bg-[radial-gradient(ellipse_at_55%_45%,rgba(220,150,70,0.28),transparent_72%)] pointer-events-none" />
 
                   <div className="relative aspect-[3/4] w-full max-w-[20rem] mx-auto rounded-[1.75rem] overflow-hidden border border-[#c08b4f]/20 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.55)]">
                     <img
@@ -465,7 +441,7 @@ export function EverydayInsightHorizontal() {
                       visible: { opacity: 1, y: 0 },
                     }}
                     transition={{ duration: 1.0, ease: ease.smooth }}
-                    className="group relative bg-white/15 border border-[#c08b4f]/15 px-5 py-4 rounded-[1rem] backdrop-blur-[3px] shadow-[0_8px_28px_rgba(58,42,34,0.04)] transition-[box-shadow,background,border-color,transform] duration-700 hover:bg-white/25 hover:border-[#c08b4f]/30 hover:shadow-[0_18px_45px_rgba(58,42,34,0.10)] hover:-translate-y-0.5"
+                    className="group relative bg-white/15 border border-[#c08b4f]/15 px-5 py-4 rounded-[1rem] shadow-[0_8px_28px_rgba(58,42,34,0.04)] transition-[box-shadow,background,border-color,transform] duration-700 hover:bg-white/25 hover:border-[#c08b4f]/30 hover:shadow-[0_18px_45px_rgba(58,42,34,0.10)] hover:-translate-y-0.5"
                   >
                     <div className="flex items-center gap-2.5 mb-2">
                       <span className="font-mono text-[11px] tracking-[0.34em] text-[#c08b4f] font-medium">
@@ -488,12 +464,10 @@ export function EverydayInsightHorizontal() {
                       visible: { opacity: 1, y: 0 },
                     }}
                     transition={{ duration: 1.0, ease: ease.smooth }}
-                    className="group relative bg-white/15 border border-[#c08b4f]/15 px-5 py-4 rounded-[1rem] backdrop-blur-[3px] shadow-[0_8px_28px_rgba(58,42,34,0.04)] transition-[box-shadow,background,border-color,transform] duration-700 hover:bg-white/25 hover:border-[#c08b4f]/30 hover:shadow-[0_18px_45px_rgba(58,42,34,0.10)] hover:-translate-y-0.5"
+                    className="group relative bg-white/15 border border-[#c08b4f]/15 px-5 py-4 rounded-[1rem] shadow-[0_8px_28px_rgba(58,42,34,0.04)] transition-[box-shadow,background,border-color,transform] duration-700 hover:bg-white/25 hover:border-[#c08b4f]/30 hover:shadow-[0_18px_45px_rgba(58,42,34,0.10)] hover:-translate-y-0.5"
                   >
-                    <motion.div
+                    <div
                       aria-hidden
-                      animate={{ y: [0, -3, 0] }}
-                      transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
                       className="absolute top-4 right-4 h-2.5 w-2.5 rounded-full bg-gradient-to-br from-[#d9b27a] to-[#a3743f] shadow-[0_0_14px_rgba(199,128,52,0.4)]"
                     />
                     <span className="font-mono text-[11px] tracking-[0.34em] text-[#c08b4f] uppercase font-medium block mb-2">
