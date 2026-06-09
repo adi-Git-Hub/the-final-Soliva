@@ -1,10 +1,5 @@
-import { useRef, useState } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
-} from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { viewportOnce, ease } from "@/design-system";
 
 /* ════════════════════════════════════════════════════════════════════════
@@ -355,66 +350,42 @@ const ZONES = [
 ];
 
 export function CoverageFigure() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [activeCount, setActiveCount] = useState(0);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.78", "end 0.55"],
-  });
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const n = Math.max(0, Math.min(ZONES.length, Math.round(v * ZONES.length + 0.0001)));
-    setActiveCount((prev) => (prev === n ? prev : n));
-  });
+  // Reveal viewport — fires once when the figure is meaningfully on screen.
+  const inView = { once: true, amount: 0.35 } as const;
 
   return (
-    <div ref={ref} className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-16 items-center">
-      {/* zone legend — activates with scroll */}
-      <ol className="order-2 lg:order-1 space-y-2.5">
-        {ZONES.map((z, i) => {
-          const on = i < activeCount;
-          return (
-            <li
-              key={z.no}
-              className="flex items-center gap-4 transition-all duration-500"
-              style={{ opacity: on ? 1 : 0.32 }}
-            >
-              <span
-                className="grid place-items-center h-9 w-9 rounded-full border font-mono text-[0.625rem] font-bold transition-all duration-500"
-                style={{
-                  borderColor: on ? ORANGE : "rgba(58,42,34,0.18)",
-                  background: on ? ORANGE : "transparent",
-                  color: on ? "#fff" : "rgba(58,42,34,0.5)",
-                }}
-              >
-                {z.no}
-              </span>
-              <span
-                className="font-display text-lg tracking-tight transition-colors duration-500"
-                style={{ color: on ? "#3a2a22" : "rgba(58,42,34,0.55)" }}
-              >
-                {z.name}
-              </span>
-              <span
-                className="h-px flex-1 transition-all duration-500"
-                style={{ background: on ? "rgba(199,102,0,0.35)" : "rgba(58,42,34,0.08)" }}
-              />
-            </li>
-          );
-        })}
-      </ol>
-
-      {/* figure */}
-      <figure className="order-1 lg:order-2 relative w-full">
-        <div className="relative aspect-[4/5] w-full max-w-[28rem] mx-auto overflow-hidden rounded-[2.25rem] border border-[#3a2a22]/8 bg-gradient-to-b from-[#F4ECE0] to-[#E9DECB]">
+    <div className="flex justify-center lg:justify-end">
+      {/* figure — strong entrance; all zone points reveal together (staggered)
+          the moment the section enters view, no scroll scrubbing. */}
+      <motion.figure
+        initial={{ opacity: 0, y: 60, scale: 0.84, rotateX: 10 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+        viewport={inView}
+        transition={{ duration: 1.4, ease: ease.luxe }}
+        style={{ transformPerspective: 1100 }}
+        className="relative w-full max-w-[20rem] lg:max-w-[21rem]"
+      >
+        {/* ambient glow behind the figure — fades in with the figure */}
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.9 }}
+          viewport={inView}
+          transition={{ duration: 1.2, delay: 0.2 }}
+          className="pointer-events-none absolute -inset-6 -z-10 rounded-[3rem] bg-[radial-gradient(circle_at_50%_38%,rgba(199,102,0,0.2),transparent_68%)] blur-2xl"
+        />
+        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2.25rem] border border-[#3a2a22]/8 bg-gradient-to-b from-[#F4ECE0] to-[#E9DECB]">
           <svg viewBox="0 0 420 525" className="absolute inset-0 h-full w-full" fill="none">
-            {/* coverage aura — grows as zones activate */}
-            <circle
+            {/* coverage aura */}
+            <motion.circle
               cx={236}
               cy={210}
               r={150}
               fill={ORANGE}
-              className="transition-all duration-700"
-              style={{ opacity: activeCount > 0 ? 0.06 + activeCount * 0.012 : 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 0.14 }}
+              viewport={inView}
+              transition={{ duration: 1, delay: 0.3 }}
             />
             {/* stylized bust silhouette */}
             <path
@@ -435,71 +406,58 @@ export function CoverageFigure() {
               strokeWidth={1.2}
             />
             {/* coverage sweep over head+shoulders */}
-            <path
+            <motion.path
               d="M170 96 q 66 -44 132 0 q 30 26 30 70 q 0 40 -20 64 q 26 12 34 40"
               stroke={ORANGE}
               strokeWidth={1.4}
-              strokeOpacity={activeCount >= 4 ? 0.5 : 0.18}
-              className="transition-all duration-700"
               fill="none"
+              initial={{ opacity: 0.18, pathLength: 0 }}
+              whileInView={{ opacity: 0.5, pathLength: 1 }}
+              viewport={inView}
+              transition={{ duration: 1.1, delay: 0.3, ease: ease.luxe }}
             />
 
-            {/* zone markers */}
-            {ZONES.map((z, i) => {
-              const on = i < activeCount;
-              return (
-                <g key={z.no} className="transition-all duration-500" style={{ opacity: on ? 1 : 0.25 }}>
-                  <line
-                    x1={z.lx + 6}
-                    y1={z.ly}
-                    x2={z.x}
-                    y2={z.y}
-                    stroke={on ? ORANGE : "#3a2a22"}
-                    strokeOpacity={on ? 0.4 : 0.12}
-                    strokeWidth={1}
-                    className="transition-all duration-500"
-                  />
+            {/* zone markers — all reveal together with a stagger on entry */}
+            <motion.g
+              initial="hidden"
+              whileInView="visible"
+              viewport={inView}
+              variants={{ visible: { transition: { staggerChildren: 0.14, delayChildren: 0.4 } } }}
+            >
+              {ZONES.map((z) => (
+                <motion.g
+                  key={z.no}
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.2 },
+                    visible: { opacity: 1, scale: 1 },
+                  }}
+                  transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
+                  style={{ transformOrigin: `${z.x}px ${z.y}px` }}
+                >
                   <circle
                     cx={z.x}
                     cy={z.y}
-                    r={on ? 13 : 8}
+                    r={13}
                     fill={ORANGE}
-                    fillOpacity={on ? 0.16 : 0}
+                    fillOpacity={0.16}
                     stroke={ORANGE}
-                    strokeOpacity={on ? 0.9 : 0.3}
+                    strokeOpacity={0.9}
                     strokeWidth={1.4}
-                    className="transition-all duration-500"
-                    style={{ transformOrigin: `${z.x}px ${z.y}px` }}
                   />
-                  <circle cx={z.x} cy={z.y} r={2.4} fill={ORANGE} fillOpacity={on ? 1 : 0.3} className="transition-all duration-500" />
-                  <text
-                    x={z.lx}
-                    y={z.ly + 3}
-                    fontFamily="monospace"
-                    fontSize={9}
-                    fontWeight="bold"
-                    fill={ORANGE}
-                    fillOpacity={on ? 0.9 : 0.3}
-                    className="transition-all duration-500"
-                  >
-                    {z.no}
-                  </text>
-                </g>
-              );
-            })}
+                  <circle cx={z.x} cy={z.y} r={2.4} fill={ORANGE} fillOpacity={1} />
+                </motion.g>
+              ))}
+            </motion.g>
           </svg>
 
           <div className="absolute bottom-5 left-6 right-6 flex items-center justify-between">
             <span className="font-mono text-[0.5625rem] tracking-[0.26em] uppercase text-[#3a2a22]/45 font-bold">
               Coverage map
             </span>
-            <span className="font-mono text-[0.5625rem] tracking-[0.26em] uppercase text-[#c76600] font-bold tabular-nums">
-              {String(activeCount).padStart(2, "0")} / 06
-            </span>
           </div>
         </div>
-        <VisualCaption>Scroll to map each protected zone · front · side · back</VisualCaption>
-      </figure>
+        <VisualCaption>Every protected zone · front · side · back</VisualCaption>
+      </motion.figure>
     </div>
   );
 }

@@ -1,0 +1,458 @@
+/* ════════════════════════════════════════════════════════════════════
+   SOLIVA · MOBILE STYLESHEET
+   --------------------------------------------------------------------
+   This file is the SINGLE home for mobile-only styling. It is loaded
+   AFTER styles.css (see routes/__root.tsx), and every rule is wrapped in
+   a media query — `@media (max-width: 767px)` for phone layout, or
+   `@media (hover: none)` for touch behaviour. Nothing here runs on
+   desktop, so desktop CSS and mobile CSS stay cleanly separate.
+
+   Component hooks: each major component root carries an `m-*` class
+   (m-hero, m-video, m-urban, m-collection, m-compare, m-brand,
+   m-header, m-footer) so its mobile rules live in one labelled block.
+
+   Rules are presentational only — no layout logic, no behaviour change.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Phone breakpoint = below Tailwind's `md` (768px), matching useIsMobile(). */
+:root {
+  --m-gutter: 1.25rem; /* consistent horizontal breathing on phones */
+  --m-section-y: clamp(3.25rem, 9vw, 4.5rem); /* ONE vertical rhythm for every section */
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   1 · GLOBAL FOUNDATIONS  (≤ 767px)
+   ════════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* Hard horizontal-overflow guard. Full-bleed carousels (`-mx-5`) and
+     ambient orbs can leak a sub-pixel sliver past the root at very narrow
+     widths (≈320px), creating a tiny sideways scroll. `clip` kills it
+     WITHOUT creating a scroll container, so Lenis smooth-scroll and any
+     position:sticky keep working (unlike `overflow: hidden`). */
+  html {
+    overflow-x: clip;
+  }
+
+  /* Comfortable reading rhythm for long body copy. Scoped to paragraphs
+     that opt in via the `.m-prose` flow or are plain body text — kept
+     mild so editorial micro-labels aren't affected. */
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Never let a stray fixed-width element create sideways scroll. */
+  .m-no-bleed {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   2 · TYPOGRAPHY REFINEMENTS  (≤ 480px — iPhone SE & up)
+   Moved here from styles.css so all mobile type tuning lives together.
+   Wide letter-spacing on small-caps is the #1 cause of overflow at 375px.
+   ════════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .font-display {
+    letter-spacing: -0.015em;
+  }
+
+  /* Infinite marquees crawl on a short viewport — speed them up to read. */
+  .marquee {
+    animation-duration: 22s;
+  }
+
+  /* Soften very wide tracking so small-caps rows don't push past 375px. */
+  .tracking-\[0\.6em\],
+  .tracking-\[0\.7em\],
+  .tracking-\[0\.8em\] {
+    letter-spacing: 0.35em;
+  }
+  .tracking-\[0\.5em\],
+  .tracking-\[0\.45em\] {
+    letter-spacing: 0.3em;
+  }
+  .tracking-\[0\.4em\] {
+    letter-spacing: 0.25em;
+  }
+
+  .mobile-wrap-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   3 · TOUCH EXPERIENCE LAYER  (hover: none — phones & tablets)
+   The native-app feel a hover-built UI is missing on a finger.
+   ════════════════════════════════════════════════════════════════════ */
+@media (hover: none) {
+  /* Snappy taps: kill the 300ms double-tap-zoom delay + grey flash. */
+  a,
+  button,
+  [role="button"],
+  input[type="submit"],
+  label {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Tactile press feedback. Framer Motion taps and transformed cards
+     carry an inline transform that outranks this, so no double-scale. */
+  a:active,
+  button:active,
+  [role="button"]:active {
+    transform: scale(0.97);
+    transition: transform 0.09s ease-out;
+  }
+
+  /* Kill "stuck hover": the raw u-* hover effects latch on after a tap. */
+  .u-card:hover {
+    --cs: 1;
+  }
+  .u-card:hover .u-card-sheen {
+    opacity: 0;
+  }
+  .u-p2-image-wrap:hover .u-p2-img,
+  .u-p4-image-wrap:hover .u-p4-img {
+    transform: none !important;
+    filter: none !important;
+  }
+  .u-cta:hover .u-cta-shimmer {
+    background-position: 200% 50%;
+  }
+}
+
+/* (Touch-target 44px floor + 16px input-zoom guard live in styles.css
+   @layer base — they're foundational resets, not alignment.) */
+
+/* ════════════════════════════════════════════════════════════════════
+   4 · PER-COMPONENT MOBILE BLOCKS  (≤ 767px)
+   One labelled block per component. Conservative refinements only —
+   the Tailwind layouts are already mobile-first, these just tighten
+   alignment and rhythm for the phone.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Header ───────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Keep the floating nav action icons evenly spaced and thumb-sized. */
+  .m-header .lucide {
+    stroke-width: 1.75;
+  }
+}
+
+/* ── SCREEN 1 · Hero (dedicated mobile-first hero) ────────────────────
+   Phones get a purpose-built portrait hero — NOT the desktop landscape
+   banner. Composition, one viewport: navbar → micro-headline → 4:5
+   portrait banner (dominant) → WhatsApp CTA → trust chips. The portrait
+   image is loaded responsively via <picture>; desktop is untouched. */
+@media (max-width: 767px) {
+  .m-hero {
+    min-height: 100svh;
+    height: auto;
+    /* Soft warm radial glow behind the composition — subtle depth, no blur. */
+    background-image: radial-gradient(
+      circle at 50% 38%,
+      rgba(245, 130, 13, 0.07),
+      transparent 62%
+    );
+  }
+  /* Stacks the composition from the top — video → information → chips →
+     WhatsApp CTA. Flows from the top (never centred) so nothing is ever
+     clipped, even when the full-height video makes the hero taller than
+     one viewport. */
+  .m-hero-banner {
+    flex: 0 0 auto; /* never shrink → content (full video) is never clipped */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: clamp(0.85rem, 4vw, 1.35rem);
+    padding-bottom: clamp(1rem, 4vw, 1.75rem);
+    overflow: visible;
+  }
+  /* Hero VIDEO — the dominant element, shown FULL (its native 9:16, never
+     cropped), edge-to-edge. */
+  .m-hero-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    background: #1a1310;
+  }
+}
+
+/* ── SCREEN 2 · Video storytelling ────────────────────────────────────
+   "Beyond coverage. Beyond ordinary." + the hero video, as their own
+   self-contained screen. The wrapper is display:contents on desktop (so
+   the GSAP pin on the inner <section> is untouched) and a centred,
+   full-height flex column on mobile. */
+@media (max-width: 767px) {
+  .m-video-screen {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(0.75rem, 3.5vw, 1.25rem);
+    min-height: 100svh;
+    padding-block: clamp(0.75rem, 3.5vw, 1.75rem);
+  }
+  /* Headline sits directly above the clip — the screen handles the spacing. */
+  .m-video-screen > header {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  /* Allow the headline to wrap on narrow phones instead of clipping (it's
+     nowrap for the single-line desktop treatment). */
+  .m-video-screen > header h2 {
+    white-space: normal;
+    line-height: 1.06;
+  }
+
+  /* Editorial 4:5 portrait presentation — taller, more mobile-native than a
+     thin 16:9 band. The clip stays dominant; the centred subject keeps focus
+     while the sides crop gently. Less dead space above/below. */
+  .m-video {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+  .m-video video {
+    object-fit: cover;
+  }
+  /* Cap the ambient orbs so they never hint at horizontal overflow. */
+  .m-video .video-orb {
+    max-width: 80vw;
+    max-height: 80vw;
+  }
+}
+
+/* ── CONSISTENT SECTION RHYTHM ────────────────────────────────────────
+   One vertical rhythm for every major section, and small-viewport-height
+   floors (svh, not vh) so content is never hidden behind browser chrome.
+   Content-heavy sections simply grow past one screen — never compressed. */
+@media (max-width: 767px) {
+  .m-urban,
+  .m-collection,
+  .m-compare,
+  .m-brand {
+    padding-block: var(--m-section-y);
+  }
+  /* Replace desktop 100vh floors with 100svh (safe-area aware). */
+  .m-urban,
+  .m-collection,
+  .m-brand {
+    min-height: 100svh;
+  }
+
+  /* Problem-section (UrbanStorytelling) panels carry overflow-hidden for the
+     desktop horizontal-scroll pin. On mobile (stacked, no pin) that clipped
+     content off the bottom of a panel — let the panels grow naturally so
+     nothing is cut. Inner image wrappers keep their own rounding clip. */
+  .m-urban .u-panel {
+    overflow: visible;
+    height: auto;
+  }
+
+  /* Problem cards (UV exposure · dust · heat …) → a horizontal swipe row on
+     mobile, breaking edge-to-edge out of the panel padding. Desktop keeps
+     its grid. */
+  .m-exposure-row {
+    display: flex !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.5rem;
+    gap: 0.85rem;
+    max-width: none;
+    margin-inline: -1.5rem;
+    padding: 0.25rem 1.5rem 0.5rem;
+    scrollbar-width: none;
+  }
+  .m-exposure-row::-webkit-scrollbar {
+    display: none;
+  }
+  .m-exposure-row > * {
+    flex: 0 0 80%;
+    max-width: 80%;
+    margin: 0 !important;
+    scroll-snap-align: start;
+  }
+}
+
+/* ── Urban storytelling (dark, vertical panels on mobile) ─────────── */
+
+/* ── Collection (product fan + feature carousel) ──────────────────── */
+@media (max-width: 767px) {
+  /* Smooth, momentum-friendly snap on the horizontal feature rail. */
+  .m-collection .snap-x {
+    scroll-padding-inline: var(--m-gutter);
+  }
+
+  /* 3D edition cards — switching editions animated a 70px box-shadow on all
+     5 cards at once (box-shadow repaints every frame, never composited),
+     tanking FPS. Snap the shadow so only the GPU-composited transform moves;
+     the swap stays buttery. Also drop the per-card image drop-shadow filter,
+     which forces a software raster on a moving layer. */
+  .m-fan-card {
+    transition: none !important;
+  }
+  .m-fan-card img {
+    filter: none !important;
+  }
+}
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Slightly roomier tap rows + even column rhythm in the link grid. */
+  .m-footer a {
+    min-height: 40px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   5 · PREMIUM MICRO-INTERACTIONS  (hover: none)
+   Interaction-only — resting appearance is never changed, so this adds
+   "feel" without redesigning anything. Transform + box-shadow only
+   (GPU-composited), with a refined settle curve.
+   ════════════════════════════════════════════════════════════════════ */
+:root {
+  --m-ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* premium settle */
+  --m-shadow-press: 0 26px 52px -30px rgba(58, 42, 34, 0.5);
+}
+
+@media (hover: none) {
+  /* Refined press settle for every plain pressable (upgrades §3 easing). */
+  a:active,
+  button:active,
+  [role="button"]:active {
+    transition: transform 0.16s var(--m-ease-out);
+  }
+
+  /* Content cards get a quiet press: a hair of scale + a deeper shadow that
+     reads as the card pushing into the surface, then settles back. Framer
+     cards carry inline transforms that outrank this, so no conflict. */
+  article:active,
+  .m-collection .group:active {
+    transform: scale(0.984);
+    box-shadow: var(--m-shadow-press);
+    transition:
+      transform 0.2s var(--m-ease-out),
+      box-shadow 0.2s var(--m-ease-out);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   6 · DIMENSIONAL DEPTH & SUBTLE MOTION  (≤ 767px)
+   The illusion of depth — no Three.js. Smoother self-contained carousels
+   and a barely-there float on product centrepieces so they feel lifted
+   off the page. One transform-only keyframe per element → GPU, ~free.
+   ════════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* Carousels: eased snapping that doesn't chain-scroll / bounce the page. */
+  .snap-x,
+  [class*="snap-x"] {
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+  }
+
+  /* Soft floating lift for the product centrepiece imagery. Pairs a gentle
+     vertical drift with a deepened ambient shadow → "premium lighting". */
+  .m-depth {
+    animation: m-float 7s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes m-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   7 · MOTION PREFERENCES
+   Respect reduced-motion: drop the ambient float entirely.
+   ════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .m-depth {
+    animation: none;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   8 · MOBILE PERFORMANCE LAYER  (≤ 767px)
+   --------------------------------------------------------------------
+   Phones can't afford the desktop's stacked GPU effects. These overrides
+   swap the heaviest layers (a 25-megapixel fixed bg, dozens of live
+   backdrop-blur passes, 60–120px ambient blur glows, ~20 continuous
+   decorative animations, blend modes) for lightweight equivalents — the
+   Soliva look is preserved, the per-frame paint/composite cost is not.
+   Everything here is gated ≤767px, so desktop renders exactly as before.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* 8.1 — Global fixed background. The original new_BG.webp is 4096×6144
+   (~25 MP → ~100MB decoded). Serve the 1080px mobile cut instead — the
+   same image, ~14× fewer pixels. This is the single biggest mobile win. */
+@media (max-width: 767px) {
+  body::before {
+    background-image: url("/new_BG-mobile.webp");
+  }
+}
+
+/* 8.2 — backdrop-filter is the most expensive mobile GPU effect (one
+   full-region blur pass per element; checkout alone stacked 11). Every
+   glass surface here already sits on a 75–92% opaque fill, so dropping
+   the live blur is visually negligible but removes all those passes. */
+@media (max-width: 767px) {
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* 8.3 — Huge ambient blur-glows (60–120px radius) are enormous fill ops,
+   and some are animated. Cap the radius so the atmosphere stays soft but
+   cheap. */
+@media (max-width: 767px) {
+  .blur-\[120px\],
+  .blur-\[110px\],
+  .blur-\[100px\],
+  .blur-\[80px\],
+  .blur-\[60px\] {
+    filter: blur(34px) !important;
+  }
+}
+
+/* 8.4 — Pause continuously-running DECORATIVE animations. They composite
+   every frame, even idle/off-screen. Brand marquees stay (transform-only,
+   part of the identity); ambient drifts / glows / floats do not. */
+@media (max-width: 767px) {
+  .float-y,
+  .rotate-slow,
+  .drift,
+  .text-shimmer,
+  .logo-glow,
+  .text-3d-float,
+  .banner-slide-l,
+  .banner-slide-r,
+  .depth-float,
+  .depth-float-delayed,
+  .video-ambient-drift,
+  .video-orb-1,
+  .video-orb-2 {
+    animation: none !important;
+  }
+}
+
+/* 8.5 — Blend modes force offscreen compositing; the hover photo-filters
+   already don't fire on touch. Normalise on phones. */
+@media (max-width: 767px) {
+  [class*="mix-blend"] {
+    mix-blend-mode: normal !important;
+  }
+}

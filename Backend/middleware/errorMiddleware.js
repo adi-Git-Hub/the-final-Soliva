@@ -25,7 +25,9 @@ const errorHandler = (err, req, res, next) => {
   }
 
   if (err.code === 11000) {
-    const message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+    const field = Object.keys(err.keyValue || {})[0] || 'value';
+    const labels = { email: 'email', phoneNumber: 'phone number', username: 'username' };
+    const message = `This ${labels[field] || field} is already registered`;
     err = new ErrorHandler(message, 400);
   }
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLogin } from "../api";
 import { loginSchema, type LoginInput } from "../schema";
+import { GoogleAuthButton } from "./GoogleAuthButton";
 
 type Props = {
   redirectTo?: string;
@@ -37,6 +38,18 @@ export function LoginForm({ redirectTo }: Props) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-4" noValidate>
+      {/* Google sign-in */}
+      <GoogleAuthButton redirectTo={redirectTo ?? "/"} />
+
+      {/* Divider */}
+      <div className="flex items-center gap-3 py-0.5">
+        <span className="h-px flex-1 bg-[#E8D7C8]" />
+        <span className="font-mono text-[0.625rem] uppercase tracking-[0.28em] text-[#3a2a22]/45">
+          Or continue with
+        </span>
+        <span className="h-px flex-1 bg-[#E8D7C8]" />
+      </div>
+
       <div className="space-y-1.5">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" autoComplete="email" {...register("email")} />

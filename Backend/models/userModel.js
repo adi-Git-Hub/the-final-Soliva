@@ -33,9 +33,28 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Please enter your password'],
+      // Local accounts require a password; Google (passwordless) accounts do not.
+      required: [
+        function () {
+          return !this.googleId;
+        },
+        'Please enter your password',
+      ],
       minlength: [6, 'Password must be at least 6 characters'],
       select: false,
+    },
+    // OAuth identity — set when the account signs in with Google. Sparse-unique
+    // so the many users without a googleId don't collide on the index.
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+    },
+    authProvider: {
+      type: String,
+      enum: ['local', 'google'],
+      default: 'local',
     },
     role: {
       type: String,
@@ -45,7 +64,9 @@ const userSchema = new mongoose.Schema(
     isVerified: {
       type: Boolean,
       default: false,
+      index: true,
     },
+    verifiedAt: Date,
     // Public URL of the user's avatar image. `null` means "no upload" — the
     // frontend renders a deterministic initials-on-color fallback in that case.
     avatarUrl: {
@@ -53,9 +74,9 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
     emailOTP: String,
-    otpExpire: Date,
+    otpExpire: { type: Date, index: true },
     forgotPasswordOTP: String,
-    forgotPasswordExpire: Date,
+    forgotPasswordExpire: { type: Date, index: true },
     
     // Login Security
     loginAttempts: {
@@ -70,15 +91,22 @@ const userSchema = new mongoose.Schema(
     // Device Session Tracking
     sessions: [
       {
-        sessionId: String,
-        ip: String,
+        sessionId: { type: String, index: true },
+        ipHash: String,
         device: String,
-        lastActive: Date,
+        browser: String,
+        lastActive: { type: Date, default: Date.now },
+        createdAt: { type: Date, default: Date.now },
+        expiresAt: { type: Date, index: true },
       },
     ],
   },
   { timestamps: true }
 );
+
+// Indexes
+userSchema.index({ email: 1 });
+userSchema.index({ username: 1 });
 
 // Virtual for lock status
 userSchema.virtual('isLocked').get(function () {
@@ -90,14 +118,21 @@ userSchema.pre('save', async function () {
   if (!this.isModified('password')) {
     return;
   }
+  // The verified-registration flow stores an already-bcrypt-hashed password
+  // (hashed once in authService.register). Skip re-hashing it here, otherwise
+  // the password is double-hashed and login can never match. Plain passwords
+  // (e.g. from a password reset) don't match this pattern and hash normally.
+  if (/^\$2[aby]\$\d{2}\$/.test(this.password)) {
+    return;
+  }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Sign JWT and return (now expects a sessionId)
+// Sign JWT and return
 userSchema.methods.getSignedJwtToken = function (sessionId) {
   return jwt.sign({ id: this._id, sessionId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
+    expiresIn: '15m', // Short-lived access token
   });
 };
 

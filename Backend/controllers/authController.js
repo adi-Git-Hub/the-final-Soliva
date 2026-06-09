@@ -1,13 +1,13 @@
 const authService = require('../services/authService');
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
-const sendToken = require('../utils/jwtToken');
+const { setAuthCookies, clearAuthCookies } = require('../utils/authUtils');
 const sendResponse = require('../utils/sendResponse');
 
 // @desc    Register a user
 // @route   POST /api/v1/auth/register
 // @access  Public
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const result = await authService.register(req.body);
+  const result = await authService.register(req.body, req);
   
   return sendResponse(res, {
     statusCode: 201,
@@ -20,8 +20,14 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 // @access  Public
 exports.verifyEmail = catchAsyncErrors(async (req, res, next) => {
   const { email, otp } = req.body;
-  const { user, sessionId } = await authService.verifyEmail(email, otp, req);
-  sendToken(user, 200, res, sessionId);
+  const { user, accessToken, refreshToken } = await authService.verifyEmail(email, otp, req);
+  
+  setAuthCookies(res, accessToken, refreshToken);
+  
+  return sendResponse(res, {
+    data: { user },
+    message: 'Email verified successfully',
+  });
 });
 
 // @desc    Resend Verification OTP
@@ -40,8 +46,28 @@ exports.resendOTP = catchAsyncErrors(async (req, res, next) => {
 // @access  Public
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
-  const { user, sessionId } = await authService.login(email, password, req);
-  sendToken(user, 200, res, sessionId);
+  const { user, accessToken, refreshToken } = await authService.login(email, password, req);
+  
+  setAuthCookies(res, accessToken, refreshToken);
+  
+  return sendResponse(res, {
+    data: { user },
+  });
+});
+
+// @desc    Sign in / sign up with Google (Firebase ID token)
+// @route   POST /api/v1/auth/google
+// @access  Public
+exports.googleAuth = catchAsyncErrors(async (req, res, next) => {
+  const { idToken } = req.body;
+  const { user, accessToken, refreshToken } = await authService.googleAuth(idToken, req);
+
+  setAuthCookies(res, accessToken, refreshToken);
+
+  return sendResponse(res, {
+    data: { user },
+    message: 'Signed in with Google',
+  });
 });
 
 // @desc    Admin Login
@@ -49,8 +75,31 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 // @access  Public
 exports.adminLogin = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
-  const { user, sessionId } = await authService.login(email, password, req, true);
-  sendToken(user, 200, res, sessionId);
+  const { user, accessToken, refreshToken } = await authService.login(email, password, req, true);
+  
+  setAuthCookies(res, accessToken, refreshToken);
+  
+  return sendResponse(res, {
+    data: { user },
+  });
+});
+
+// @desc    Refresh Token
+// @route   POST /api/v1/auth/refresh
+// @access  Public (via refresh token cookie)
+exports.refreshToken = catchAsyncErrors(async (req, res, next) => {
+  const token = req.cookies.refreshToken;
+  if (!token) {
+    return sendResponse(res, { statusCode: 401, message: 'Refresh token not found' });
+  }
+
+  const { user, accessToken, refreshToken } = await authService.refreshToken(token, req);
+  
+  setAuthCookies(res, accessToken, refreshToken);
+  
+  return sendResponse(res, {
+    data: { user },
+  });
 });
 
 // @desc    Forgot Password
@@ -81,8 +130,14 @@ exports.verifyForgotOTP = catchAsyncErrors(async (req, res, next) => {
 // @access  Public
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   const { email, otp, password } = req.body;
-  const { user, sessionId } = await authService.resetPassword(email, otp, password, req);
-  sendToken(user, 200, res, sessionId);
+  const { user, accessToken, refreshToken } = await authService.resetPassword(email, otp, password, req);
+  
+  setAuthCookies(res, accessToken, refreshToken);
+  
+  return sendResponse(res, {
+    data: { user },
+    message: 'Password reset successfully',
+  });
 });
 
 // @desc    Logout user (current device)
@@ -90,10 +145,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 // @access  Private
 exports.logout = catchAsyncErrors(async (req, res, next) => {
   await authService.logout(req.user.id, req.sessionId);
-  res.cookie('token', null, {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  });
+  clearAuthCookies(res);
   
   return sendResponse(res, {
     message: 'Logged out successfully',
@@ -105,13 +157,32 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 // @access  Private
 exports.logoutAll = catchAsyncErrors(async (req, res, next) => {
   await authService.logoutAll(req.user.id);
-  res.cookie('token', null, {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  });
+  clearAuthCookies(res);
   
   return sendResponse(res, {
     message: 'Logged out from all devices successfully',
+  });
+});
+
+// @desc    Revoke specific session
+// @route   DELETE /api/v1/auth/sessions/:sessionId
+// @access  Private
+exports.revokeSession = catchAsyncErrors(async (req, res, next) => {
+  await authService.revokeSession(req.user.id, req.params.sessionId);
+  
+  return sendResponse(res, {
+    message: 'Session revoked successfully',
+  });
+});
+
+// @desc    Revoke all other sessions
+// @route   DELETE /api/v1/auth/sessions
+// @access  Private
+exports.revokeOtherSessions = catchAsyncErrors(async (req, res, next) => {
+  await authService.revokeOtherSessions(req.user.id, req.sessionId);
+  
+  return sendResponse(res, {
+    message: 'All other sessions revoked successfully',
   });
 });
 
@@ -119,7 +190,12 @@ exports.logoutAll = catchAsyncErrors(async (req, res, next) => {
 // @route   GET /api/v1/auth/me
 // @access  Private
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
+  const user = await require('../models/userModel').findById(req.user.id);
   return sendResponse(res, {
-    data: { user: req.user },
+    data: { 
+      user,
+      permissions: user.role === 'admin' ? ['all'] : ['read'],
+      verificationStatus: user.isVerified 
+    },
   });
 });

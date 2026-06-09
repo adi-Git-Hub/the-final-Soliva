@@ -1,9 +1,44 @@
-# gstack tooling / analytics (local only)
-.gstack/
+# Dependencies
+node_modules/
 
-# dependencies (defensive — also covered by subdir .gitignores)
-**/node_modules/
+# Environment files
+.env
+.env.*
+!.env.example
 
-# misc local
+# Logs
+logs/
+*.log
+
+# Build files
+dist/
+build/
+coverage/
+
+# Vite
+.vite/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# OS Files
 .DS_Store
-*.local
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary
+tmp/
+temp/
+
+# Runtime
+pids
+*.pid
+*.seed
+*.pid.lock

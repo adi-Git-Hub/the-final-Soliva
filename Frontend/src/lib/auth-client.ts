@@ -2,10 +2,11 @@
 // Backend issues an httpOnly JWT cookie; lib/api.ts already sends
 // `credentials: "include"` so every call carries the cookie automatically.
 //
-// Response shapes from the backend are not uniform:
-//   sendToken     → { success, token, user }              (login, verify-email, reset-password)
-//   sendResponse  → { success, message, data: { ... } }   (everything else, including /auth/me)
-// We unwrap per-endpoint here so callers see a clean User/Session.
+// Backend uses a uniform enveloped response for auth endpoints:
+//   sendResponse → { success, message, data: { user } }
+// (login, verify-email, reset-password, admin-login, /auth/me all return the
+// user at res.data.user). The JWT is delivered as an httpOnly cookie, not in
+// the body. We unwrap res.data.user per-endpoint so callers see a clean Session.
 
 import { z } from "zod";
 
@@ -46,7 +47,6 @@ function normalizeUser(raw: unknown): User {
   });
 }
 
-type SendTokenResponse = { success: boolean; token?: string; user: unknown };
 type EnvelopedResponse<T> = { success: boolean; message?: string; data: T };
 
 export const authClient = {
@@ -62,8 +62,20 @@ export const authClient = {
   },
 
   async login(input: { email: string; password: string }): Promise<Session> {
-    const res = await api.post<SendTokenResponse>("/auth/login", input);
-    return { user: normalizeUser(res.user) };
+    const res = await api.post<EnvelopedResponse<{ user: unknown }>>("/auth/login", input);
+    return { user: normalizeUser(res.data.user) };
+  },
+
+  /**
+   * Exchange a Firebase Google ID token for a Soliva session. The backend
+   * verifies the token, creates the user on first login or signs in an existing
+   * one, and sets the JWT cookie — same session shape as email/password login.
+   */
+  async googleSignIn(idToken: string): Promise<Session> {
+    const res = await api.post<EnvelopedResponse<{ user: unknown }>>("/auth/google", {
+      idToken,
+    });
+    return { user: normalizeUser(res.data.user) };
   },
 
   /** Returns the email the OTP was sent to. No session is created yet. */
@@ -88,8 +100,8 @@ export const authClient = {
 
   /** Verifies the registration OTP; backend issues the JWT cookie on success. */
   async verifyEmail(input: { email: string; otp: string }): Promise<Session> {
-    const res = await api.post<SendTokenResponse>("/auth/verify-email", input);
-    return { user: normalizeUser(res.user) };
+    const res = await api.post<EnvelopedResponse<{ user: unknown }>>("/auth/verify-email", input);
+    return { user: normalizeUser(res.data.user) };
   },
 
   async resendOtp(email: string): Promise<void> {
@@ -106,8 +118,8 @@ export const authClient = {
 
   /** Resets password and signs the user in (backend issues JWT cookie). */
   async resetPassword(input: { email: string; otp: string; password: string }): Promise<Session> {
-    const res = await api.post<SendTokenResponse>("/auth/reset-password", input);
-    return { user: normalizeUser(res.user) };
+    const res = await api.post<EnvelopedResponse<{ user: unknown }>>("/auth/reset-password", input);
+    return { user: normalizeUser(res.data.user) };
   },
 
   async logout(): Promise<void> {

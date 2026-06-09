@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { viewportOnce, ease } from "@/design-system";
 import {
@@ -12,6 +13,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { ParticleLogo } from "./ParticleLogo";
+import { TermsAndConditions } from "./TermsAndConditions";
 
 const socials = [
   { name: "Instagram", url: "https://www.instagram.com/solivaguard/", color: "#E1306C", icon: Instagram },
@@ -24,9 +26,61 @@ const socials = [
 const label =
   "font-mono text-[0.5625rem] tracking-[0.35em] text-[#c76600] uppercase font-black opacity-70";
 
+/**
+ * Tilt3D — wraps a link in a cursor-tracked 3D tilt. As the pointer moves over
+ * the element it rotates in perspective toward the cursor and lifts slightly;
+ * on leave it springs flat. Only enabled on hover-capable / fine-pointer
+ * devices, so mobile taps stay clean and flat.
+ */
+function Tilt3D({
+  children,
+  className = "",
+  intensity = 18,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  intensity?: number;
+}) {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    setEnabled(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+  }, []);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const spring = { stiffness: 280, damping: 16 };
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [intensity, -intensity]), spring);
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-intensity, intensity]), spring);
+  // Lift toward the viewer on hover for real depth (z translation in perspective).
+  const z = useSpring(0, spring);
+
+  if (!enabled) return <div className={className}>{children}</div>;
+
+  return (
+    <motion.div
+      onPointerMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        x.set((e.clientX - r.left) / r.width - 0.5);
+        y.set((e.clientY - r.top) / r.height - 0.5);
+      }}
+      onPointerEnter={() => z.set(60)}
+      onPointerLeave={() => {
+        x.set(0);
+        y.set(0);
+        z.set(0);
+      }}
+      whileHover={{ scale: 1.18 }}
+      style={{ rotateX, rotateY, z, transformPerspective: 600, transformStyle: "preserve-3d" }}
+      className={`${className} transition-[filter] duration-300 hover:drop-shadow-[0_14px_26px_rgba(199,102,0,0.45)]`}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export function BrandNarrative() {
   return (
-    <div className="relative w-full bg-[#3a2a22] overflow-hidden z-10 min-h-screen flex flex-col justify-center pt-20 pb-8">
+    <div className="m-brand relative w-full bg-[#3a2a22] overflow-hidden z-10 min-h-screen flex flex-col justify-center pt-20 pb-8">
       {/* Ambient depth */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.02),transparent_70%)]" />
@@ -113,8 +167,8 @@ export function BrandNarrative() {
             {/* Identity */}
             <div className="col-span-2 space-y-2.5">
               <span className={label}>Identity</span>
-              <h4 className="font-display text-base md:text-lg text-white tracking-wide uppercase leading-tight">
-                SOLIVAGUARD PRIVATE LIMITED
+              <h4 className="font-display text-base md:text-lg text-white tracking-wide leading-tight">
+                Solivaguard Private Limited
               </h4>
               <div className="flex items-start gap-2 text-white/50">
                 <MapPin size={11} className="text-[#c76600] mt-0.5 shrink-0 opacity-60" />
@@ -128,29 +182,37 @@ export function BrandNarrative() {
             <div className="space-y-6">
               <div className="space-y-3">
                 <span className={label}>Action</span>
-                <a href="https://wa.me/917350640608" className="group flex flex-col w-fit">
-                  <div className="flex items-center gap-2 text-white/80 group-hover:text-[#c76600] transition-colors duration-500 font-mono text-[0.7rem] tracking-[0.2em] font-black uppercase">
-                    <MessageCircle size={13} className="text-[#25D366] opacity-70 group-hover:opacity-100" />
-                    WhatsApp
-                  </div>
-                  <div className="h-px w-full bg-white/10 mt-1.5 group-hover:bg-[#c76600] transition-colors" />
-                </a>
+                <Tilt3D className="w-fit">
+                  <a href="https://wa.me/917350640608" className="group flex flex-col w-fit">
+                    <div className="flex items-center gap-2.5 text-white/80 group-hover:text-[#c76600] transition-colors duration-500 font-mono text-[1rem] md:text-[1.1rem] tracking-[0.2em] font-black uppercase">
+                      <MessageCircle size={19} className="text-[#25D366] opacity-70 group-hover:opacity-100" />
+                      WhatsApp
+                    </div>
+                    <div className="h-px w-full bg-white/10 mt-1.5 group-hover:bg-[#c76600] transition-colors" />
+                  </a>
+                </Tilt3D>
               </div>
               <div className="space-y-3">
                 <span className={label}>Explore</span>
-                <nav className="flex flex-col gap-2">
-                  {["Home", "Collection", "Story", "Identity"].map((l) => (
-                    <Link
-                      key={l}
-                      to={l === "Home" ? "/" : `/${l.toLowerCase()}`}
-                      className="group flex items-center gap-2 font-mono text-[0.6875rem] tracking-[0.12em] text-white/40 hover:text-white uppercase transition-colors duration-500"
-                    >
-                      <ArrowRight
-                        size={9}
-                        className="opacity-0 -translate-x-1 group-hover:opacity-40 group-hover:translate-x-0 transition-all"
-                      />
-                      {l}
-                    </Link>
+                <nav className="flex flex-col gap-3">
+                  {[
+                    { label: "Home", to: "/" },
+                    { label: "Collection", to: "/collection" },
+                    { label: "Story", to: "/story" },
+                    { label: "How It Works", to: "/technology" },
+                  ].map((l) => (
+                    <Tilt3D key={l.to} className="w-fit">
+                      <Link
+                        to={l.to}
+                        className="group flex items-center gap-2 font-mono text-[0.95rem] md:text-[1.05rem] tracking-[0.12em] text-white/45 hover:text-white uppercase transition-colors duration-500"
+                      >
+                        <ArrowRight
+                          size={14}
+                          className="opacity-0 -translate-x-1 group-hover:opacity-40 group-hover:translate-x-0 transition-all"
+                        />
+                        {l.label}
+                      </Link>
+                    </Tilt3D>
                   ))}
                 </nav>
               </div>
@@ -159,31 +221,48 @@ export function BrandNarrative() {
             {/* Presence */}
             <div className="space-y-3">
               <span className={label}>Presence</span>
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-3.5">
                 {socials.map((s) => (
-                  <a
-                    key={s.name}
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-2.5 font-mono text-[0.6875rem] tracking-[0.08em] text-white/40 hover:text-white transition-colors duration-500"
-                  >
-                    <span
-                      className="opacity-40 group-hover:opacity-100 transition-all duration-500 group-hover:text-[var(--hc)]"
-                      style={{ "--hc": s.color } as React.CSSProperties}
+                  <Tilt3D key={s.name} className="w-fit">
+                    <a
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-3 font-mono text-[0.95rem] md:text-[1.05rem] tracking-[0.08em] text-white/45 hover:text-white transition-colors duration-500"
                     >
-                      <s.icon size={14} strokeWidth={1.5} />
-                    </span>
-                    {s.name}
-                  </a>
+                      <span
+                        className="opacity-40 group-hover:opacity-100 transition-all duration-500 group-hover:text-[var(--hc)]"
+                        style={{ "--hc": s.color } as React.CSSProperties}
+                      >
+                        <s.icon size={20} strokeWidth={1.5} />
+                      </span>
+                      {s.name}
+                    </a>
+                  </Tilt3D>
                 ))}
               </div>
             </div>
           </motion.div>
         </div>
 
+        {/* ── Brand etymology (amber) — above the closure strip ── */}
+        <div className="mt-8 lg:mt-10 flex items-center justify-center gap-3 font-mono text-[12px] md:text-[14px] tracking-[0.14em] uppercase text-[#f59e0b] leading-none">
+          <span>
+            <span className="font-bold">Sol</span> — Sun
+          </span>
+          <span className="h-3.5 w-px bg-[#f59e0b]/40" aria-hidden />
+          <span>
+            <span className="font-bold">Iva</span> — Motion
+          </span>
+        </div>
+
+        {/* ── Terms & Conditions (compact summary + full modal) ── */}
+        <div className="mt-6 border-t border-white/5 pt-5">
+          <TermsAndConditions variant="dark" className="mx-auto max-w-3xl text-center" />
+        </div>
+
         {/* ── Closure ── */}
-        <div className="mt-8 lg:mt-10 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-20 font-mono text-[0.5rem] tracking-[0.4em] uppercase text-white border-t border-white/5 pt-5">
+        <div className="mt-5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-20 font-mono text-[0.5rem] tracking-[0.4em] uppercase text-white border-t border-white/5 pt-5">
           <div className="flex items-center gap-8">
             <span>© 2026 SOLIVA</span>
             <span>Sun · Motion</span>

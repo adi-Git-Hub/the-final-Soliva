@@ -45,8 +45,10 @@
   --color-orange-glow: var(--orange-glow);
   --color-brown: var(--brown);
   --color-brown-deep: var(--brown-deep);
-  --font-display: "Cormorant Garamond", "Times New Roman", serif;
+  /* Whole UI runs on one clean sans-serif (Inter). */
+  --font-display: "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
+  --font-serif: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
   /* ════════════════════════════════════════════════════════════════════════
@@ -265,7 +267,7 @@
     }
     button:not([class*="h-"]):not(.inline-button),
     [role="button"]:not([class*="h-"]) {
-      min-height: 40px;
+      min-height: 44px;
     }
   }
   /* Safe-area aware utility helpers — additive padding using env() so we
@@ -313,8 +315,13 @@
 
 @utility font-display {
   font-family: var(--font-display);
-  font-weight: 300;
+  font-weight: 500;
   letter-spacing: -0.02em;
+}
+
+/* Tailwind's `font-serif` utility → the same sans-serif (no serif anywhere). */
+.font-serif {
+  font-family: var(--font-body);
 }
 
 @utility bg-cinematic {
@@ -1135,46 +1142,7 @@
     }
   }
 
-  /* === Mobile refinements (≤ 480px, tuned for iPhone SE @ 375 × 667) ===
-     Targets only screen-sized phones — desktop and tablet are untouched.
-     Tones down letter-spacing on small caps headings (which otherwise
-     overflow), gives heavy display headings a fluid clamp, tightens marquee
-     timing so the running ticker doesn't crawl, and clamps any leftover
-     fixed pixel widths that would push past 375px. */
-  @media (max-width: 480px) {
-    /* Heavy display headings — anything Cormorant + size 4xl+ gets a softer
-       upper bound on small screens so it doesn't wrap into 4–5 lines. */
-    .font-display {
-      letter-spacing: -0.015em;
-    }
-    /* Marquee was 40s / 60s — feels frozen on small screens because the
-       visible window is so short. Halve it so movement reads. */
-    .marquee {
-      animation-duration: 22s;
-    }
-    /* Wide letter-spacing on small caps + small font sizes is the single
-       biggest source of horizontal overflow at 375px. Soften across the
-       site without flattening it entirely. */
-    .tracking-\[0\.6em\],
-    .tracking-\[0\.7em\],
-    .tracking-\[0\.8em\] {
-      letter-spacing: 0.35em;
-    }
-    .tracking-\[0\.5em\],
-    .tracking-\[0\.45em\] {
-      letter-spacing: 0.3em;
-    }
-    .tracking-\[0\.4em\] {
-      letter-spacing: 0.25em;
-    }
-    /* Pre-title editorial markers wrap rather than overflow — they're
-       decorative so wrapping is fine, but break-words avoids a fixed-pixel
-       text run from forcing horizontal scroll. */
-    .mobile-wrap-anywhere {
-      overflow-wrap: anywhere;
-      word-break: break-word;
-    }
-  }
+  /* Mobile typography refinements (≤480px) moved to ./styles/mobile.css §2. */
 
   /* Respect user motion preferences globally — kill the largest, longest
      animations that aren't already gated above. */
@@ -1285,4 +1253,9 @@
   .u-p2-image-wrap:hover .u-p2-img,
   .u-p4-image-wrap:hover .u-p4-img { transform: none !important; }
 }
+
+/* NOTE: All mobile-only styling now lives in ./styles/mobile.css, loaded
+   after this file in routes/__root.tsx. Keeps desktop + mobile CSS
+   cleanly separated. (Touch experience layer, mobile typography, and
+   per-component mobile blocks moved there.) */
 

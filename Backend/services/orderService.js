@@ -71,6 +71,9 @@ class OrderService {
           status: 'pending',
         },
         orderStatus: 'pending',
+        events: [
+          { status: 'pending', message: 'Order created and awaiting payment' }
+        ],
         user: userId,
         idempotencyKey,
       };
@@ -145,6 +148,7 @@ class OrderService {
 
     if (order.orderStatus === 'pending') {
       order.orderStatus = 'paid';
+      order.events.push({ status: 'paid', message: 'Payment verified successfully via Razorpay' });
     }
 
     await order.save();
@@ -257,6 +261,8 @@ class OrderService {
     }
 
     order.orderStatus = status;
+    order.events.push({ status, message: `Order status updated to ${status}` });
+    
     if (status === 'delivered') {
       order.deliveredAt = Date.now();
     }

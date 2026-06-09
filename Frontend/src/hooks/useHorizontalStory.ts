@@ -61,82 +61,114 @@ export function useHorizontalStory({
 
     /* ──────────────────────── LOCK MODE ──────────────────────── */
     if (mode === "lock") {
-      // Gesture detection by velocity. A page advances on the LEADING EDGE of a
-      // scroll motion — either after the wheel goes idle (a fresh motion) or on a
-      // velocity SPIKE (the user flicking again while the previous motion's
-      // inertia is still decaying). The decaying inertia in between is absorbed,
-      // so ONE motion = ONE page no matter how long the inertia runs (never a
-      // skip to the last page), while a deliberate re-flick still fires at once.
-      const IDLE_GAP = 200; // ms of wheel-silence that ends a motion
-      const SPIKE_RATIO = 2.5; // re-flick: |delta| jumps this × over the inertia
-      const SPIKE_MIN = 24; // …and is at least this large (ignore noise)
-      const REARM = 150; // floor between steps (one motion can't double-fire)
-      const ENTRY_ABSORB = 380; // swallow the scroll that carried the user in
-      let index = 0;
-      let active = false; // section centred + scroll frozen
+      // ── Queued panel navigation (no hard lock) ────────────────────────────
+      // There is no "wait after every panel" block. Every scroll / swipe / key
+      // adds to a TARGET panel; a pump loop walks the track toward that target
+      // ONE panel at a time. Scroll aggressively and the target accumulates far
+      // ahead — the queue then plays each intermediate panel back-to-back at a
+      // shorter duration, so power users race through the story while still
+      // SEEING every panel in order. The track never jumps across panels: each
+      // animation moves exactly one panel, and the next starts the instant the
+      // previous finishes.
+      const PANEL_PX = 120; // accumulated wheel distance that queues one panel
+      const DUR_NORMAL = 0.65; // a lone, deliberate step (0.6–0.7s band)
+      const ENTRY_ABSORB = 520; // swallow the scroll that carried the user in
+
+      let index = 0; // panel currently shown
+      let target = 0; // panel we're heading toward (the queue depth)
+      let animating = false; // a single-panel transition is in flight
+      let accum = 0; // accumulated wheel delta toward the next panel
+      let releaseDir: 0 | 1 | -1 = 0; // pending exit once an edge is reached
+      let active = false; // section centred + page scroll frozen
       let guardUntil = 0; // ignore re-engage briefly after releasing
-      let lastWheelT = -Infinity;
-      let avgMag = 0; // smoothed |deltaY| (tracks/decays with inertia)
-      let stepFloor = 0;
+      let stepFloor = 0; // ignore wheel until the entry settle completes
       let lastScroll = 0;
       let prevTop = Infinity;
       let settleTimer: ReturnType<typeof setTimeout> | undefined;
-      // While a page is still arriving (slide in flight, or the entry settle),
-      // ALL input is blocked — the chapter must reach 100% on screen before the
-      // next scroll counts, and the section can't release to vertical scroll
-      // until the last page has fully settled. (Wheel timing is still tracked so
-      // a flick's inertia tail is absorbed, not read as a fresh gesture after.)
-      let transitioning = false;
 
       const scrollY = () =>
         getLenis()?.scroll ?? window.scrollY ?? document.documentElement.scrollTop;
       const absTop = () => section.getBoundingClientRect().top + scrollY();
 
-      const goto = (next: number) => {
-        const clamped = Math.max(0, Math.min(steps, next));
-        if (clamped === index) return;
-        index = clamped;
-        transitioning = true; // block input until this slide finishes
+      // Walk ONE panel toward `target`; when it lands, immediately continue to
+      // the next queued panel — or, if an edge was over-scrolled, release.
+      const pump = () => {
+        if (!active || animating) return;
+        if (index === target) {
+          if (releaseDir) {
+            const d = releaseDir;
+            releaseDir = 0;
+            release(d);
+          }
+          return;
+        }
+        const dir = target > index ? 1 : -1;
+        const remaining = Math.abs(target - index);
+        // Duration adapts to how much is queued: a single step settles gently
+        // (0.65s); a backlog (aggressive scroll) plays fast, deeper = faster,
+        // clamped to the 0.25–0.35s band.
+        const duration =
+          remaining > 1 ? Math.max(0.25, 0.36 - remaining * 0.02) : DUR_NORMAL;
+        index += dir;
+        animating = true;
+        onChange?.(index);
         gsap.to(track, {
           xPercent: -per * index,
-          duration: 0.3,
-          ease: "power3.inOut",
+          duration,
+          ease: remaining > 1 ? "power2.inOut" : "power3.inOut",
           overwrite: true,
           onComplete: () => {
-            transitioning = false;
+            animating = false;
+            pump(); // continue to the next queued panel at once
           },
         });
-        onChange?.(index);
+      };
+
+      // Queue one panel in `dir`. Over-scrolling past an edge arms a release;
+      // the move itself is always ±1, so panels are never skipped.
+      const requestStep = (dir: 1 | -1) => {
+        const next = target + dir;
+        if (next < 0) {
+          releaseDir = -1;
+          pump();
+          return;
+        }
+        if (next > steps) {
+          releaseDir = 1;
+          pump();
+          return;
+        }
+        releaseDir = 0;
+        target = next;
+        pump();
       };
 
       const engage = (startIndex: number) => {
         if (active) return;
         active = true;
-        transitioning = true; // block until page 1 has fully settled in
         index = startIndex;
+        target = startIndex;
+        accum = 0;
+        releaseDir = 0;
+        animating = false;
         // Promote the track to its own GPU layer so the horizontal slide stays
         // buttery (no per-frame re-raster of the panels).
         gsap.set(track, { xPercent: -per * startIndex, willChange: "transform" });
         onChange?.(startIndex);
         const l = getLenis();
-        lastWheelT = performance.now();
-        avgMag = 90; // moderate seed so the entry inertia won't read as a spike
         if (l) {
-          // SMOOTH freeze: ease the section flush into the viewport (no hard
-          // snap), then stop + accept input — so it never feels like a "lock".
+          // SMOOTH freeze: ease the section flush into the viewport, then stop.
           l.scrollTo(absTop(), { duration: 0.45, lock: true, force: true });
-          stepFloor = performance.now() + 520; // cover the settle + entry inertia
+          stepFloor = performance.now() + 560; // cover settle + entry inertia
           clearTimeout(settleTimer);
           settleTimer = setTimeout(() => {
             getLenis()?.stop();
             observer.enable();
-            transitioning = false; // page 1 fully on screen → accept input
           }, 460);
         } else {
           window.scrollTo({ top: absTop(), behavior: "smooth" });
           stepFloor = performance.now() + ENTRY_ABSORB;
           observer.enable();
-          transitioning = false;
         }
       };
 
@@ -150,54 +182,40 @@ export function useHorizontalStory({
         const l = getLenis();
         l?.start();
         const top = absTop();
-        const target =
+        const dest =
           direction === 1
             ? top + section.offsetHeight + 2
             : Math.max(0, top - window.innerHeight * 0.5);
-        if (l) l.scrollTo(target, { duration: 0.6, force: true });
-        else window.scrollTo({ top: target, behavior: "smooth" });
-      };
-
-      const doStep = (direction: 1 | -1) => {
-        if (direction === 1) index < steps ? goto(index + 1) : release(1);
-        else index > 0 ? goto(index - 1) : release(-1);
-      };
-      // Discrete inputs (touch swipe, arrow key) — one event = one intent.
-      const commit = (direction: 1 | -1) => {
-        if (!active || transitioning) return;
-        const now = performance.now();
-        if (now < stepFloor) return;
-        stepFloor = now + 360;
-        doStep(direction);
+        if (l) l.scrollTo(dest, { duration: 0.6, force: true });
+        else window.scrollTo({ top: dest, behavior: "smooth" });
       };
 
       const observer = Observer.create({
         type: "touch",
         tolerance: 10,
         preventDefault: true,
-        onUp: () => commit(1),
-        onDown: () => commit(-1),
+        onUp: () => active && requestStep(1),
+        onDown: () => active && requestStep(-1),
       });
       observer.disable();
 
-      // Wheel — velocity gated: leading edge of a fresh motion, or a re-flick
-      // spike. The inertia tail in between is absorbed (no skipping).
+      // Wheel — accumulate distance into the target panel. Each PANEL_PX of
+      // scroll queues one more panel; aggressive scrolling queues several, which
+      // the pump loop then plays through in order (never skipped).
       const onWheel = (e: WheelEvent) => {
         if (!active) return;
         e.preventDefault();
         if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // ignore horizontal
-        const now = performance.now();
-        const mag = Math.abs(e.deltaY);
-        const gap = now - lastWheelT;
-        lastWheelT = now;
-        const dir: 1 | -1 = e.deltaY > 0 ? 1 : -1;
-        const afterIdle = gap > IDLE_GAP;
-        const spike = mag > avgMag * SPIKE_RATIO && mag > SPIKE_MIN;
-        avgMag = afterIdle ? mag : avgMag * 0.8 + mag * 0.2;
-        if (transitioning) return; // page still arriving → block (timing tracked above)
-        if ((afterIdle || spike) && now >= stepFloor) {
-          stepFloor = now + REARM;
-          doStep(dir);
+        if (performance.now() < stepFloor) return; // entry settle window
+        const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1;
+        accum += e.deltaY * unit;
+        while (accum >= PANEL_PX) {
+          accum -= PANEL_PX;
+          requestStep(1);
+        }
+        while (accum <= -PANEL_PX) {
+          accum += PANEL_PX;
+          requestStep(-1);
         }
       };
       window.addEventListener("wheel", onWheel, { passive: false });
@@ -224,7 +242,7 @@ export function useHorizontalStory({
         if (!keys.includes(e.key)) return;
         e.preventDefault();
         const forward = ["ArrowDown", "PageDown", "End", " "].includes(e.key);
-        commit(forward ? 1 : -1);
+        requestStep(forward ? 1 : -1);
       };
       window.addEventListener("keydown", onKey);
 

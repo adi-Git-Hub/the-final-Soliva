@@ -10,6 +10,7 @@ import { useCart } from "@/features/cart/hooks/useCart";
 import { useSession } from "@/features/auth/hooks/useSession";
 import { useCheckoutStore } from "@/features/checkout/store";
 import { viewportOnce } from "@/design-system";
+import { TermsAndConditions } from "@/components/TermsAndConditions";
 
 export const Route = createFileRoute("/_public/products/$slug")({
   component: ProductRoute,
@@ -406,6 +407,11 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
                   <dd className="font-display text-base text-brown-deep italic">{spec.value}</dd>
                 </div>
               ))}
+            </div>
+
+            {/* Terms & Conditions — compact summary + full modal */}
+            <div className="mt-8 sm:mt-10 border-t border-line-soft pt-6">
+              <TermsAndConditions variant="light" />
             </div>
           </motion.div>
         </div>

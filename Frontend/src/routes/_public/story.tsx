@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { viewportOnce, viewportOnceEarly, ease } from "@/design-system";
@@ -53,7 +53,7 @@ function StoryImage({
       {caption && (
         <figcaption className="mt-4 flex items-start gap-3 max-w-md">
           <span className="mt-2 block h-px w-6 bg-[#c76600]/40 flex-shrink-0" />
-          <p className="font-mono text-[0.625rem] tracking-[0.2em] uppercase text-[#3a2a22]/50 leading-[1.7]">
+          <p className="font-mono text-[0.625rem] tracking-[0.2em] text-[#3a2a22]/50 leading-[1.7]">
             {caption}
           </p>
         </figcaption>
@@ -62,24 +62,139 @@ function StoryImage({
   );
 }
 
-/* ─── Eyebrow / chapter marker ────────────────────────────────── */
-function Chapter({
-  number,
-  title,
-  tone = "warm",
-}: {
-  number: string;
-  title: string;
-  tone?: "warm" | "ivory";
-}) {
-  const color = tone === "ivory" ? "text-[#d9b27a]" : "text-[#c76600]";
-  const line = tone === "ivory" ? "bg-[#d9b27a]/40" : "bg-[#c76600]/40";
+/* ─── Animated speaker / mute icon ────────────────────────────── */
+function SpeakerIcon({ muted }: { muted: boolean }) {
   return (
-    <div className="flex items-center gap-3 mb-6">
-      <span className={`block h-px w-8 ${line}`} />
-      <span className={`font-mono text-[0.625rem] tracking-[0.42em] uppercase font-bold ${color}`}>
-        {number} · {title}
-      </span>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="relative z-10"
+    >
+      {/* Speaker body */}
+      <path
+        d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4Z"
+        fill="currentColor"
+      />
+
+      {/* Sound waves — drawn + pulsing when unmuted */}
+      <motion.path
+        d="M15 9.2a4 4 0 0 1 0 5.6"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        initial={false}
+        animate={
+          muted
+            ? { pathLength: 0, opacity: 0 }
+            : { pathLength: 1, opacity: [0.55, 1, 0.55] }
+        }
+        transition={
+          muted
+            ? { duration: 0.25 }
+            : {
+                pathLength: { duration: 0.3 },
+                opacity: { duration: 1.4, repeat: Infinity, ease: "easeInOut" },
+              }
+        }
+      />
+      <motion.path
+        d="M17.6 6.8a8 8 0 0 1 0 10.4"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        initial={false}
+        animate={
+          muted
+            ? { pathLength: 0, opacity: 0 }
+            : { pathLength: 1, opacity: [0.4, 0.85, 0.4] }
+        }
+        transition={
+          muted
+            ? { duration: 0.25 }
+            : {
+                pathLength: { duration: 0.3, delay: 0.05 },
+                opacity: {
+                  duration: 1.4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.2,
+                },
+              }
+        }
+      />
+
+      {/* Diagonal slash — drawn when muted */}
+      <motion.line
+        x1="15"
+        y1="7.5"
+        x2="21"
+        y2="16.5"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        initial={false}
+        animate={{ pathLength: muted ? 1 : 0, opacity: muted ? 1 : 0 }}
+        transition={{ duration: 0.25 }}
+      />
+    </svg>
+  );
+}
+
+/* ─── Story video with animated mute control ──────────────────── */
+function StoryVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+
+  const toggleMute = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    const next = !v.muted;
+    v.muted = next;
+    setMuted(next);
+    if (!next) v.play().catch(() => {});
+  };
+
+  return (
+    <div className="relative mx-auto">
+      <div className="relative mx-auto h-[min(60vh,40rem)] max-w-[92vw] aspect-[4/5] overflow-hidden rounded-[2rem] border border-[#3a2a22]/10 bg-[#EDE6D8] shadow-[0_44px_100px_-32px_rgba(58,42,34,0.55)]">
+        <video
+          ref={videoRef}
+          src="/product_images/IMG_4705.mp4"
+          poster="/product_images/IMG_4705-poster.jpg"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover"
+        />
+
+        {/* Mute / unmute toggle */}
+        <button
+          type="button"
+          onClick={toggleMute}
+          aria-label={muted ? "Unmute video" : "Mute video"}
+          aria-pressed={!muted}
+          className="group absolute bottom-4 right-4 grid h-11 w-11 place-items-center rounded-full bg-[#3a2a22]/55 text-[#FAF7F3] backdrop-blur-md ring-1 ring-white/20 transition-[background-color,transform] duration-300 hover:bg-[#c76600] hover:scale-105 active:scale-95"
+        >
+          {/* Pulsing ring invites the user to unmute */}
+          {muted && (
+            <motion.span
+              className="absolute inset-0 rounded-full ring-2 ring-white/40"
+              initial={{ opacity: 0.6, scale: 1 }}
+              animate={{ opacity: 0, scale: 1.6 }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeOut" }}
+            />
+          )}
+          <SpeakerIcon muted={muted} />
+        </button>
+      </div>
+
+      <p className="mt-3 text-center font-mono text-[0.5625rem] tracking-[0.3em] uppercase text-[#3a2a22]/40">
+        {muted ? "Tap the icon to hear it" : "Sound on"}
+      </p>
     </div>
   );
 }
@@ -109,7 +224,7 @@ function StoryRoute() {
   return (
     <div className="relative w-full bg-[#FAF7F3] overflow-x-hidden text-[#3a2a22]">
       {/* ════════════════════════════════════════════════════════════════
-         SECTION 01 — FOUNDER STORY
+         PAGE 01 — A DAILY PROBLEM WORTH SOLVING
          ════════════════════════════════════════════════════════════════ */}
       <section
         ref={heroRef}
@@ -124,39 +239,31 @@ function StoryRoute() {
               viewport={viewportOnce}
               transition={{ duration: 1.1, ease: ease.smooth }}
             >
-              <Chapter number="CHAPTER ONE" title="Founder" />
               <h1
-                className="font-display leading-[1.02] tracking-tight mb-10"
-                style={{ fontSize: "clamp(2.4rem, 6.4vw, 5rem)" }}
+                className="font-display leading-[1.02] tracking-tight mb-10 whitespace-nowrap"
+                style={{ fontSize: "clamp(1.6rem, 4vw, 3.2rem)" }}
               >
-                A commute that
-                <br />
-                started a brand
-                <span className="block italic font-light text-[#c76600] mt-1">
-                  in Nagpur.
-                </span>
+                A daily problem{" "}
+                <span className="italic font-light text-[#c76600]">worth solving.</span>
               </h1>
 
               <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
+                <p>Soliva began with a simple observation.</p>
                 <p>
-                  Every morning, the same scooter. The same sun. The same dust. The dupatta would
-                  slip — once, twice, twenty times before reaching the office gate.
+                  Like many people, I spent years relying on everyday coverings while commuting,
+                  travelling, and spending time outdoors. Over time, I noticed how much effort went
+                  into making them work — adjusting, repositioning, and constantly managing something
+                  that was meant to feel protective.
                 </p>
+                <p>What started as a personal frustration became a larger realization.</p>
                 <p>
-                  We had learned to adapt around discomfort. To accept exposure as routine. To
-                  treat protection as something improvised, not designed.
+                  Millions of people face the same reality every day, often accepting discomfort as
+                  part of the routine.
                 </p>
+                <p>We believed there had to be a more thoughtful way forward.</p>
                 <p className="italic text-[#3a2a22]/80">
-                  Soliva began with one question — what if everyday protection were actually
-                  engineered for everyday life?
+                  Sometimes the most familiar problems are the ones worth questioning.
                 </p>
-              </div>
-
-              <div className="mt-12 flex items-center gap-4">
-                <span className="block h-px w-10 bg-[#c76600]/40" />
-                <span className="font-mono text-[0.6875rem] tracking-[0.32em] uppercase text-[#3a2a22]/60 font-bold">
-                  The Founder · Nagpur, India
-                </span>
               </div>
             </motion.div>
 
@@ -169,11 +276,11 @@ function StoryRoute() {
             >
               <motion.div style={{ y: heroParallax }} className="max-w-[26rem] mx-auto lg:mx-0 lg:ml-auto">
                 <StoryImage
-                  label="FOUNDER · COMMUTE"
+                  label="FOUNDER · CHENALI BISEN"
                   src="/founder-commute.webp"
-                  alt="Founder · daily commute"
+                  alt="Founder Chenali Bisen"
                   aspect="aspect-[4/5]"
-                  caption="On the road · 7:42 AM"
+                  caption="Founder Chenali Bisen"
                 />
               </motion.div>
             </motion.div>
@@ -182,548 +289,175 @@ function StoryRoute() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════════
-         SECTION 02 — THE DAILY STRUGGLE
+         PAGE 02 — DESIGNED AROUND REAL LIFE
          ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#F3ECE2]/50 border-y border-[#3a2a22]/8 py-14">
+      <section className="relative snap-start min-h-screen flex flex-col justify-center bg-[#F3ECE2]/50 border-y border-[#3a2a22]/8 pt-24 pb-8 sm:pt-28 sm:pb-10">
         <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-20 items-center">
-            {/* LEFT — Image */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={viewportOnce}
-              transition={{ duration: 1.2, ease: ease.smooth }}
-              className="max-w-[26rem] mx-auto lg:mx-0"
-            >
-              <StoryImage
-                label="DUPATTA · ADJUSTMENT"
-                aspect="aspect-[4/5]"
-                caption="Adjusting · again"
-              />
-            </motion.div>
-
-            {/* RIGHT — Editorial copy */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportOnce}
-              transition={{ duration: 1.1, ease: ease.smooth, delay: 0.1 }}
-            >
-              <Chapter number="CHAPTER TWO" title="The Daily Struggle" />
-              <h2
-                className="font-display leading-[1.05] tracking-tight mb-8"
-                style={{ fontSize: "clamp(2rem, 5.2vw, 4rem)" }}
-              >
-                We learned to{" "}
-                <span className="italic font-light text-[#c76600]">adjust.</span>
-              </h2>
-
-              <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
-                <p className="font-display italic text-[#3a2a22]/80 text-[1.15rem] md:text-[1.25rem] leading-[1.6]">
-                  Pull it back. Fix it again. Cover again. Repeat.
-                </p>
-                <p>
-                  What looked like protection was, more honestly, a constant negotiation — with
-                  movement, with heat, with attention. The fabric was never designed for the
-                  speed, the wind, or the weight of the day.
-                </p>
-                <p>
-                  Discomfort wasn't an event. It was a routine — built quietly into the rhythm
-                  of every commute, every afternoon, every long outdoor hour.
-                </p>
-              </div>
-
-              <ul className="mt-10 grid grid-cols-2 gap-x-8 gap-y-3 max-w-md">
-                {["Adjustment", "Discomfort", "Exposure", "Friction"].map((word, i) => (
-                  <li
-                    key={word}
-                    className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.32em] uppercase text-[#3a2a22]/55 font-bold"
-                  >
-                    <span className="block h-px w-4 bg-[#c76600]/40" />
-                    0{i + 1} · {word}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-         SECTION 03 — THE OBSERVATION (3-image editorial grid)
-         ════════════════════════════════════════════════════════════════ */}
-      <section className="relative snap-start py-12 sm:py-16">
-        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1, ease: ease.smooth }}
-            className="max-w-3xl mb-10 sm:mb-12 text-center mx-auto"
-          >
-            <div className="flex justify-center">
-              <Chapter number="CHAPTER THREE" title="The Observation" />
-            </div>
-            <h2
-              className="font-display leading-[1.06] tracking-tight"
-              style={{ fontSize: "clamp(1.8rem, 4.2vw, 3.25rem)" }}
-            >
-              We started watching{" "}
-              <span className="italic font-light text-[#c76600]">how India moves.</span>
-            </h2>
-            <p className="mt-5 max-w-xl mx-auto text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light leading-[1.7]">
-              In traffic. On scooters. Outside school gates. Protection improvised, never engineered.
-            </p>
-          </motion.div>
-
+          {/* Manifesto — each statement on its own line */}
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={viewportOnceEarly}
-            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-7 max-w-5xl mx-auto"
+            viewport={viewportOnce}
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+            className="mx-auto max-w-2xl text-center"
           >
-            {[
-              { label: "COMMUTING · WOMAN", caption: "7:42 AM · scooter" },
-              { label: "SCHOOL · COMMUTE", caption: "Morning · gate" },
-              { label: "OFFICE · COMMUTE", caption: "Afternoon · arrival" },
-            ].map((img) => (
-              <motion.div
-                key={img.label}
+            <motion.h2
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 1, ease: ease.smooth }}
+              className="font-display leading-[1.05] tracking-tight mb-2"
+              style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)" }}
+            >
+              Designed around{" "}
+              <span className="italic font-light text-[#c76600]">real life.</span>
+            </motion.h2>
+
+            <div className="mx-auto max-w-2xl space-y-3 text-[0.95rem] md:text-[1.05rem] text-[#7b6a5f] font-light leading-[1.6]">
+              <motion.p
                 variants={{
-                  hidden: { opacity: 0, y: 24 },
+                  hidden: { opacity: 0, y: 14 },
                   visible: { opacity: 1, y: 0 },
                 }}
-                transition={{ duration: 1, ease: ease.smooth }}
+                transition={{ duration: 0.8, ease: ease.smooth }}
               >
-                <StoryImage
-                  label={img.label}
-                  caption={img.caption}
-                  aspect="aspect-[3/4]"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="mt-10 sm:mt-12 max-w-2xl mx-auto text-center font-display italic text-[#3a2a22]/70 leading-[1.5]"
-            style={{ fontSize: "clamp(1rem, 1.6vw, 1.25rem)" }}
-          >
-            What we noticed wasn't a problem with people. It was a gap in what was being made for them.
-          </motion.p>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-         SECTION 04 — THE GAP IN THE MARKET
-         ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#F3ECE2]/40 border-y border-[#3a2a22]/8 py-14">
-        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1, ease: ease.smooth }}
-            className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12 sm:mb-14"
-          >
-            <div className="max-w-2xl">
-              <Chapter number="CHAPTER FOUR" title="The Gap in the Market" />
-              <h2
-                className="font-display leading-[1.06] tracking-tight"
-                style={{ fontSize: "clamp(2rem, 5vw, 3.75rem)" }}
+                Soliva wasn't created in a boardroom. It was shaped by everyday
+                commutes, outdoor hours, changing weather, and the realities of
+                daily movement.
+              </motion.p>
+              <motion.p
+                variants={{
+                  hidden: { opacity: 0, y: 14 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.8, ease: ease.smooth }}
+                className="font-display italic text-[#3a2a22]/80 text-[1.05rem] md:text-[1.2rem] leading-[1.5] pt-1"
               >
-                Three lives. <br />
-                <span className="italic font-light text-[#c76600]">No real product.</span>
-              </h2>
+                Every decision begins with a simple question: Will this make
+                everyday life easier for the wearer?
+              </motion.p>
             </div>
-            <p className="max-w-md text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light italic leading-[1.75]">
-              No category in India had been built around the actual movement these three lives
-              demand every single day.
-            </p>
           </motion.div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnceEarly}
-            variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-10"
-          >
-            {[
-              {
-                n: "01",
-                tag: "DAILY RIDERS",
-                title: "Women commuters",
-                body: "Relying on dupattas and stoles built for stillness, not for 60kmph wind, urban heat, and continuous everyday exposure.",
-              },
-              {
-                n: "02",
-                tag: "SCHOOL COMMUTES",
-                title: "Children",
-                body: "Coverings that itch, slip, and feel claustrophobic. Children need protection they will actually choose to wear.",
-              },
-              {
-                n: "03",
-                tag: "URBAN MOVEMENT",
-                title: "Men with no middle ground",
-                body: "Either heavy biker armour or nothing in between. No considered, breathable, everyday choice designed for city motion.",
-              },
-            ].map((block) => (
-              <motion.div
-                key={block.n}
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 1, ease: ease.smooth }}
-                className="border-t border-[#3a2a22]/12 pt-7"
-              >
-                <div className="flex items-baseline gap-4 mb-6">
-                  <span className="font-mono text-[1.5rem] tracking-tight text-[#c76600] font-medium">
-                    {block.n}
-                  </span>
-                  <span className="font-mono text-[0.5625rem] tracking-[0.32em] uppercase text-[#3a2a22]/55 font-bold">
-                    {block.tag}
-                  </span>
-                </div>
-                <h3
-                  className="font-display leading-[1.15] tracking-tight mb-4"
-                  style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.75rem)" }}
-                >
-                  {block.title}
-                </h3>
-                <p className="text-[0.9375rem] text-[#7b6a5f] font-light leading-[1.75]">
-                  {block.body}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-         SECTION 05 — THE REAL PROBLEM (dark statement)
-         ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#3a2a22] text-[#FAF7F3] overflow-hidden py-14">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.08),transparent_55%)]" />
-
-        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.1, ease: ease.smooth }}
-            className="text-center max-w-4xl mx-auto mb-10 sm:mb-12"
-          >
-            <Chapter number="CHAPTER FIVE" title="The Real Problem" tone="ivory" />
-            <h2
-              className="font-display leading-[1.02] tracking-tight"
-              style={{ fontSize: "clamp(2.4rem, 7vw, 5.5rem)" }}
-            >
-              Heat. Dust. Pollution.
-              <span className="block italic font-light text-[#d9b27a] mt-2">
-                And the sun that never asked.
-              </span>
-            </h2>
-            <p className="mt-8 max-w-xl mx-auto text-[1rem] md:text-[1.0625rem] text-white/70 font-light leading-[1.75]">
-              The discomfort isn't dramatic — it's daily. Exposure compounds in the background
-              of ordinary life, quietly shaping skin, energy, and confidence over years of
-              continuous movement.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.3, ease: ease.smooth, delay: 0.1 }}
-            className="mx-auto max-w-[1040px]"
-          >
-            <StoryImage
-              label="HEAT · DUST · POLLUTION"
-              src="/heat-dust-pollution.webp"
-              alt="Everyday exposure — heat, dust, pollution"
-              aspect="aspect-[21/9]"
-              rounded="rounded-[2.5rem]"
-              caption="Everyday exposure · 44°C"
-              className="[&_.bg-[\\#EDE6D8\\]]:bg-[#2a1d16] [&_.text-[\\#3a2a22\\]\\/30]:text-white/30 [&_.text-[\\#c76600\\]\\/70]:text-[#d9b27a]"
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-         SECTION 06 — WHY SOLIVA EXISTS
-         ════════════════════════════════════════════════════════════════ */}
-      <section className="relative snap-start py-12 sm:py-16">
-        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-20 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportOnce}
-              transition={{ duration: 1.1, ease: ease.smooth }}
-            >
-              <Chapter number="CHAPTER SIX" title="Why Soliva Exists" />
-              <h2
-                className="font-display leading-[1.04] tracking-tight mb-10"
-                style={{ fontSize: "clamp(2.2rem, 5.8vw, 4.25rem)" }}
-              >
-                Protection that
-                <span className="block italic font-light text-[#c76600]">
-                  moves with life.
-                </span>
-              </h2>
-
-              <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
-                <p>
-                  Soliva is built around the rhythm of Indian movement — the commutes, the
-                  afternoons, the long outdoor hours. Engineered for motion, calibrated for
-                  heat, and shaped for everyday wearability.
-                </p>
-                <p>
-                  Not a piece you reach for on holidays or special days. A piece that simply
-                  becomes part of how you live.
-                </p>
-                <p className="font-display italic text-[#3a2a22]/80 text-[1.15rem] md:text-[1.25rem] leading-[1.5]">
-                  Quiet protection. Effortless presence. Designed once. Worn every day.
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={viewportOnce}
-              transition={{ duration: 1.2, ease: ease.smooth, delay: 0.1 }}
-              className="max-w-[26rem] mx-auto lg:mx-0 lg:ml-auto"
-            >
-              <StoryImage
-                label="SOLIVA · IN USE"
-                aspect="aspect-[4/5]"
-                caption="On the road · effortless"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-         SECTION 07 — BRAND PRINCIPLES
-         ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#F3ECE2]/45 border-y border-[#3a2a22]/8 py-14">
-        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1, ease: ease.smooth }}
-            className="max-w-3xl mb-10 sm:mb-12"
-          >
-            <Chapter number="CHAPTER SEVEN" title="Brand Principles" />
-            <h2
-              className="font-display leading-[1.06] tracking-tight"
-              style={{ fontSize: "clamp(2rem, 5vw, 3.75rem)" }}
-            >
-              Four ideas
-              <span className="italic font-light text-[#c76600]"> we won't compromise on.</span>
-            </h2>
-          </motion.div>
-
+          {/* Video centered, principles flanking left & right */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnceEarly}
             variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-14 lg:gap-y-0"
+            className="mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] items-center gap-x-10 gap-y-8 xl:gap-x-16"
           >
-            {[
-              {
-                n: "01",
-                title: "Protection First",
-                desc: "Every choice begins with what shields the wearer — never what looks cleverer in a brief.",
-              },
-              {
-                n: "02",
-                title: "Designed for India",
-                desc: "Calibrated for Indian heat, dust, pollution, and the geometries of how India actually moves.",
-              },
-              {
-                n: "03",
-                title: "Everyday Wearability",
-                desc: "Quiet, lightweight, breathable — protection that becomes part of routine, not a costume for it.",
-              },
-              {
-                n: "04",
-                title: "Accessible Protection",
-                desc: "Considered design, made for real lives — not reserved for an elite few or a marketing photograph.",
-              },
-            ].map((pillar) => (
-              <motion.div
-                key={pillar.n}
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.9, ease: ease.smooth }}
-                className="relative lg:border-l lg:first:border-l-0 lg:border-[#3a2a22]/12 lg:pl-8"
-              >
-                <span className="font-mono text-[0.625rem] tracking-[0.4em] uppercase text-[#c76600] font-bold block mb-5">
-                  Principle {pillar.n}
-                </span>
-                <h3
-                  className="font-display leading-[1.15] tracking-tight mb-4"
-                  style={{ fontSize: "clamp(1.35rem, 2vw, 1.65rem)" }}
+            {/* LEFT principles */}
+            <div className="order-2 lg:order-1 grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-8 lg:gap-y-12">
+              {[
+                { title: "Thoughtful Design", desc: "Every detail should serve a purpose." },
+                { title: "Everyday Comfort", desc: "Comfort should never be optional." },
+              ].map((pillar) => (
+                <motion.div
+                  key={pillar.title}
+                  variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.9, ease: ease.smooth }}
+                  className="lg:text-right"
                 >
-                  {pillar.title}
-                </h3>
-                <p className="text-[0.9375rem] text-[#7b6a5f] font-light leading-[1.75] max-w-xs">
-                  {pillar.desc}
-                </p>
-              </motion.div>
-            ))}
+                  <span className="block h-px w-8 bg-[#c76600]/40 mb-4 lg:ml-auto" />
+                  <h3
+                    className="font-display leading-[1.15] tracking-tight mb-2"
+                    style={{ fontSize: "clamp(1.15rem, 1.6vw, 1.45rem)" }}
+                  >
+                    {pillar.title}
+                  </h3>
+                  <p className="text-[0.9375rem] text-[#7b6a5f] font-light leading-[1.75] lg:ml-auto max-w-xs">
+                    {pillar.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* CENTER video */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } }}
+              transition={{ duration: 1, ease: ease.smooth }}
+              className="order-1 lg:order-2"
+            >
+              <StoryVideo />
+            </motion.div>
+
+            {/* RIGHT principles */}
+            <div className="order-3 grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-8 lg:gap-y-12">
+              {[
+                { title: "Built For Movement", desc: "Designed for routines, not occasions." },
+                { title: "Accessible Quality", desc: "Protection should be within reach." },
+              ].map((pillar) => (
+                <motion.div
+                  key={pillar.title}
+                  variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
+                  transition={{ duration: 0.9, ease: ease.smooth }}
+                  className="lg:text-left"
+                >
+                  <span className="block h-px w-8 bg-[#c76600]/40 mb-4" />
+                  <h3
+                    className="font-display leading-[1.15] tracking-tight mb-2"
+                    style={{ fontSize: "clamp(1.15rem, 1.6vw, 1.45rem)" }}
+                  >
+                    {pillar.title}
+                  </h3>
+                  <p className="text-[0.9375rem] text-[#7b6a5f] font-light leading-[1.75] max-w-xs">
+                    {pillar.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* ════════════════════════════════════════════════════════════════
-         SECTION 08 — VISION (Now / Next / Future timeline)
+         PAGE 03 — BUILT WITH INTENTION
          ════════════════════════════════════════════════════════════════ */}
-      <section className="relative snap-start py-12 sm:py-16">
+      <section className="relative snap-start min-h-screen flex flex-col justify-center py-16">
         <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
             transition={{ duration: 1, ease: ease.smooth }}
-            className="max-w-3xl mb-14"
+            className="max-w-3xl mb-10 text-center mx-auto"
           >
-            <Chapter number="CHAPTER EIGHT" title="Vision" />
             <h2
               className="font-display leading-[1.06] tracking-tight"
               style={{ fontSize: "clamp(2rem, 5vw, 3.75rem)" }}
             >
-              One product today.
-              <span className="block italic font-light text-[#c76600]">
-                A complete system tomorrow.
-              </span>
+              Built with
+              <span className="italic font-light text-[#c76600]"> intention.</span>
             </h2>
+
+            <div className="mt-5 space-y-1.5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.6]">
+              <p>We are not here to create more products.</p>
+              <p>We are here to create better ones.</p>
+            </div>
           </motion.div>
 
-          <div className="relative">
-            {/* Editorial timeline rail */}
-            <motion.div
-              aria-hidden
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={viewportOnce}
-              transition={{ duration: 1.4, ease: ease.smooth }}
-              className="hidden md:block absolute left-0 right-0 top-8 h-px bg-gradient-to-r from-transparent via-[#c76600]/40 to-transparent origin-left"
-            />
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportOnceEarly}
-              variants={{ visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } } }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-y-14 md:gap-x-10"
-            >
-              {[
-                {
-                  marker: "NOW",
-                  title: "Soliva AirShield Wrap",
-                  desc: "Our first product. Engineered for the daily commute, the long ride, the everyday exposure.",
-                },
-                {
-                  marker: "NEXT",
-                  title: "Neck, Face & Kids Systems",
-                  desc: "Integrated coverage and a gentle line for school commutes and outdoor childhood movement.",
-                },
-                {
-                  marker: "FUTURE",
-                  title: "A Complete Ecosystem",
-                  desc: "A considered family of urban mobility essentials — protection thoughtfully woven into everyday Indian life.",
-                },
-              ].map((step) => (
-                <motion.div
-                  key={step.marker}
-                  variants={{
-                    hidden: { opacity: 0, y: 28 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  transition={{ duration: 1, ease: ease.smooth }}
-                  className="relative flex flex-col items-start text-left"
-                >
-                  <span className="relative z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FAF7F3] border border-[#c76600]/50 mb-6">
-                    <span className="block h-1.5 w-1.5 rounded-full bg-[#c76600]" />
-                  </span>
-                  <span className="font-mono text-[0.625rem] tracking-[0.42em] uppercase text-[#c76600] font-bold mb-4">
-                    {step.marker}
-                  </span>
-                  <h3
-                    className="font-display leading-[1.15] tracking-tight mb-4"
-                    style={{ fontSize: "clamp(1.45rem, 2.2vw, 1.85rem)" }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p className="text-[0.9375rem] text-[#7b6a5f] font-light leading-[1.75] max-w-xs">
-                    {step.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-         FINAL — EMOTIONAL CLOSING
-         ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100svh] snap-start flex items-center bg-[#3a2a22] text-[#FAF7F3] overflow-hidden py-14">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.07),transparent_60%)]" />
-
-        <div className="relative z-10 mx-auto max-w-[1340px] w-full px-5 sm:px-8">
+          {/* Production stages — 3 placeholders */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.2, ease: ease.smooth }}
-            className="text-center max-w-4xl mx-auto"
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnceEarly}
+            variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
+            className="grid grid-cols-3 gap-4 sm:gap-6 max-w-[760px] mx-auto"
           >
-            <Chapter number="EPILOGUE" title="Where this is going" tone="ivory" />
-            <h2
-              className="font-display leading-[1.02] tracking-tight"
-              style={{ fontSize: "clamp(2.4rem, 7.4vw, 5.75rem)" }}
-            >
-              This began on one scooter.
-              <span className="block italic font-light text-[#d9b27a] mt-2">
-                It belongs to every commute.
-              </span>
-            </h2>
-            <p className="mt-8 max-w-xl mx-auto text-[1rem] md:text-[1.0625rem] text-white/65 font-light italic leading-[1.75]">
-              A quiet protection system, built for the way India moves — one wearer, one
-              everyday, one calmer commute at a time.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.3, ease: ease.smooth, delay: 0.1 }}
-            className="mt-10 sm:mt-12 mx-auto max-w-[1040px]"
-          >
-            <StoryImage
-              label="SOLIVA · COMMUNITY"
-              aspect="aspect-[21/9]"
-              rounded="rounded-[2.5rem]"
-              caption="A protection system · in motion"
-              className="[&_.bg-[\\#EDE6D8\\]]:bg-[#2a1d16] [&_.text-[\\#3a2a22\\]\\/30]:text-white/30 [&_.text-[\\#c76600\\]\\/70]:text-[#d9b27a]"
-            />
+            {["PRODUCT DEVELOPMENT", "PROTOTYPE", "MANUFACTURING"].map((label) => (
+              <motion.div
+                key={label}
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 1, ease: ease.smooth }}
+              >
+                <StoryImage label={label} aspect="aspect-[3/4]" />
+              </motion.div>
+            ))}
           </motion.div>
 
           <motion.div
@@ -731,17 +465,17 @@ function StoryRoute() {
             whileInView={{ opacity: 1 }}
             viewport={viewportOnce}
             transition={{ duration: 1, delay: 0.3 }}
-            className="mt-10 sm:mt-12 flex flex-col sm:flex-row justify-center gap-4"
+            className="mt-10 flex flex-col sm:flex-row justify-center gap-4"
           >
             <Link
               to="/collection"
-              className="px-10 py-5 rounded-full bg-[#FAF7F3] text-[#3a2a22] font-mono text-[0.625rem] tracking-[0.32em] uppercase font-bold transition-[transform,background-color] duration-300 hover:bg-[#d9b27a] hover:-translate-y-0.5"
+              className="px-10 py-5 rounded-full bg-[#3a2a22] text-[#FAF7F3] font-mono text-[0.625rem] tracking-[0.32em] uppercase font-bold transition-[transform,background-color] duration-300 hover:bg-[#c76600] hover:-translate-y-0.5"
             >
               Explore the Collection
             </Link>
             <Link
               to="/technology"
-              className="px-10 py-5 rounded-full border border-[#FAF7F3]/25 text-[#FAF7F3] font-mono text-[0.625rem] tracking-[0.32em] uppercase font-bold transition-[transform,background-color] duration-300 hover:bg-[#FAF7F3]/8 hover:-translate-y-0.5"
+              className="px-10 py-5 rounded-full border border-[#3a2a22]/25 text-[#3a2a22] font-mono text-[0.625rem] tracking-[0.32em] uppercase font-bold transition-[transform,background-color] duration-300 hover:bg-[#3a2a22]/5 hover:-translate-y-0.5"
             >
               Read the Technology
             </Link>

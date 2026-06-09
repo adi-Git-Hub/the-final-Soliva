@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 /**
  * Particle-logo — a WebGL simulation that turns a transparent logo PNG into
@@ -55,27 +56,104 @@ function hexToRgb(hex: string) {
     : { r: 1, g: 1, b: 1 };
 }
 
+/**
+ * Premium, fully self-contained fallback — pure CSS/SVG, depends on NO remote
+ * asset, so it can never 404 or show a broken box. Renders whenever the WebGL
+ * particle simulation can't initialise (no WebGL, blocked context, asset decode
+ * failure). Floating glass Soliva monogram with a soft orange glow.
+ */
+function LogoFallback({ color = "#e3c187" }: { color?: string }) {
+  return (
+    <div className="absolute inset-0 grid place-items-center overflow-hidden" aria-hidden>
+      {/* soft orange ambient glow */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[78%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{ background: `radial-gradient(circle, ${color}33, transparent 62%)`, filter: "blur(26px)" }}
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
+        transition={{
+          opacity: { duration: 1, ease: [0.16, 1, 0.3, 1] },
+          scale: { duration: 1, ease: [0.16, 1, 0.3, 1] },
+          y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+        }}
+        className="relative flex flex-col items-center"
+      >
+        {/* floating glass disc */}
+        <div
+          className="relative grid h-36 w-36 place-items-center rounded-full sm:h-44 sm:w-44 lg:h-52 lg:w-52"
+          style={{
+            background:
+              "radial-gradient(circle at 34% 28%, rgba(255,255,255,0.12), rgba(255,255,255,0.02) 60%)",
+            border: "1px solid rgba(227,193,135,0.28)",
+            boxShadow: `0 34px 90px -34px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.16), 0 0 70px -12px ${color}66`,
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          {/* glossy top highlight */}
+          <span
+            className="pointer-events-none absolute inset-x-5 top-3 h-1/3 rounded-full"
+            style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)", filter: "blur(3px)" }}
+          />
+          <span
+            className="font-display leading-none"
+            style={{
+              fontSize: "clamp(3.5rem, 9vw, 5.5rem)",
+              backgroundImage: `linear-gradient(155deg, #f7e6c4, ${color} 52%, #b88445)`,
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+              filter: `drop-shadow(0 2px 12px ${color}66)`,
+            }}
+          >
+            S
+          </span>
+        </div>
+        {/* wordmark */}
+        <span
+          className="mt-5 pl-[0.5em] font-display text-[1.15rem] tracking-[0.5em] sm:text-[1.4rem]"
+          style={{ color, textShadow: `0 0 24px ${color}55` }}
+        >
+          SOLIVA
+        </span>
+      </motion.div>
+    </div>
+  );
+}
+
 export function ParticleLogo({
   src = "/soliva-particle-logo.png",
   color = "#e3c187",
   className,
 }: ParticleLogoProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // When the WebGL sim can't run (no context / blocked / asset decode failure)
+  // we swap to a premium CSS fallback instead of leaving a broken empty box.
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = canvas?.parentElement;
     if (!canvas || !container) return;
 
-    const gl = canvas.getContext("webgl", {
-      alpha: true,
-      depth: false,
-      stencil: false,
-      antialias: true,
-      premultipliedAlpha: false,
-      powerPreference: "high-performance",
-    });
-    if (!gl) return;
+    let gl: WebGLRenderingContext | null = null;
+    try {
+      gl = canvas.getContext("webgl", {
+        alpha: true,
+        depth: false,
+        stencil: false,
+        antialias: true,
+        premultipliedAlpha: false,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      gl = null;
+    }
+    if (!gl) {
+      setFailed(true);
+      return;
+    }
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -93,8 +171,13 @@ export function ParticleLogo({
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const tint = hexToRgb(color);
 
-    const SCAN = 440; // logo scan resolution → particle density
-    const FILL = 1.0; // logo size as a fraction of the smaller container side
+    // Logo scan resolution → particle density. Phones run ~half the count
+    // (300² vs 440² ≈ 0.46×): same particle look, far lighter GPU/CPU load.
+    const SCAN =
+      typeof window !== "undefined" && window.matchMedia?.("(max-width: 767px)")?.matches
+        ? 300
+        : 440;
+    const FILL = 1.32; // logo size as a fraction of the smaller container side
 
     type P = { sx: number; sy: number; vx: number; vy: number; ox: number; oy: number };
     let particles: P[] = [];
@@ -143,6 +226,7 @@ export function ParticleLogo({
     };
 
     const build = (pixels: Uint8ClampedArray) => {
+      particles = []; // reset — guard against a double build desyncing the buffer
       const cx = canvas.width / 2;
       const cy = canvas.height / 2;
       const pos: number[] = [];
@@ -271,41 +355,111 @@ export function ParticleLogo({
       { threshold: 0 },
     );
 
-    // boot
+    // Real GPU context loss (tab backgrounded, driver reset). preventDefault
+    // keeps the canvas restorable; we stop the loop and drop to the premium CSS
+    // fallback so the user never sees a blank box. (Distinct from the remount
+    // bug below — that was self-inflicted by loseContext() in cleanup.)
+    const onContextLost = (e: Event) => {
+      e.preventDefault();
+      cancelAnimationFrame(raf);
+      raf = 0;
+      setFailed(true);
+    };
+    canvas.addEventListener("webglcontextlost", onContextLost as EventListener);
+
+    // boot — resilient to client-side route changes (cached image + late layout)
+    let disposed = false;
+    let booted = false;
     sizeCanvas();
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.onload = () => {
+
+    // Safety net: if the asset never decodes (404, hang, blocked), drop to the
+    // premium fallback instead of an empty box.
+    const failTimer = window.setTimeout(() => {
+      if (!disposed && !booted) setFailed(true);
+    }, 5000);
+
+    const ready = () => {
+      // Bail if the effect was torn down (stale onload would build on a lost
+      // GL context); guard against running twice (onload + cached fast-path).
+      if (disposed || booted) return;
+      booted = true;
+      window.clearTimeout(failTimer);
+      sizeCanvas(); // re-measure now that layout has settled after navigation
       const tmp = document.createElement("canvas");
       tmp.width = SCAN;
       tmp.height = SCAN;
       const ctx = tmp.getContext("2d");
-      if (!ctx) return;
+      if (!ctx) {
+        setFailed(true);
+        return;
+      }
       const s = SCAN * 0.97; // minimal padding so the mark reads large
       const off = (SCAN - s) / 2;
-      ctx.drawImage(img, off, off, s, s);
-      build(ctx.getImageData(0, 0, SCAN, SCAN).data);
-      ro.observe(container);
+      try {
+        ctx.drawImage(img, off, off, s, s);
+        build(ctx.getImageData(0, 0, SCAN, SCAN).data);
+      } catch {
+        setFailed(true);
+        return;
+      }
+      // Image decoded but yielded no shape (empty / fully transparent) → fallback.
+      if (!particles.length) {
+        setFailed(true);
+        return;
+      }
+      ro.observe(container); // backstop: fixes size the moment layout finalises
       io.observe(container);
       window.addEventListener("mousemove", onMove);
     };
+
+    img.onload = ready;
+    img.onerror = () => {
+      window.clearTimeout(failTimer);
+      if (!disposed) setFailed(true);
+    };
     img.src = src;
+    // On SPA navigation the PNG is already cached and may be complete before
+    // (or without) firing onload — kick off immediately in that case.
+    if (img.complete && img.naturalWidth > 0) ready();
 
     return () => {
+      disposed = true;
+      window.clearTimeout(failTimer);
+      img.onload = null;
+      img.onerror = null;
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
+      canvas.removeEventListener("webglcontextlost", onContextLost as EventListener);
       ro.disconnect();
       io.disconnect();
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // NOTE: deliberately NOT calling WEBGL_lose_context.loseContext() here.
+      // React reuses the same <canvas> DOM node across a route remount, and
+      // getContext() returns the same context for that node — so losing it on
+      // unmount left the remounted logo with a dead context (blank). The browser
+      // reclaims the context when the canvas node is actually removed from the DOM.
     };
   }, [src, color]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden
-      className={className}
-      style={{ display: "block", width: "100%", height: "100%", pointerEvents: "none" }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        aria-hidden
+        className={className}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          display: "block",
+          pointerEvents: "none",
+          opacity: failed ? 0 : 1,
+          transition: "opacity 0.4s ease",
+        }}
+      />
+      {failed && <LogoFallback color={color} />}
+    </>
   );
 }

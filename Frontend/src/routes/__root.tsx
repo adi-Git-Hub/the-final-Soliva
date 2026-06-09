@@ -13,6 +13,8 @@ import { IntroLoader } from "@/components/IntroLoader";
 import { appLoader } from "@/design-system";
 
 import appCss from "../styles.css?url";
+// Mobile-only stylesheet — loaded AFTER appCss so its media-query rules win.
+import mobileCss from "../styles/mobile.css?url";
 
 // Pre-hydration: if the loader has already played this session, set a flag on
 // <html> before the body paints. The CSS rule below uses it to hide the SSR'd
@@ -24,7 +26,7 @@ const introGateScript = `try{if(sessionStorage.getItem(${JSON.stringify(
 // Paint the brand background BEFORE any CSS loads so a slow first paint
 // doesn't show a black/white flash. Also keep the pre-hydration intro-gate
 // rule that hides the SSR'd overlay for return visitors.
-const introGateStyle = `html,body{background:#f7f3ee;color:#3a2a22}body{background-image:url('/luxury-bg.webp');background-size:cover;background-position:center;background-attachment:fixed}@keyframes soliva-reveal{from{opacity:0}to{opacity:1}}html:not([data-soliva-intro="hide"])::after{content:"";position:fixed;inset:0;z-index:99;background-image:url('/luxury-bg.webp');background-size:cover;background-position:center;pointer-events:none;animation:soliva-reveal .5s ease-out both}html:not([data-soliva-intro="hide"]) [data-soliva-intro-root]{animation:soliva-reveal .5s ease-out both}html[data-soliva-intro="hide"] [data-soliva-intro-root]{display:none!important}html[data-soliva-intro="hide"]::after{display:none!important}`;
+const introGateStyle = `html,body{background:#f7f3ee;color:#3a2a22}body{background-image:url('/luxury-bg.webp');background-size:cover;background-position:center}@keyframes soliva-reveal{from{opacity:0}to{opacity:1}}html:not([data-soliva-intro="hide"])::after{content:"";position:fixed;inset:0;z-index:99;background-image:url('/luxury-bg.webp');background-size:cover;background-position:center;pointer-events:none;animation:soliva-reveal .5s ease-out both}html:not([data-soliva-intro="hide"]) [data-soliva-intro-root]{animation:soliva-reveal .5s ease-out both}html[data-soliva-intro="hide"] [data-soliva-intro-root]{display:none!important}html[data-soliva-intro="hide"]::after{display:none!important}`;
 
 function NotFoundComponent() {
   return (
@@ -102,7 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap",
       },
       // Favicon — icon variant of the Soliva mark.
       {
@@ -126,6 +128,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      // Mobile layer last → wins the cascade on phones (desktop ignores it).
+      {
+        rel: "stylesheet",
+        href: mobileCss,
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -135,8 +142,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  // introGateScript sets data-soliva-intro on <html> before hydration to
+  // prevent the return-visitor intro flash. That intentional pre-hydration DOM
+  // mutation triggers a React hydration-mismatch warning on <html>;
+  // suppressHydrationWarning silences it (scoped to this element only).
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
         <style dangerouslySetInnerHTML={{ __html: introGateStyle }} />

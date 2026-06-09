@@ -20,7 +20,6 @@ import { Route as PublicStoryRouteImport } from './routes/_public/story'
 import { Route as PublicSearchRouteImport } from './routes/_public/search'
 import { Route as PublicProfileRouteImport } from './routes/_public/profile'
 import { Route as PublicOrderConfirmedRouteImport } from './routes/_public/order-confirmed'
-import { Route as PublicIdentityRouteImport } from './routes/_public/identity'
 import { Route as PublicCollectionRouteImport } from './routes/_public/collection'
 import { Route as PublicCheckoutRouteImport } from './routes/_public/checkout'
 import { Route as PublicCartRouteImport } from './routes/_public/cart'
@@ -30,9 +29,7 @@ import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as PublicProductsIndexRouteImport } from './routes/_public/products/index'
-import { Route as PublicCategoriesIndexRouteImport } from './routes/_public/categories/index'
 import { Route as PublicProductsSlugRouteImport } from './routes/_public/products/$slug'
-import { Route as PublicCategoriesSlugRouteImport } from './routes/_public/categories/$slug'
 
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
@@ -87,11 +84,6 @@ const PublicOrderConfirmedRoute = PublicOrderConfirmedRouteImport.update({
   path: '/order-confirmed',
   getParentRoute: () => PublicRouteRoute,
 } as any)
-const PublicIdentityRoute = PublicIdentityRouteImport.update({
-  id: '/identity',
-  path: '/identity',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
 const PublicCollectionRoute = PublicCollectionRouteImport.update({
   id: '/collection',
   path: '/collection',
@@ -137,19 +129,9 @@ const PublicProductsIndexRoute = PublicProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
-const PublicCategoriesIndexRoute = PublicCategoriesIndexRouteImport.update({
-  id: '/categories/',
-  path: '/categories/',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
 const PublicProductsSlugRoute = PublicProductsSlugRouteImport.update({
   id: '/products/$slug',
   path: '/products/$slug',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicCategoriesSlugRoute = PublicCategoriesSlugRouteImport.update({
-  id: '/categories/$slug',
-  path: '/categories/$slug',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 
@@ -164,7 +146,6 @@ export interface FileRoutesByFullPath {
   '/cart': typeof PublicCartRoute
   '/checkout': typeof PublicCheckoutRoute
   '/collection': typeof PublicCollectionRoute
-  '/identity': typeof PublicIdentityRoute
   '/order-confirmed': typeof PublicOrderConfirmedRoute
   '/profile': typeof PublicProfileRoute
   '/search': typeof PublicSearchRoute
@@ -172,9 +153,7 @@ export interface FileRoutesByFullPath {
   '/technology': typeof PublicTechnologyRoute
   '/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/categories/$slug': typeof PublicCategoriesSlugRoute
   '/products/$slug': typeof PublicProductsSlugRoute
-  '/categories/': typeof PublicCategoriesIndexRoute
   '/products/': typeof PublicProductsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -188,7 +167,6 @@ export interface FileRoutesByTo {
   '/cart': typeof PublicCartRoute
   '/checkout': typeof PublicCheckoutRoute
   '/collection': typeof PublicCollectionRoute
-  '/identity': typeof PublicIdentityRoute
   '/order-confirmed': typeof PublicOrderConfirmedRoute
   '/profile': typeof PublicProfileRoute
   '/search': typeof PublicSearchRoute
@@ -196,9 +174,7 @@ export interface FileRoutesByTo {
   '/technology': typeof PublicTechnologyRoute
   '/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/categories/$slug': typeof PublicCategoriesSlugRoute
   '/products/$slug': typeof PublicProductsSlugRoute
-  '/categories': typeof PublicCategoriesIndexRoute
   '/products': typeof PublicProductsIndexRoute
 }
 export interface FileRoutesById {
@@ -215,7 +191,6 @@ export interface FileRoutesById {
   '/_public/cart': typeof PublicCartRoute
   '/_public/checkout': typeof PublicCheckoutRoute
   '/_public/collection': typeof PublicCollectionRoute
-  '/_public/identity': typeof PublicIdentityRoute
   '/_public/order-confirmed': typeof PublicOrderConfirmedRoute
   '/_public/profile': typeof PublicProfileRoute
   '/_public/search': typeof PublicSearchRoute
@@ -223,9 +198,7 @@ export interface FileRoutesById {
   '/_public/technology': typeof PublicTechnologyRoute
   '/_public/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
-  '/_public/categories/$slug': typeof PublicCategoriesSlugRoute
   '/_public/products/$slug': typeof PublicProductsSlugRoute
-  '/_public/categories/': typeof PublicCategoriesIndexRoute
   '/_public/products/': typeof PublicProductsIndexRoute
 }
 export interface FileRouteTypes {
@@ -241,7 +214,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/collection'
-    | '/identity'
     | '/order-confirmed'
     | '/profile'
     | '/search'
@@ -249,9 +221,7 @@ export interface FileRouteTypes {
     | '/technology'
     | '/terms'
     | '/admin/dashboard'
-    | '/categories/$slug'
     | '/products/$slug'
-    | '/categories/'
     | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -265,7 +235,6 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/collection'
-    | '/identity'
     | '/order-confirmed'
     | '/profile'
     | '/search'
@@ -273,9 +242,7 @@ export interface FileRouteTypes {
     | '/technology'
     | '/terms'
     | '/admin/dashboard'
-    | '/categories/$slug'
     | '/products/$slug'
-    | '/categories'
     | '/products'
   id:
     | '__root__'
@@ -291,7 +258,6 @@ export interface FileRouteTypes {
     | '/_public/cart'
     | '/_public/checkout'
     | '/_public/collection'
-    | '/_public/identity'
     | '/_public/order-confirmed'
     | '/_public/profile'
     | '/_public/search'
@@ -299,9 +265,7 @@ export interface FileRouteTypes {
     | '/_public/technology'
     | '/_public/terms'
     | '/admin/dashboard'
-    | '/_public/categories/$slug'
     | '/_public/products/$slug'
-    | '/_public/categories/'
     | '/_public/products/'
   fileRoutesById: FileRoutesById
 }
@@ -391,13 +355,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicOrderConfirmedRouteImport
       parentRoute: typeof PublicRouteRoute
     }
-    '/_public/identity': {
-      id: '/_public/identity'
-      path: '/identity'
-      fullPath: '/identity'
-      preLoaderRoute: typeof PublicIdentityRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
     '/_public/collection': {
       id: '/_public/collection'
       path: '/collection'
@@ -461,25 +418,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicProductsIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
-    '/_public/categories/': {
-      id: '/_public/categories/'
-      path: '/categories'
-      fullPath: '/categories/'
-      preLoaderRoute: typeof PublicCategoriesIndexRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
     '/_public/products/$slug': {
       id: '/_public/products/$slug'
       path: '/products/$slug'
       fullPath: '/products/$slug'
       preLoaderRoute: typeof PublicProductsSlugRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/categories/$slug': {
-      id: '/_public/categories/$slug'
-      path: '/categories/$slug'
-      fullPath: '/categories/$slug'
-      preLoaderRoute: typeof PublicCategoriesSlugRouteImport
       parentRoute: typeof PublicRouteRoute
     }
   }
@@ -509,16 +452,13 @@ interface PublicRouteRouteChildren {
   PublicCartRoute: typeof PublicCartRoute
   PublicCheckoutRoute: typeof PublicCheckoutRoute
   PublicCollectionRoute: typeof PublicCollectionRoute
-  PublicIdentityRoute: typeof PublicIdentityRoute
   PublicOrderConfirmedRoute: typeof PublicOrderConfirmedRoute
   PublicProfileRoute: typeof PublicProfileRoute
   PublicSearchRoute: typeof PublicSearchRoute
   PublicStoryRoute: typeof PublicStoryRoute
   PublicTechnologyRoute: typeof PublicTechnologyRoute
   PublicTermsRoute: typeof PublicTermsRoute
-  PublicCategoriesSlugRoute: typeof PublicCategoriesSlugRoute
   PublicProductsSlugRoute: typeof PublicProductsSlugRoute
-  PublicCategoriesIndexRoute: typeof PublicCategoriesIndexRoute
   PublicProductsIndexRoute: typeof PublicProductsIndexRoute
 }
 
@@ -526,16 +466,13 @@ const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicCartRoute: PublicCartRoute,
   PublicCheckoutRoute: PublicCheckoutRoute,
   PublicCollectionRoute: PublicCollectionRoute,
-  PublicIdentityRoute: PublicIdentityRoute,
   PublicOrderConfirmedRoute: PublicOrderConfirmedRoute,
   PublicProfileRoute: PublicProfileRoute,
   PublicSearchRoute: PublicSearchRoute,
   PublicStoryRoute: PublicStoryRoute,
   PublicTechnologyRoute: PublicTechnologyRoute,
   PublicTermsRoute: PublicTermsRoute,
-  PublicCategoriesSlugRoute: PublicCategoriesSlugRoute,
   PublicProductsSlugRoute: PublicProductsSlugRoute,
-  PublicCategoriesIndexRoute: PublicCategoriesIndexRoute,
   PublicProductsIndexRoute: PublicProductsIndexRoute,
 }
 

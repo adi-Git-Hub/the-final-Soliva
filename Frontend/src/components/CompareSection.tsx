@@ -1,296 +1,370 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { Link } from "@tanstack/react-router";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 
-const oldWay = [
-  "Slips during rides",
-  "Constant repositioning",
-  "Traps heat & sweat",
-  "Leaves neck exposed",
-  "Gaps around ears & nose",
-  "Tangled hair & smudged makeup",
+/* ════════════════════════════════════════════════════════════════════════
+ * SOLIVA — Comparison Section
+ * Editorial split-screen poster (magazine spread), NOT side-by-side cards.
+ * One continuous canvas: cool-grey "Traditional" half | warm-ivory "Soliva"
+ * half, joined by a centre divider with a floating VS badge. Campaign images
+ * are embedded into each half's lower corner (no cards, no large radius).
+ * Playfair Display + palette scoped to this file — no global changes.
+ * ════════════════════════════════════════════════════════════════════════ */
+
+const SERIF = '"Inter", system-ui, sans-serif';
+const EASE = [0.16, 1, 0.3, 1] as const;
+const ACCENT = "#B88445";
+
+type HalfData = {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  points: string[];
+  footer: string;
+  image: string;
+  alt: string;
+};
+
+const LEFT: HalfData = {
+  kicker: "Traditional",
+  title: "Borrowed Protection",
+  subtitle: "Built to cover. Not built to protect.",
+  points: [
+    "Slips while moving",
+    "Constant repositioning",
+    "Gaps around ears & neck",
+    "Heat trapped inside",
+    "Designed for coverage, not exposure",
+  ],
+  footer: "Everyday adjustment became everyday habit.",
+  image: "/product_images/Gemini_Generated_Image_e61dwqe61dwqe61d.png",
+  alt: "Traditional dupatta wrapped over the face — borrowed protection that slips and needs constant adjustment",
+};
+
+const RIGHT: HalfData = {
+  kicker: "Soliva",
+  title: "Protection System™",
+  subtitle: "Thoughtfully designed for everyday exposure.",
+  points: [
+    "Full face, neck & back coverage",
+    "Designed for movement",
+    "Breathable long-wear comfort",
+    "Stays structured all day",
+    "Built for everyday exposure",
+  ],
+  footer: "Protection should quietly work in the background.",
+  image: "/DSC05489.webp",
+  alt: "Soliva Protection System designed for everyday movement and exposure",
+};
+
+/* ── The everyday adjustment cycle — illustration strip (sliced from source) ── */
+const STEPS = [
+  { img: "/adjust-1.webp", label: "Pull it back." },
+  { img: "/adjust-2.webp", label: "Fix it again." },
+  { img: "/adjust-3.webp", label: "Cover again." },
+  { img: "/adjust-4.webp", label: "Move again." },
+  { img: "/adjust-5.webp", label: "Repeat." },
 ];
 
-const newWay = [
-  "Full face & neck coverage",
-  "Dual-layer breathable airflow",
-  "Stays secure while moving",
-  "Lightweight all-day comfort",
-  "Designed for real-world commuting",
-  "No exposed gaps",
-];
+/* ── Thin editorial marks ── */
+function Check({ color }: { color: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 sm:h-[18px] sm:w-[18px]" aria-hidden="true">
+      <path d="M5 12.5l4 4L19 6.5" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function Cross({ color }: { color: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 sm:h-[18px] sm:w-[18px]" aria-hidden="true">
+      <path d="M7 7l10 10M17 7L7 17" stroke={color} strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+  );
+}
 
-const marqueeItems = [
-  "UPF 50+ Protection",
-  "Breathable Airflow",
-  "360° Coverage",
-  "Designed For Indian Conditions",
-  "Daily Wear Comfort",
-  "No Constant Adjustments",
-];
+/* ── One half of the poster ── */
+function Half({ data, side }: { data: HalfData; side: "left" | "right" }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+
+  const isSoliva = side === "right";
+  const bg = isSoliva ? "#F6EFE4" : "#E9E9EC";
+  const kickerColor = isSoliva ? ACCENT : "rgba(45,36,30,0.42)";
+  const titleColor = isSoliva ? "#2D241E" : "rgba(45,36,30,0.78)";
+  const subColor = isSoliva ? ACCENT : "rgba(45,36,30,0.5)";
+  const line = isSoliva ? "rgba(45,36,30,0.12)" : "rgba(45,36,30,0.1)";
+  const textColor = isSoliva ? "#2D241E" : "rgba(45,36,30,0.6)";
+  const markColor = isSoliva ? ACCENT : "rgba(45,36,30,0.45)";
+
+  const Features = (
+    <ul
+      className={`order-1 flex flex-col justify-center px-7 py-6 lg:px-12 lg:py-10 ${
+        isSoliva ? "md:order-1" : "md:order-2"
+      }`}
+    >
+      {data.points.map((p, i) => (
+        <motion.li
+          key={p}
+          initial={{ opacity: 0, x: isSoliva ? 16 : -16 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.6, ease: EASE, delay: 0.15 + i * 0.07 }}
+          className="flex items-center gap-4 border-b py-3.5 last:border-b-0 sm:py-4 lg:py-5"
+          style={{ borderColor: line }}
+        >
+          <span
+            className="flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-full sm:h-[32px] sm:w-[32px]"
+            style={{ backgroundColor: isSoliva ? "rgba(184,132,69,0.12)" : "rgba(45,36,30,0.05)" }}
+          >
+            {isSoliva ? <Check color={markColor} /> : <Cross color={markColor} />}
+          </span>
+          <span
+            className="text-[0.95rem] leading-snug sm:text-[1.05rem] lg:text-[1.12rem]"
+            style={{ color: textColor, fontWeight: isSoliva ? 500 : 400 }}
+          >
+            {p}
+          </span>
+        </motion.li>
+      ))}
+    </ul>
+  );
+
+  const Image = (
+    <div
+      className={`relative order-2 h-[320px] self-end overflow-hidden sm:h-[420px] lg:h-[520px] ${
+        isSoliva ? "md:order-2" : "md:order-1"
+      }`}
+    >
+      <motion.img
+        src={data.image}
+        alt={data.alt}
+        loading="lazy"
+        style={{
+          y: reduce ? 0 : imgY,
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 13%)",
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 13%)",
+        }}
+        className="absolute inset-x-0 bottom-0 h-[110%] w-full scale-[1.02] object-cover object-top"
+      />
+      {/* warm/cool wash so the image melts into the half */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: `linear-gradient(to bottom, ${bg} 0%, transparent 20%, transparent 92%, ${bg} 100%)` }}
+      />
+    </div>
+  );
+
+  return (
+    <div ref={ref} className="relative flex flex-col" style={{ backgroundColor: bg }}>
+      {/* Heading block */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 1, ease: EASE }}
+        className={`px-7 pt-9 lg:px-12 lg:pt-14 ${isSoliva ? "lg:pl-20" : "lg:pr-20"}`}
+      >
+        <span
+          className="mb-4 block text-[0.7rem] font-semibold uppercase tracking-[0.42em]"
+          style={{ color: kickerColor }}
+        >
+          {data.kicker}
+        </span>
+        <h3
+          className="text-[1.75rem] uppercase leading-[1.04] tracking-tight sm:text-[2.2rem] lg:text-[2.75rem]"
+          style={{ fontFamily: SERIF, color: titleColor }}
+        >
+          {data.title.replace(/™$/, "")}
+        </h3>
+        <p
+          className="mt-3 text-[1.05rem] italic sm:text-[1.2rem] lg:text-[1.35rem]"
+          style={{ fontFamily: SERIF, color: subColor }}
+        >
+          {data.subtitle}
+        </p>
+      </motion.div>
+
+      {/* Image + features composition */}
+      <div className="mt-6 grid flex-1 grid-cols-1 items-stretch md:mt-9 md:grid-cols-2">
+        {Features}
+        {Image}
+      </div>
+
+      {/* Footer strip */}
+      <div className="border-t px-7 py-5 lg:px-12 lg:py-7" style={{ borderColor: line }}>
+        <p className="text-[1.02rem] italic sm:text-[1.12rem]" style={{ fontFamily: SERIF, color: subColor }}>
+          {data.footer}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export function CompareSection() {
+  const reduce = useReducedMotion();
+
   return (
     <section
-      className="relative w-full overflow-hidden bg-luxury-beige md:min-h-screen md:flex md:flex-col pt-4 sm:pt-5 md:pt-6 pb-0 z-20"
+      aria-labelledby="compare-heading"
+      className="m-compare relative z-20 flex w-full flex-col items-center px-4 py-12 sm:px-8 sm:py-16"
+      style={{ backgroundColor: "#F7F3EC", color: "#2D241E" }}
     >
-      {/* PREMIUM ATMOSPHERIC TRANSITION ZONE */}
-      <div className="absolute top-0 inset-x-0 h-64 pointer-events-none z-30">
-        <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-luxury-beige/40 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(245,130,13,0.1),transparent_70%)]" />
-      </div>
 
-      {/* LUXURY EDITORIAL BACKGROUND SYSTEM (static) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(245,130,13,0.04),transparent_50%),radial-gradient(circle_at_80%_20%,rgba(252,231,243,0.5),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(243,236,226,1),transparent_50%),radial-gradient(circle_at_30%_90%,rgba(245,130,13,0.06),transparent_40%)] opacity-80" />
-      </div>
-
-      <div className="relative mx-auto max-w-[88rem] w-full px-4 md:px-6 z-10 md:flex-1 md:flex md:items-center">
-        {/* PREMIUM EDITORIAL PANEL SHELL (CHAMPAGNE LAYER) */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full bg-white/40 border border-brown/10 rounded-[1.75rem] sm:rounded-[2.25rem] md:rounded-[2.5rem] xl:rounded-[3rem] p-4 sm:p-5 md:p-6 lg:px-9 lg:pt-5 lg:pb-7 xl:px-12 xl:pt-6 xl:pb-9 shadow-[0_40px_100px_-40px_rgba(58,42,34,0.1)] overflow-hidden"
+      <div className="relative mx-auto w-full max-w-[84rem]">
+        {/* ── HEADER ── */}
+        <motion.header
+          initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 1.1, ease: EASE }}
+          className="mx-auto mb-9 max-w-2xl text-center md:mb-12"
         >
-          {/* Ambient Inset Lighting for Shell */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(245,130,13,0.02),transparent_40%),radial-gradient(circle_at_100%_100%,rgba(252,231,243,0.15),transparent_50%)] pointer-events-none" />
+          <h2
+            id="compare-heading"
+            className="text-[1.9rem] leading-[1.04] sm:text-4xl md:text-5xl"
+            style={{ fontFamily: SERIF, color: "#2D241E" }}
+          >
+            Still adjusting <span className="italic" style={{ color: ACCENT }}>everyday?</span>
+          </h2>
+          <p className="mx-auto mt-3 text-[0.9rem] leading-relaxed sm:whitespace-nowrap sm:text-[0.95rem]" style={{ color: "rgba(45,36,30,0.6)" }}>
+            What feels like protection isn't always designed for everyday exposure.
+          </p>
+        </motion.header>
 
-          {/* Comparison Experience Container */}
-          <div className="relative flex flex-col md:flex-row items-stretch gap-4 sm:gap-5 z-10">
-            {/* Left Panel: The Old Way (MATTE WARM GREY-BEIGE) */}
+        {/* ── EDITORIAL SPLIT-SCREEN CANVAS ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 1.1, ease: EASE }}
+          className="relative grid grid-cols-1 overflow-hidden rounded-[20px] md:grid-cols-2"
+          style={{ boxShadow: "0 40px 90px -50px rgba(45,36,30,0.4)", border: "1px solid rgba(45,36,30,0.08)" }}
+        >
+          <Half data={LEFT} side="left" />
+          <Half data={RIGHT} side="right" />
+
+          {/* centre vertical divider (desktop) */}
+          <motion.div
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 1.2, ease: EASE, delay: 0.3 }}
+            style={{ originY: 0, backgroundColor: "rgba(45,36,30,0.14)" }}
+            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 md:block"
+          />
+
+          {/* floating VS badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.55 }}
+            className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2"
+            aria-hidden="true"
+          >
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -4 }}
-              className="flex-1 relative bg-[#EBE5DE] border border-brown/20 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-5 lg:p-6 xl:p-7 transition-transform duration-500 group/old shadow-[0_20px_40px_-15px_rgba(58,42,34,0.08)] overflow-hidden"
+              animate={reduce ? undefined : { y: [0, -10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="flex h-[5rem] w-[5rem] items-center justify-center rounded-full sm:h-[6rem] sm:w-[6rem] lg:h-[6.75rem] lg:w-[6.75rem]"
+              style={{
+                backgroundColor: "#FBF8F4",
+                boxShadow: "0 32px 64px -20px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.85)",
+                border: "1px solid rgba(45,36,30,0.12)",
+              }}
             >
-              {/* Subtle Lighting */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.4),transparent)] opacity-50 pointer-events-none" />
-
-              <div className="relative z-10">
-                <header className="mb-3 sm:mb-4">
-                  <span className="mb-1.5 block font-mono text-[8px] sm:text-[9px] uppercase font-bold tracking-[0.35em] sm:tracking-[0.5em] text-brown/60">
-                    01 // CONVENTIONAL
-                  </span>
-                  <h3 className="mb-1.5 font-display text-xl sm:text-2xl md:text-[1.75rem] tracking-tight leading-[1.05] text-brown-deep/70 transition-colors duration-700 group-hover/old:text-brown-deep/90">
-                    Borrowed protection.
-                  </h3>
-                  <p className="max-w-[260px] text-[11.5px] md:text-[12.5px] font-light italic leading-snug text-brown/70">
-                    Makeshift solutions were never designed for real environmental exposure.
-                  </p>
-                </header>
-
-                {/* Readable Stats Grid (Champagne Tint) */}
-                <div className="mb-3 sm:mb-4 grid grid-cols-3 gap-2 sm:gap-3 rounded-lg border-y border-brown/15 bg-[#F3ECE2]/40 px-3 py-2.5 sm:py-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.5)] transition-all duration-700 group-hover/old:bg-[#F3ECE2]/60">
-                  <div className="space-y-0.5">
-                    <span className="block text-[8px] text-brown/60 uppercase font-mono tracking-widest font-bold">
-                      UPF
-                    </span>
-                    <span className="block text-base sm:text-lg md:text-xl font-mono italic tracking-tighter text-brown/70 transition-colors group-hover/old:text-brown-deep">
-                      ≤ 15
-                    </span>
-                  </div>
-                  <div className="space-y-0.5 border-x border-brown/15 px-2 sm:px-3">
-                    <span className="block text-[8px] text-brown/60 uppercase font-mono tracking-widest font-bold">
-                      Adj/Hr
-                    </span>
-                    <span className="block text-base sm:text-lg md:text-xl font-mono italic tracking-tighter text-brown/70 transition-colors group-hover/old:text-brown-deep">
-                      18×
-                    </span>
-                  </div>
-                  <div className="space-y-0.5">
-                    <span className="block text-[8px] text-brown/60 uppercase font-mono tracking-widest font-bold">
-                      Cover
-                    </span>
-                    <span className="block text-base sm:text-lg md:text-xl font-mono italic tracking-tighter text-brown/70 transition-colors group-hover/old:text-brown-deep">
-                      Partial
-                    </span>
-                  </div>
-                </div>
-
-                {/* Problems List */}
-                <ul className="mb-3 sm:mb-4 space-y-1.5 sm:space-y-2">
-                  {oldWay.map((item, i) => (
-                    <motion.li
-                      key={item}
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.2 + 0.08 * i }}
-                      className="flex items-start gap-3 text-brown/70 text-[12px] md:text-[13px] font-medium group/item"
-                    >
-                      <span className="mt-[8px] h-[1px] w-3 bg-brown/30 group-hover/item:w-5 transition-all duration-500" />
-                      <span className="group-hover/item:text-brown-deep transition-colors leading-snug">
-                        {item}
-                      </span>
-                    </motion.li>
-                  ))}
-                </ul>
-
-                <div className="pt-3 border-t border-brown/15">
-                  <p className="font-display text-lg sm:text-xl text-brown/50 leading-tight">
-                    Looks covered.{" "}
-                    <span className="text-brown/70 italic">Still exposed.</span>
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Panel: SOLIVA AIRSHIELD™ (PREMIUM IVORY & BRONZE) */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -6 }}
-              className="flex-[1.1] relative bg-[#FDFBF7] border-2 border-orange-glow/30 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-5 lg:p-6 xl:p-8 shadow-[0_30px_60px_-20px_rgba(58,42,34,0.2)] group/card overflow-hidden transition-transform duration-500"
-            >
-              {/* Internal Depth Layer (static) */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-orange-glow/5 pointer-events-none" />
-
-              <div className="absolute top-0 right-0 w-64 h-64 bg-orange-glow/10 blur-[40px] -mr-32 -mt-32 rounded-full" />
-
-              <div className="relative z-10">
-                <header className="mb-3 sm:mb-4">
-                  <div className="mb-2 flex items-center justify-between gap-3">
-                    <span className="text-[9px] sm:text-[10px] uppercase font-black tracking-[0.35em] sm:tracking-[0.6em] text-orange-glow">
-                      02 // SOLIVA AIRSHIELD™
-                    </span>
-                    <motion.div
-                      animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
-                      transition={{ duration: 4, repeat: Infinity }}
-                      className="h-2 w-2 rounded-full bg-orange-glow shadow-[0_0_15px_rgba(245,130,13,1)]"
-                    />
-                  </div>
-                  <h3 className="mb-1.5 font-display text-2xl sm:text-3xl md:text-[2.25rem] tracking-tight leading-[1] text-brown-deep">
-                    Engineered protection.
-                  </h3>
-                  <p className="max-w-[340px] text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-snug text-brown-deep/80">
-                    Purpose-built for Indian heat, pollution, movement, and long daily wear.
-                  </p>
-                </header>
-
-                {/* HIGH-CONTRAST STATS (CHAMPAGNE FRAME) */}
-                <div className="mb-3 sm:mb-4 grid grid-cols-3 gap-2 sm:gap-3 rounded-xl border-y border-orange-glow/20 bg-white/95 px-3 py-2.5 sm:py-3 shadow-[0_15px_40px_-10px_rgba(58,42,34,0.1),inset_0_1px_0_rgba(255,255,255,0.9)] transition-all duration-700 group-hover/card:bg-white">
-                  <div className="space-y-0.5">
-                    <span className="block text-[8px] sm:text-[9px] text-orange-glow uppercase font-mono tracking-widest font-black">
-                      UPF
-                    </span>
-                    <span
-                      className="block font-mono font-black tracking-tighter text-brown-deep transition-transform duration-500 group-hover/card:scale-110 origin-left"
-                      style={{ fontSize: "clamp(1.2rem, 3.5vw, 1.9rem)" }}
-                    >
-                      50+
-                    </span>
-                  </div>
-                  <div className="space-y-0.5 border-x border-orange-glow/20 px-2 sm:px-3">
-                    <span className="block text-[8px] sm:text-[9px] text-orange-glow uppercase font-mono tracking-widest font-black">
-                      Adj/Hr
-                    </span>
-                    <span
-                      className="block font-mono font-black tracking-tighter text-brown-deep transition-transform duration-500 group-hover/card:scale-110"
-                      style={{ fontSize: "clamp(1.2rem, 3.5vw, 1.9rem)" }}
-                    >
-                      0×
-                    </span>
-                  </div>
-                  <div className="space-y-0.5">
-                    <span className="block text-[8px] sm:text-[9px] text-orange-glow uppercase font-mono tracking-widest font-black">
-                      Cover
-                    </span>
-                    <span
-                      className="block font-mono font-black tracking-tighter text-brown-deep transition-transform duration-500 group-hover/card:scale-110 origin-right"
-                      style={{ fontSize: "clamp(1.2rem, 3.5vw, 1.9rem)" }}
-                    >
-                      360°
-                    </span>
-                  </div>
-                </div>
-
-                {/* Premium Benefits List */}
-                <ul className="mb-3 sm:mb-4 space-y-1.5 sm:space-y-2">
-                  {newWay.map((item, i) => (
-                    <motion.li
-                      key={item}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.3 + 0.08 * i, duration: 0.7, ease: "easeOut" }}
-                      className="flex items-start gap-3 text-brown-deep text-[12.5px] md:text-[14px] font-bold group/item"
-                    >
-                      <div className="mt-[7px] h-1 w-4 bg-orange-glow rounded-full shadow-[0_0_12px_rgba(245,130,13,0.5)] group-hover/item:w-7 transition-all duration-700 flex-shrink-0" />
-                      <span className="group-hover/item:text-orange-glow transition-colors duration-500 leading-snug">
-                        {item}
-                      </span>
-                    </motion.li>
-                  ))}
-                </ul>
-
-                <div className="pt-3 border-t border-orange-glow/30">
-                  <p className="font-display text-lg sm:text-xl text-brown-deep leading-tight font-bold">
-                    Designed once.{" "}
-                    <span className="text-orange-glow font-black italic">Worn effortlessly.</span>
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Strong Bottom Statement */}
-          <div className="relative z-10 mt-4 sm:mt-5 space-y-1.5 sm:space-y-2 text-center">
-            <motion.h4
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2 }}
-              className="font-display text-brown-deep tracking-tighter font-bold leading-[1.1]"
-              style={{ fontSize: "clamp(1.15rem, 3.6vw, 2rem)" }}
-            >
-              Protection shouldn’t depend on{" "}
-              <span className="italic font-serif text-orange-glow underline underline-offset-[6px] sm:underline-offset-[8px] decoration-orange-glow/30 decoration-2">
-                adjustment.
+              <span className="text-2xl italic sm:text-3xl lg:text-4xl" style={{ fontFamily: SERIF, color: "#2D241E" }}>
+                vs
               </span>
-            </motion.h4>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6, duration: 1.2 }}
-              className="text-brown/50 text-[8.5px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.45em] uppercase font-black"
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* ════ THE ADJUSTMENT CYCLE — continuation of the same comparison story ════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 1, ease: EASE }}
+          className="mt-12 w-full md:mt-16"
+        >
+          {/* bridge line — ties the panel above into the sequence below */}
+          <p
+            className="text-center text-[0.95rem] italic sm:text-[1.05rem]"
+            style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.55)" }}
+          >
+            Covered doesn't always mean protected.
+          </p>
+
+          {/* question heading */}
+          <h3
+            className="mx-auto mt-3 text-center text-[1.5rem] leading-[1.12] sm:text-[2rem] md:text-[2.2rem] lg:whitespace-nowrap"
+            style={{ fontFamily: SERIF, color: "#2D241E" }}
+          >
+            How many times do you adjust protection{" "}
+            <span className="italic" style={{ color: ACCENT }}>
+              everyday?
+            </span>
+          </h3>
+
+          {/* 5-step adjustment illustration row — single row on desktop, swipe on mobile */}
+          <ul className="mx-auto mt-8 flex max-w-[72rem] snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] md:mt-10 md:grid md:grid-cols-5 md:overflow-visible [&::-webkit-scrollbar]:hidden">
+            {STEPS.map((s, i) => (
+              <motion.li
+                key={s.label}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, ease: EASE, delay: i * 0.1 }}
+                className="flex w-[46%] shrink-0 snap-center flex-col items-center px-3 first:border-l-0 sm:w-[33%] sm:px-5 md:w-auto md:border-l"
+                style={{ borderColor: "rgba(45,36,30,0.10)" }}
+              >
+                <div className="flex h-24 w-full items-end justify-center sm:h-28 md:h-32">
+                  <img
+                    src={s.img}
+                    alt={`Adjusting traditional protection: ${s.label}`}
+                    loading="lazy"
+                    className="h-full w-auto max-w-full object-contain"
+                  />
+                </div>
+                <span
+                  className="mt-3 text-center text-[0.9rem] italic sm:text-[0.98rem]"
+                  style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.78)" }}
+                >
+                  {s.label}
+                </span>
+              </motion.li>
+            ))}
+          </ul>
+
+          {/* resolution — question → solution → CTA */}
+          <div className="mt-12 flex flex-col items-center text-center md:mt-16">
+            <h3
+              className="mx-auto text-[1.45rem] leading-[1.14] sm:text-[1.9rem] md:text-[2.1rem] lg:whitespace-nowrap"
+              style={{ fontFamily: SERIF, color: "#2D241E" }}
             >
-              Designed for real life. Not temporary fixes.
-            </motion.p>
+              Why should protection work{" "}
+              <span className="italic" style={{ color: ACCENT }}>
+                harder than life?
+              </span>
+            </h3>
+            <p
+              className="mt-3 text-[0.95rem] italic sm:text-[1.05rem]"
+              style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.55)" }}
+            >
+              Move beyond adjustment.
+            </p>
+            <Link
+              to="/collection"
+              className="group mt-7 inline-flex items-center gap-2.5 rounded-full bg-[#2D241E] px-9 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[#F7F3EC] shadow-[0_18px_40px_-18px_rgba(45,36,30,0.5)] transition-[transform,background-color] duration-500 hover:-translate-y-0.5 hover:bg-[#B88445]"
+            >
+              Discover Soliva
+              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
+            </Link>
           </div>
         </motion.div>
       </div>
-
-      {/* LUXURY INFINITE MARQUEE */}
-      <div className="relative md:mt-auto mt-4 border-y border-brown/15 bg-white/50 py-2.5 sm:py-3 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-luxury-beige to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-luxury-beige to-transparent z-10 pointer-events-none" />
-
-        <div className="flex whitespace-nowrap items-center justify-center">
-          <motion.div
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-            className="flex gap-14 sm:gap-20 items-center pr-14 sm:pr-20"
-          >
-            {[...marqueeItems, ...marqueeItems].map((item, i) => (
-              <div key={`${item}-${i}`} className="flex items-center gap-14 sm:gap-20">
-                <span className="text-[11px] sm:text-[12px] md:text-[13px] tracking-[0.3em] sm:tracking-[0.4em] text-brown-deep/80 uppercase font-black hover:text-orange-glow transition-colors duration-700 cursor-default">
-                  {item}
-                </span>
-                <span className="text-orange-glow/70 text-lg sm:text-xl font-serif leading-none">
-                  ✦
-                </span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-
     </section>
   );
 }

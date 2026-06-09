@@ -3,11 +3,8 @@ import { motion } from "framer-motion";
 import { viewportOnce, ease } from "@/design-system";
 import {
   SunlightVisual,
-  ProtectionRings,
   AirflowSystem,
   CoverageFigure,
-  EnvironmentSystem,
-  LayeredEpilogue,
 } from "@/components/technology/visuals";
 
 export const Route = createFileRoute("/_public/technology")({
@@ -31,7 +28,7 @@ function Chapter({
   tone = "warm",
 }: {
   number: string;
-  title: string;
+  title?: string;
   tone?: "warm" | "ivory";
 }) {
   const color = tone === "ivory" ? "text-[#d9b27a]" : "text-[#c76600]";
@@ -40,7 +37,7 @@ function Chapter({
     <div className="flex items-center gap-3 mb-6">
       <span className={`block h-px w-8 ${line}`} />
       <span className={`font-mono text-[0.625rem] tracking-[0.42em] uppercase font-bold ${color}`}>
-        {number} · {title}
+        {title ? `${number} · ${title}` : number}
       </span>
     </div>
   );
@@ -76,25 +73,24 @@ function HowItWorksRoute() {
               viewport={viewportOnce}
               transition={{ duration: 1.1, ease: ease.smooth }}
             >
-              <Chapter number="CHAPTER ONE" title="The Idea" />
+              <Chapter number="HOW IT WORKS" />
               <h1
-                className="font-display leading-[1.02] tracking-tight mb-10"
-                style={{ fontSize: "clamp(2.4rem, 6.4vw, 5rem)" }}
+                className="font-display leading-[1.02] tracking-tight mb-10 whitespace-nowrap"
+                style={{ fontSize: "clamp(1.35rem, 3vw, 2.8rem)" }}
               >
-                Designed to Protect.
-                <span className="block italic font-light text-[#c76600] mt-1">
-                  Built for everyday life.
-                </span>
+                Designed for{" "}
+                <span className="italic font-light text-[#c76600]">everyday exposure.</span>
               </h1>
 
               <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
                 <p>
-                  Every day, your skin meets sun, dust, heat, and pollution. Yet most coverings were
-                  never engineered to actually answer these conditions.
+                  Every day, your skin faces long hours of sun, heat, dust, and environmental
+                  exposure. Yet most coverings were never specifically designed for these conditions.
                 </p>
                 <p>
-                  Soliva is a protection system — thoughtful coverage, breathable comfort, and
-                  effortless wearability, designed for the way modern India moves.
+                  Soliva was created as a thoughtful everyday protection system—combining comfortable
+                  coverage, breathable construction, and effortless wearability into one solution
+                  designed for the way modern India moves.
                 </p>
               </div>
 
@@ -113,90 +109,31 @@ function HowItWorksRoute() {
         </div>
       </section>
 
-      {/* ══════════════════════ CHAPTER TWO — PROTECTION, BY DESIGN ══════════════════════ */}
-      <section className="relative flex items-center bg-[#F3ECE2]/50 border-y border-[#3a2a22]/8 py-20 sm:py-28">
-        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-12 lg:gap-20 items-center">
-            <Depth className="order-2 lg:order-1">
-              <ProtectionRings />
-            </Depth>
-
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportOnce}
-              transition={{ duration: 1.1, ease: ease.smooth, delay: 0.1 }}
-              className="order-1 lg:order-2"
-            >
-              <Chapter number="CHAPTER TWO" title="Protection, By Design" />
-              <h2
-                className="font-display leading-[1.05] tracking-tight mb-8"
-                style={{ fontSize: "clamp(2rem, 5.2vw, 4rem)" }}
-              >
-                Protection begins
-                <span className="block italic font-light text-[#c76600]">
-                  inside the fabric.
-                </span>
-              </h2>
-
-              <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
-                <p>
-                  Soliva is built with UPF 50+ protective fabric — engineered so more than 98% of UV
-                  is blocked before it ever reaches skin, through commutes, errands, and long outdoor
-                  hours.
-                </p>
-                <p className="font-display italic text-[#3a2a22]/80 text-[1.15rem] md:text-[1.25rem] leading-[1.6]">
-                  Not an afterthought. A foundation.
-                </p>
-                <p>
-                  Layer by layer, protection is woven into the material itself — quietly, consistently,
-                  from the first thread up.
-                </p>
-              </div>
-
-              <div className="mt-10 inline-flex items-center gap-4 border-t border-[#3a2a22]/12 pt-5">
-                <span className="font-mono text-[0.625rem] tracking-[0.42em] uppercase text-[#c76600] font-bold">
-                  UPF 50+
-                </span>
-                <span className="block h-px w-6 bg-[#3a2a22]/20" />
-                <span className="font-mono text-[0.625rem] tracking-[0.32em] uppercase text-[#3a2a22]/55 font-bold">
-                  Everyday UV defence
-                </span>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* ══════════════════════ CHAPTER THREE — COMFORT WITHOUT COMPROMISE ══════════════════════ */}
-      <section className="relative py-20 sm:py-28">
+      <section className="relative min-h-screen flex flex-col justify-center py-14">
         <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
             transition={{ duration: 1, ease: ease.smooth }}
-            className="max-w-3xl mb-12 sm:mb-16 text-center mx-auto"
+            className="max-w-4xl mb-8 text-center mx-auto"
           >
-            <div className="flex justify-center">
-              <Chapter number="CHAPTER THREE" title="Comfort Without Compromise" />
-            </div>
             <h2
-              className="font-display leading-[1.04] tracking-tight"
-              style={{ fontSize: "clamp(1.95rem, 4.6vw, 3.5rem)" }}
+              className="font-display leading-[1.04] tracking-tight whitespace-nowrap"
+              style={{ fontSize: "clamp(1.3rem, 3.2vw, 2.5rem)" }}
             >
-              Protection should never feel
-              <span className="block italic font-light text-[#c76600]">
-                heavy, restrictive, or worn.
+              Comfortable enough{" "}
+              <span className="italic font-light text-[#c76600]">
+                to wear every day.
               </span>
             </h2>
-            <p className="mt-5 max-w-xl mx-auto text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light leading-[1.7]">
-              A thoughtfully layered construction routes air through the weave and lets heat escape —
-              so Soliva stays calm and unobtrusive through every hour of wear.
+            <p className="mt-4 mx-auto max-w-2xl text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light leading-[1.7]">
+              Protection should feel natural, not restrictive — air circulates, heat escapes, comfort lasts.
             </p>
           </motion.div>
 
-          <Depth className="max-w-[60rem] mx-auto">
+          <Depth className="max-w-[46rem] mx-auto">
             <AirflowSystem />
           </Depth>
 
@@ -205,110 +142,73 @@ function HowItWorksRoute() {
             whileInView={{ opacity: 1 }}
             viewport={viewportOnce}
             transition={{ duration: 1, delay: 0.2 }}
-            className="mt-12 sm:mt-16 max-w-2xl mx-auto text-center font-display italic text-[#3a2a22]/70 leading-[1.5]"
+            className="mt-8 max-w-2xl mx-auto text-center font-display italic text-[#3a2a22]/70 leading-[1.5]"
             style={{ fontSize: "clamp(1rem, 1.6vw, 1.25rem)" }}
           >
-            Comfort isn't the absence of protection — it's the quiet evidence of it.
+            Because the best protection is the one people actually choose to wear consistently.
           </motion.p>
         </div>
       </section>
 
       {/* ══════════════════════ CHAPTER FOUR — COVERAGE WHERE IT MATTERS ══════════════════════ */}
-      <section className="relative flex items-center bg-[#F3ECE2]/40 border-y border-[#3a2a22]/8 py-20 sm:py-28">
+      <section className="relative min-h-screen flex flex-col justify-center bg-[#F3ECE2]/40 border-y border-[#3a2a22]/8 py-10 sm:py-12">
         <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
+          {/* Header — headline, centered */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
             transition={{ duration: 1.1, ease: ease.smooth }}
-            className="max-w-3xl mb-12 sm:mb-16"
+            className="mb-6 lg:mb-8 text-center"
           >
-            <Chapter number="CHAPTER FOUR" title="Coverage Where It Matters" />
             <h2
-              className="font-display leading-[1.04] tracking-tight mb-6"
-              style={{ fontSize: "clamp(2rem, 5.2vw, 3.85rem)" }}
+              className="font-display leading-[1.04] tracking-tight whitespace-nowrap"
+              style={{ fontSize: "clamp(1.5rem, 3.6vw, 3rem)" }}
             >
-              Where makeshift solutions
-              <span className="block italic font-light text-[#c76600]">
-                quietly leave gaps.
-              </span>
+              Coverage where it{" "}
+              <span className="italic font-light text-[#c76600]">matters most.</span>
             </h2>
-            <p className="max-w-xl text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
-              Soliva is intentionally shaped to cover the face, nose, ears, neck, shoulders, and
-              back — the areas most exposed during everyday movement. Scroll to follow the map.
-            </p>
           </motion.div>
 
-          <CoverageFigure />
+          {/* Body — text left, image right */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.9fr] gap-8 lg:gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewportOnce}
+              transition={{ duration: 1.1, delay: 0.1, ease: ease.smooth }}
+              className="max-w-xl"
+            >
+              <div className="space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
+                <p>Protection is only effective where it is present.</p>
+                <p>
+                  Soliva is intentionally shaped to provide coverage across the areas most commonly
+                  exposed during commuting, outdoor activity, and everyday movement—including the face,
+                  nose, ears, neck, shoulders, and upper back.
+                </p>
+              </div>
+              <p className="mt-6 font-display italic text-[#3a2a22]/70 text-[1.05rem] md:text-[1.15rem] leading-[1.6]">
+                Unlike makeshift coverings that shift, slip, or leave gaps throughout the day, Soliva is
+                designed to stay comfortable while providing consistent coverage where it matters most.
+              </p>
+            </motion.div>
+
+            <CoverageFigure />
+          </div>
         </div>
       </section>
 
-      {/* ══════════════════════ CHAPTER FIVE — BUILT FOR INDIAN CONDITIONS ══════════════════════ */}
-      <section className="relative flex items-center bg-[#3a2a22] text-[#FAF7F3] overflow-hidden py-20 sm:py-28">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_25%,rgba(245,130,13,0.08),transparent_55%)]" />
-
-        <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.1, ease: ease.smooth }}
-            className="text-center max-w-4xl mx-auto mb-12 sm:mb-16"
-          >
-            <Chapter number="CHAPTER FIVE" title="Built for Indian Conditions" tone="ivory" />
-            <h2
-              className="font-display leading-[1.02] tracking-tight"
-              style={{ fontSize: "clamp(2.2rem, 6.4vw, 5rem)" }}
-            >
-              Heat. Dust. Pollution.
-              <span className="block italic font-light text-[#d9b27a] mt-2">Movement.</span>
-            </h2>
-            <p className="mt-8 max-w-xl mx-auto text-[1rem] md:text-[1.0625rem] text-white/70 font-light leading-[1.75]">
-              These forces never arrive one at a time. Soliva is engineered for them together — the
-              real conditions people face on every commute, ride, and errand.
-            </p>
-          </motion.div>
-
-          <EnvironmentSystem />
-        </div>
-      </section>
-
-      {/* ══════════════════════ EPILOGUE — THOUGHTFULLY LAYERED ══════════════════════ */}
+      {/* ══════════════════════ EPILOGUE — EXPLORE THE COLLECTION ══════════════════════ */}
       <section className="relative flex items-center bg-[#2a1d16] text-[#FAF7F3] overflow-hidden py-24 sm:py-32">
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,rgba(245,130,13,0.06),transparent_62%)]" />
 
         <div className="relative z-10 mx-auto max-w-[1340px] w-full px-5 sm:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.3, ease: ease.luxe }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <Chapter number="EPILOGUE" title="The Promise" tone="ivory" />
-            <h2
-              className="font-display leading-[1.02] tracking-tight"
-              style={{ fontSize: "clamp(2.4rem, 7.4vw, 5.75rem)" }}
-            >
-              Thoughtfully layered.
-              <span className="block italic font-light text-[#d9b27a] mt-2">Effortlessly worn.</span>
-            </h2>
-            <p className="mt-8 max-w-xl mx-auto text-[1rem] md:text-[1.0625rem] text-white/65 font-light italic leading-[1.75]">
-              An engineered protection system for modern movement — that feels as natural as stepping
-              out.
-            </p>
-          </motion.div>
-
-          <div className="mt-14 sm:mt-20">
-            <LayeredEpilogue />
-          </div>
-
-          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={viewportOnce}
             transition={{ duration: 1, delay: 0.3 }}
-            className="mt-14 sm:mt-20 flex justify-center"
+            className="flex justify-center"
           >
             <Link
               to="/collection"

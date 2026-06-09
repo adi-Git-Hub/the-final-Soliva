@@ -154,9 +154,6 @@ export function TechSection() {
                 className="reveal-on-scroll group flex gap-6 border-t border-line-soft bg-transparent hover:bg-surface-glass-strong py-8 px-6 transition-all duration-500 rounded-2xl cursor-default"
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
-                <span className="font-mono text-micro-md text-orange-glow tracking-cta font-bold mt-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
-                  {f.tag}
-                </span>
                 <div className="flex-1">
                   <h4 className="font-display text-2xl text-brown-deep group-hover:text-orange-glow transition-all duration-500 tracking-tight">
                     {f.title}

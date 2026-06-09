@@ -1,57 +1,24 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Search,
-  ShoppingBag,
-  User,
-  LogOut,
-  Menu,
-  X,
-  LogIn,
-  UserPlus,
-  KeyRound,
-  LayoutDashboard,
-} from "lucide-react";
+import { Search, ShoppingBag, Menu } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ApiStatusDot } from "@/components/shared/ApiStatusDot";
-import { Avatar } from "@/components/shared/Avatar";
 import { SolivaLogo } from "@/components/SolivaLogo";
-import { useSession } from "@/features/auth/hooks/useSession";
-import { useLogout } from "@/features/auth/api";
+import { AccountMenu } from "./AccountMenu";
 import { useCart } from "@/features/cart/hooks/useCart";
 import { cn } from "@/lib/utils";
 
 const primaryLinks: readonly { to: string; label: string; search?: Record<string, string> }[] = [
   { to: "/", label: "Home" },
   { to: "/collection", label: "Collection" },
-  { to: "/categories", label: "Categories" },
   { to: "/story", label: "Story" },
   { to: "/technology", label: "How It Works" },
-  { to: "/identity", label: "Identity" },
 ];
 
-const authLinks = [
-  { to: "/login", label: "Sign in", icon: LogIn },
-  { to: "/register", label: "Create account", icon: UserPlus },
-  { to: "/forgot-password", label: "Forgot password", icon: KeyRound },
-] as const;
-
 export function Header() {
-  const session = useSession();
   const { itemCount: cartCount } = useCart();
-  const logout = useLogout();
   const navigate = useNavigate();
   const [searchQ, setSearchQ] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -100,20 +67,10 @@ export function Header() {
     setSearchOpen(false);
   }
 
-  const getUserInitials = () => {
-    if (!session?.user?.name) return "??";
-    return session.user.name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none transition-all duration-700 ease-in-out",
+        "m-header fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none transition-all duration-700 ease-in-out",
         isHidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100",
       )}
     >
@@ -127,11 +84,11 @@ export function Header() {
         className={cn(
           "pointer-events-auto relative mx-auto transition-all duration-700 ease-in-out flex items-center justify-between",
           "border-b backdrop-blur-xl",
-          "before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:pointer-events-none",
-          "after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/20 after:pointer-events-none",
+          "before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/15 before:to-transparent before:pointer-events-none",
+          "after:absolute after:inset-x-0 after:top-0 after:h-px after:bg-white/30 after:pointer-events-none",
           isScrolled
-            ? "h-[68px] w-[min(96vw,1100px)] px-6 mt-2 rounded-2xl border border-white/20 bg-white/40 shadow-editorial"
-            : "h-[84px] w-full px-8 mt-0 rounded-none border-transparent bg-white/40 shadow-none",
+            ? "h-[68px] w-[min(96vw,1100px)] px-6 mt-2 rounded-[22px] border border-[#c2410c]/40 bg-[#f97316] shadow-[inset_0_6px_10px_rgba(255,255,255,0.45),inset_0_-10px_16px_rgba(124,45,18,0.5),0_20px_38px_-12px_rgba(124,45,18,0.55)]"
+            : "h-[68px] w-full px-8 mt-0 rounded-none border-transparent bg-[#f97316] shadow-none",
         )}
       >
         <div
@@ -143,12 +100,12 @@ export function Header() {
           <div className="flex items-center gap-8 lg:gap-12 h-full">
             {/* Soliva Branding — fills the navbar height with small breathing room,
                 so the full logo stays visible (never cropped). */}
-            <Link to="/" className="flex items-center outline-none group h-full py-1.5">
+            <Link to="/" className="flex items-center outline-none group h-full py-3 md:py-3.5">
               <img
-                src="/soliva-nav.webp"
+                src="/soliva-nav-new.webp"
                 alt="Soliva"
                 className={cn(
-                  "object-contain transition-all duration-700 ease-in-out h-full w-auto max-w-[260px] lg:max-w-[300px]",
+                  "object-contain transition-all duration-700 ease-in-out h-full w-auto max-w-[300px]",
                 )}
               />
             </Link>
@@ -160,9 +117,9 @@ export function Header() {
                   key={l.label}
                   to={l.to}
                   search={l.search as any}
-                  className="text-[13px] font-medium tracking-tight text-ink-default/70 hover:text-ink-strong transition-colors outline-none"
+                  className="text-[13px] font-medium tracking-tight text-white/85 hover:text-white transition-colors outline-none"
                   activeOptions={{ exact: l.to === "/" }}
-                  activeProps={{ className: "text-ink-strong font-semibold" }}
+                  activeProps={{ className: "text-white font-semibold" }}
                 >
                   {l.label}
                 </Link>
@@ -200,7 +157,7 @@ export function Header() {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(true)}
-                  className="flex h-10.5 px-3 items-center justify-center rounded-full text-ink-default/60 hover:text-ink-strong hover:bg-black/5 transition-all outline-none"
+                  className="flex h-10.5 px-3 items-center justify-center rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all outline-none"
                   aria-label="Search"
                 >
                   <Search className="h-[18px] w-[18px]" />
@@ -209,97 +166,16 @@ export function Header() {
             </div>
 
             <div className="flex items-center gap-1.5">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  {session ? (
-                    // Signed in → round Avatar (uploaded image if present,
-                    // initials-on-deterministic-color fallback otherwise).
-                    <button
-                      type="button"
-                      aria-label={`Account · ${session.user.name}`}
-                      className="rounded-full outline-none transition-all hover:opacity-85 focus-visible:ring-2 focus-visible:ring-orange-glow/30"
-                    >
-                      <Avatar src={session.user.avatarUrl} name={session.user.name} size={44} />
-                    </button>
-                  ) : (
-                    // Signed out → unchanged icon + "Account" text trigger.
-                    <button className="flex h-10.5 px-4 items-center justify-center gap-2.5 rounded-full text-ink-default/70 hover:text-ink-strong hover:bg-black/5 transition-all outline-none">
-                      <User className="h-[18px] w-[18px]" />
-                      <span className="hidden lg:inline text-[13px] font-medium tracking-tight">
-                        Account
-                      </span>
-                    </button>
-                  )}
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  sideOffset={12}
-                  className="w-52 rounded-xl border-border/40 shadow-lg"
-                >
-                  {session ? (
-                    <>
-                      <DropdownMenuLabel className="px-4 py-3">
-                        <span className="block text-[9px] tracking-[0.2em] text-muted-foreground uppercase font-black mb-1">
-                          Account
-                        </span>
-                        <div className="truncate text-sm font-semibold text-ink-strong">
-                          {session.user.name}
-                        </div>
-                      </DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        asChild
-                        className="cursor-pointer focus:bg-accent/50 text-[12px] font-medium py-2.5 px-4"
-                      >
-                        <Link to="/profile" className="flex items-center w-full">
-                          <User className="mr-3 h-4 w-4 opacity-70" />
-                          Profile
-                        </Link>
-                      </DropdownMenuItem>
-                      {session.user.role === "admin" && (
-                        <DropdownMenuItem
-                          asChild
-                          className="cursor-pointer focus:bg-accent/50 text-[12px] font-medium py-2.5 px-4"
-                        >
-                          <Link to="/admin/dashboard" className="flex items-center w-full">
-                            <LayoutDashboard className="mr-3 h-4 w-4 opacity-70" />
-                            Admin dashboard
-                          </Link>
-                        </DropdownMenuItem>
-                      )}
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onSelect={() => logout.mutate()}
-                        className="cursor-pointer focus:bg-red-500/5 text-red-500 text-[12px] font-bold py-2.5 px-4"
-                      >
-                        <LogOut className="mr-3 h-4 w-4 opacity-70" />
-                        Sign out
-                      </DropdownMenuItem>
-                    </>
-                  ) : (
-                    authLinks.map((l) => (
-                      <DropdownMenuItem
-                        key={l.to}
-                        asChild
-                        className="cursor-pointer focus:bg-accent/50 text-[12px] font-medium py-2.5 px-4"
-                      >
-                        <Link to={l.to} className="w-full">
-                          {l.label}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <AccountMenu />
 
               <Link
                 to="/cart"
-                className="flex h-10.5 px-4 items-center justify-center gap-2.5 rounded-full text-ink-default/70 hover:text-ink-strong hover:bg-black/5 transition-all outline-none"
+                className="flex h-10.5 px-4 items-center justify-center gap-2.5 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-all outline-none"
               >
                 <div className="relative">
                   <ShoppingBag className="h-[18px] w-[18px]" />
                   {cartCount > 0 && (
-                    <span className="absolute -top-1.5 -right-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-orange-glow px-1.5 text-[9px] font-black text-white shadow-sm">
+                    <span className="absolute -top-1.5 -right-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-white px-1.5 text-[9px] font-black text-[#f97316] shadow-sm">
                       {cartCount}
                     </span>
                   )}
@@ -317,11 +193,16 @@ export function Header() {
               <div className="flex items-center md:hidden ml-1">
                 <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
                   <SheetTrigger asChild>
-                    <button className="h-9 w-9 flex items-center justify-center rounded-md hover:bg-black/5 outline-none">
-                      <Menu className="h-4 w-4 text-ink-default" />
+                    <button className="h-9 w-9 flex items-center justify-center rounded-md hover:bg-white/10 outline-none">
+                      <Menu className="h-4 w-4 text-white" />
                     </button>
                   </SheetTrigger>
-                  <SheetContent side="left" className="w-[min(20rem,85vw)] bg-background">
+                  <SheetContent
+                    side="left"
+                    aria-describedby={undefined}
+                    className="w-[min(20rem,85vw)] bg-background"
+                  >
+                    <SheetTitle className="sr-only">Menu</SheetTitle>
                     <nav className="mt-12 flex flex-col gap-1 px-4">
                       {primaryLinks.map((l) => (
                         <Link

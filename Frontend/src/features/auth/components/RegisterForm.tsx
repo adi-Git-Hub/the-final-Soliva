@@ -13,8 +13,9 @@ import { Label } from "@/components/ui/label";
 import { setPendingAvatar } from "@/lib/pending-avatar";
 import { useRegister } from "../api";
 import { registerSchema, type RegisterInput } from "../schema";
+import { GoogleAuthButton } from "./GoogleAuthButton";
 
-export function RegisterForm({ redirectTo: _redirectTo }: { redirectTo?: string }) {
+export function RegisterForm({ redirectTo = "/" }: { redirectTo?: string }) {
   const navigate = useNavigate();
   const reg = useRegister();
 
@@ -121,6 +122,18 @@ export function RegisterForm({ redirectTo: _redirectTo }: { redirectTo?: string 
             </button>
           )}
         </div>
+      </div>
+
+      {/* Google sign-in — below the photo section, above the form. */}
+      <GoogleAuthButton redirectTo={redirectTo} />
+
+      {/* Divider */}
+      <div className="flex items-center gap-3 py-0.5">
+        <span className="h-px flex-1 bg-[#E8D7C8]" />
+        <span className="font-mono text-[0.625rem] uppercase tracking-[0.28em] text-[#3a2a22]/45">
+          Or continue with
+        </span>
+        <span className="h-px flex-1 bg-[#E8D7C8]" />
       </div>
 
       <div className="space-y-1.5">

@@ -1,6 +1,14 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Sun, Wind, Bike } from "lucide-react";
 import { viewportOnce, ease } from "@/design-system";
+
+// Mobile-only trust chips shown near the banner (md:hidden on desktop).
+const heroChips = [
+  { icon: Sun, label: "UV Protection" },
+  { icon: Wind, label: "Breathable Comfort" },
+  { icon: Bike, label: "Daily Commute Ready" },
+];
 
 const stripItems = [
   "Lightweight",
@@ -32,79 +40,146 @@ export function Hero({ isRevealed = false }: { isRevealed?: boolean }) {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full bg-[#FAF7F3] pt-12 md:pt-16 pb-2 overflow-hidden"
+      className="m-hero relative flex min-h-svh md:h-screen w-full flex-col overflow-hidden bg-[#FAF7F3] pt-[68px]"
     >
-      <div className="mx-auto w-full px-1.5 sm:px-3">
-        <motion.div
-          style={{ opacity: scrollOpacity }}
-          className="relative h-[86vh] md:h-[92vh] w-full rounded-[1.75rem] md:rounded-[2.75rem] overflow-hidden shadow-cinematic bg-white border border-[#3a2a22]/5"
-        >
-          {/* Main Cinematic Banner */}
-          <div className="absolute inset-0">
-            <img
-              src="/soliva-banner.webp"
-              alt="Soliva Engineered Sun Protection"
-              loading="eager"
-              fetchPriority="high"
-              decoding="sync"
-              className="h-full w-full object-cover object-center transition-transform duration-[3000ms] hover:scale-105"
-            />
-          </div>
+      <motion.div
+        style={{ opacity: scrollOpacity }}
+        className="flex min-h-0 flex-1 flex-col justify-center md:justify-start"
+      >
+        {/* ── Full-bleed cinematic banner (sits right below the navbar) ── */}
+        <div className="m-hero-banner relative min-h-0 w-full md:flex-1 overflow-hidden">
+          {/* ════ MOBILE HERO (mobile only): video → information → chips → CTA ════ */}
 
-          {/* Cinematic Scrims — Softened for the new background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-luxury-beige/10 via-transparent to-luxury-beige/20 pointer-events-none z-10" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(58,42,34,0.06)_100%)] pointer-events-none z-10" />
+          {/* 1 · Hero video — the dominant element */}
+          <motion.video
+            key="hero-video"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, ease: ease.luxe }}
+            className="m-hero-video md:hidden block w-full"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster="/homepage-banner-mobile.webp"
+          >
+            <source src="/soliva-hero.mp4" type="video/mp4" />
+          </motion.video>
 
-          {/* Content Overlay - Hidden (Removed buttons/tagline) */}
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-            {/* Elements removed as requested */}
-          </div>
+          {/* 2 · Information — micro-headline below the video */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.12, ease: ease.luxe }}
+            className="md:hidden flex items-center justify-center gap-2.5 px-5"
+          >
+            <span className="h-px w-6 bg-[#3a2a22]/20" />
+            <span className="whitespace-nowrap font-mono text-[0.6rem] font-bold uppercase tracking-[0.26em] text-[#c76600]">
+              Premium Everyday Protection
+            </span>
+            <span className="h-px w-6 bg-[#3a2a22]/20" />
+          </motion.div>
 
-          {/* Top-right — Join WhatsApp Community */}
-          <div className="absolute top-8 right-6 md:top-12 md:right-12 z-30 pointer-events-auto">
+          {/* 3 · Trust chips */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.22, ease: ease.luxe }}
+            className="md:hidden flex flex-wrap items-center justify-center gap-2 px-5"
+          >
+            {heroChips.map(({ icon: Icon, label }) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#3a2a22]/10 bg-white/70 px-3 py-1.5 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.06em] text-[#3a2a22]/75"
+              >
+                <Icon className="h-3 w-3 text-[#c76600]" />
+                {label}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* 4 · WhatsApp CTA */}
+          <motion.a
+            href="https://chat.whatsapp.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Join Soliva Community"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.32, ease: ease.luxe }}
+            className="md:hidden inline-flex items-center gap-2.5 rounded-full bg-[#25D366] px-5 py-2.5 text-white shadow-[0_8px_20px_-8px_rgba(37,211,102,0.75)] active:scale-[0.97]"
+          >
+            <WhatsAppIcon className="h-4 w-4" />
+            <span className="font-mono text-[0.7rem] font-bold tracking-[0.01em]">
+              Join Soliva Community
+            </span>
+          </motion.a>
+
+          {/* ════ DESKTOP HERO (desktop only): the landscape banner ════ */}
+          <img
+            src="/homepage-banner.webp"
+            alt="Soliva — Thoughtful protection for everyday life"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
+            className="hidden md:block w-full object-cover object-center md:h-full transition-transform duration-[3000ms] md:hover:scale-[1.03]"
+          />
+
+          {/* Soft cinematic scrims (desktop) */}
+          <div className="hidden md:block pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-luxury-beige/5 via-transparent to-luxury-beige/15" />
+
+          {/* Top-right — WhatsApp logo + animated join message (desktop only) */}
+          <div className="hidden md:block absolute right-5 top-5 z-30 md:right-7 md:top-7">
             <a
               href="https://chat.whatsapp.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-3.5 py-1.5 font-mono text-[0.55rem] md:text-[0.6rem] tracking-[0.12em] uppercase font-black text-white shadow-[0_4px_0_0_#15a347] transition-all duration-150 hover:-translate-y-0.5 hover:bg-[#2ee06f] hover:shadow-[0_5px_0_0_#15a347] active:translate-y-1 active:shadow-[0_1px_0_0_#15a347]"
+              aria-label="Join Soliva Community"
+              className="group flex items-center gap-2"
             >
-              <WhatsAppIcon className="h-3.5 w-3.5" /> Join WhatsApp Community
+              {/* Animated hint message — gently nudges toward the logo */}
+              <motion.span
+                animate={{ x: [0, -3, 0], opacity: [0.9, 1, 0.9] }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                className="rounded-full bg-white/90 px-3 py-1.5 font-mono text-[0.6rem] font-bold tracking-[0.01em] text-[#128C7E] shadow-[0_6px_18px_-8px_rgba(0,0,0,0.35)] backdrop-blur transition-transform duration-200 group-hover:scale-105 md:text-[0.65rem]"
+              >
+                Join Soliva Community
+              </motion.span>
+
+              {/* WhatsApp logo only — brand green, with a pulsing ripple */}
+              <span className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#25D366] text-white shadow-[0_8px_20px_-6px_rgba(37,211,102,0.9)] transition-transform duration-200 group-hover:scale-110">
+                <motion.span
+                  aria-hidden
+                  className="absolute inset-0 rounded-full bg-[#25D366]"
+                  animate={{ opacity: [0.5, 0], scale: [1, 1.9] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
+                />
+                <WhatsAppIcon className="relative h-6 w-6" />
+              </span>
             </a>
           </div>
 
-          {/* Footer cluster — brand etymology (amber) above the marquee strip */}
-          <div className="absolute bottom-0 inset-x-0 z-30">
-            <div className="flex items-center justify-center gap-3 pb-2.5 font-mono text-[12px] md:text-[14px] tracking-[0.14em] uppercase text-[#e3c187] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]">
-              <span>
-                <span className="font-bold">Sol</span> — Sun
-              </span>
-              <span className="h-3.5 w-px bg-[#e3c187]/40" aria-hidden />
-              <span>
-                <span className="font-bold">Iva</span> — Motion
-              </span>
-            </div>
+        </div>
 
-            <div className="border-t border-[#e3c187]/20 bg-[#3a2a22]/95 backdrop-blur-sm py-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-              <div className="flex whitespace-nowrap items-center justify-center">
-                <motion.div
-                  animate={{ x: ["0%", "-50%"] }}
-                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                  className="flex gap-14 items-center pr-14"
-                >
-                  {[...stripItems, ...stripItems].map((t, i) => (
-                    <div key={i} className="flex items-center gap-14">
-                      <span className="text-micro-sm tracking-[0.2em] text-[#e3c187] font-bold uppercase">
-                        {t}
-                      </span>
-                      <span className="text-[#e3c187]/45 font-serif text-xl">&rsaquo;</span>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
+        {/* ── Marquee strip — desktop only (the mobile hero ends at the chips) ── */}
+        <div className="hidden md:block w-full shrink-0 border-t border-[#3a2a22]/10 bg-[#3a2a22] py-1.5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+          <div className="flex items-center justify-center whitespace-nowrap">
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              className="flex items-center gap-3 pr-3"
+            >
+              {[...stripItems, ...stripItems].map((t, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <span className="text-xs font-bold tracking-[0.04em] text-[#e3c187]">{t}</span>
+                  <span className="text-xs text-[#e3c187]/40">*</span>
+                </div>
+              ))}
+            </motion.div>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

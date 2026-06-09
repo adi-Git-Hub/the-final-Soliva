@@ -219,9 +219,6 @@ export function EverydayInsightHorizontal() {
                         className="flex flex-col gap-2"
                       >
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-[11px] tracking-[0.34em] text-[#c08b4f] font-medium">
-                            {b.n}
-                          </span>
                           <span className="block h-px w-5 bg-[#c08b4f]/40" />
                         </div>
                         <p className="text-[12.5px] md:text-[13.5px] text-white/70 font-light leading-[1.6]">
@@ -366,9 +363,6 @@ export function EverydayInsightHorizontal() {
                       className="group relative bg-white/15 border border-[#c08b4f]/15 px-5 py-4 rounded-[1rem] shadow-[0_8px_28px_rgba(58,42,34,0.04)] transition-[box-shadow,background,border-color,transform] duration-700 hover:bg-white/25 hover:border-[#c08b4f]/30 hover:shadow-[0_18px_45px_rgba(58,42,34,0.10)] hover:-translate-y-0.5"
                     >
                       <div className="flex items-center gap-2.5 mb-2">
-                        <span className="font-mono text-[11px] tracking-[0.34em] text-[#c08b4f] font-medium">
-                          {b.n}
-                        </span>
                         <span className="block h-px w-6 bg-[#c08b4f]/40 group-hover:w-10 group-hover:bg-[#c08b4f]/70 transition-all duration-700" />
                       </div>
                       <h3 className="font-display text-[1.05rem] md:text-[1.15rem] text-[#FAF7F3] tracking-tight mb-1 leading-snug group-hover:text-[#d9b27a] transition-colors duration-700">

@@ -88,7 +88,7 @@
   --leading-display-snug: 1.2; /* sub-headings with breath */
 
   /* --- Font families (mirror existing) ----------------------------------- */
-  --font-display-ds: "Cormorant Garamond", "Times New Roman", serif;
+  --font-display-ds: "Inter", system-ui, sans-serif;
   --font-body-ds: "Inter", system-ui, sans-serif;
   --font-mono-ds: "JetBrains Mono", ui-monospace, monospace;
 

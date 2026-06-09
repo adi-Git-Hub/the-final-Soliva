@@ -45,9 +45,14 @@ function Index() {
 
     lenis.on("scroll", ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    // Keep a stable reference so cleanup removes THIS callback. Previously the
+    // cleanup did `gsap.ticker.remove(lenis.raf)` — a different function from the
+    // anonymous one added here — so every return to the home route stacked another
+    // per-frame ticker callback that was never removed, slowing rendering over time.
+    const tick = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
+    gsap.ticker.add(tick);
 
     gsap.ticker.lagSmoothing(0);
 
@@ -66,7 +71,7 @@ function Index() {
       cancelAnimationFrame(rafId);
       setLenis(null);
       lenis.destroy();
-      gsap.ticker.remove(lenis.raf);
+      gsap.ticker.remove(tick);
     };
   }, []);
 

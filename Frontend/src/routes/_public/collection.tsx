@@ -1,237 +1,423 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { viewportOnce, ease } from "@/design-system";
 import { useCart } from "@/features/cart/hooks/useCart";
-import { Sun, Wind, Shield, MapPin, Check, Minus, Plus, ArrowRight, X } from "lucide-react";
+import { useCheckoutStore } from "@/features/checkout/store";
+import { Check, ArrowRight, ChevronLeft, ChevronRight, ShoppingBag, Truck, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/_public/collection")({
   component: CollectionRoute,
   head: () => ({
     meta: [
-      { title: "Collection — Soliva SunWrap" },
+      { title: "SunWrap by Soliva — Women's Collection" },
       {
         name: "description",
-        content: "One product. Five colours. Engineered sun protection for daily movement.",
+        content:
+          "Full face, neck & back coverage designed for everyday movement. Available in 5 editions.",
       },
     ],
   }),
 });
 
-/* ── One product · one hero image per colour ──
-   Three live colours (real product photos) + two "Coming Soon" colours. */
-const colours = [
-  { id: "blush-pink", name: "Blush Pink", swatch: "#E4B7C6", image: null, comingSoon: true },
-  { id: "classic-beige", name: "Classic Beige", swatch: "#D8C3A0", image: null, comingSoon: true },
-  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/IMG_0550.webp", comingSoon: false },
-  { id: "deep-violet", name: "Deep Violet", swatch: "#6C5CB8", image: "/IMG_0554.webp", comingSoon: false },
-  { id: "mustard-olive", name: "Mustard Olive", swatch: "#A67C2E", image: "/IMG_0560.webp", comingSoon: false },
+/* ── One product · five editions · four gallery views each.
+   Exact edition naming kept consistent site-wide. ── */
+const editions = [
+  {
+    id: "blush-pink",
+    name: "Blush Pink",
+    swatch: "#E4B7C6",
+    images: [
+      { view: "Front View", src: "/product_images/Blush_Pink.webp" },
+      { view: "Side View", src: "/product_images/IMG_6193.webp" },
+      { view: "Back View", src: "/product_images/IMG_6194.webp" },
+      { view: "Lifestyle View", src: "/product_images/IMG_0493.webp" },
+    ],
+  },
+  {
+    id: "zesty-lime",
+    name: "Zesty Lime",
+    swatch: "#AEC96B",
+    images: [
+      { view: "Front View", src: "/product_images/zesty-lime-front.webp" },
+      { view: "Side View", src: "/product_images/IMG_6205.webp" },
+      { view: "Back View", src: "/product_images/IMG_6202.webp" },
+      { view: "Lifestyle View", src: "/product_images/IMG_4888.webp" },
+    ],
+  },
+  {
+    id: "green-edition",
+    name: "Olive Green",
+    swatch: "#6A7038",
+    images: [
+      { view: "Front View", src: "/product_images/olive-green-front.webp" },
+      { view: "Side View", src: "/product_images/IMG_6200.webp" },
+      { view: "Back View", src: "/product_images/IMG_6201.webp" },
+      { view: "Lifestyle View", src: "/product_images/IMG_0494.webp" },
+    ],
+  },
+  {
+    id: "deep-blue",
+    name: "Deep Blue",
+    swatch: "#33508A",
+    images: [
+      { view: "Front View", src: "/product_images/Deep_Blue.webp" },
+      { view: "Side View", src: "/product_images/IMG_6196.webp" },
+      { view: "Back View", src: "/product_images/IMG_6195.webp" },
+      { view: "Lifestyle View", src: "/product_images/IMG_0492.webp" },
+    ],
+  },
+  {
+    id: "classic-beige",
+    name: "Classic Beige",
+    swatch: "#D8C3A0",
+    images: [
+      { view: "Front View", src: "/product_images/classic-beige-front.webp" },
+      { view: "Side View", src: "/product_images/IMG_6203.webp" },
+      { view: "Back View", src: "/product_images/IMG_6204.webp" },
+      { view: "Lifestyle View", src: "/product_images/IMG_0491.webp" },
+    ],
+  },
 ] as const;
 
-/* Page opens on the first colour that actually has a product image. */
-const FIRST_LIVE = colours.findIndex((c) => !c.comingSoon);
-
-const benefits = [
-  { icon: Sun, title: "UPF 50+ Protection", desc: "Blocks harmful UV through long outdoor hours." },
-  { icon: Wind, title: "Breathable Comfort", desc: "Airflow-engineered fabric that stays cool in heat." },
-  { icon: Shield, title: "Complete Coverage", desc: "Full face, neck, and back — and it stays in place." },
-  { icon: MapPin, title: "Built For Indian Conditions", desc: "Tested against dust, heat, and relentless sun." },
+const lifestyleTags = [
+  { emoji: "🛵", label: "Daily Commutes" },
+  { emoji: "🎓", label: "College Travel" },
+  { emoji: "💼", label: "Work Movement" },
+  { emoji: "☀️", label: "Outdoor Hours" },
+  { emoji: "✈️", label: "Weekend Journeys" },
 ];
 
-const comparison = [
-  { label: "Stability", trad: "Slips and shifts with movement", soliva: "Stays put through motion" },
-  { label: "Coverage", trad: "Gaps around neck & jawline", soliva: "Full, continuous coverage" },
-  { label: "Breathability", trad: "Traps heat, feels stuffy", soliva: "Breathable, airflow-engineered" },
-  { label: "Daily usability", trad: "Constant readjustment", soliva: "Effortless all-day wear" },
+/* Collection preview cards — placeholder content (client replaces text). */
+const collections = [
+  {
+    no: "01",
+    title: "Women",
+    intro: "Protection designed around everyday movement.",
+    bullets: ["Daily commutes", "College travel", "Work movement", "Outdoor hours"],
+    paragraph: "Thoughtfully engineered coverage for the rhythms of modern everyday life.",
+    tagline: "Everyday Essentials",
+    bg: "from-[#FBEFF1] to-[#F6E1E7]", // soft blush pink
+    comingSoon: false, // Women is live
+  },
+  {
+    no: "02",
+    title: "Kids",
+    intro: "Protection made for little explorers.",
+    bullets: ["School rides", "Outdoor play", "Family outings", "Everyday adventures"],
+    paragraph: "Comfort-first coverage built around active, growing routines.",
+    tagline: "For Little Explorers",
+    bg: "from-[#EEF6EF] to-[#DCEDE0]", // soft mint green
+    comingSoon: true,
+  },
+  {
+    no: "03",
+    title: "Men",
+    intro: "Protection designed for everyday movement.",
+    bullets: ["Daily commutes", "Work travel", "Outdoor hours", "Everyday exposure"],
+    paragraph: "Built around real-world routines where comfort and coverage matter most.",
+    tagline: "Built for Movement",
+    bg: "from-[#EEF3FA] to-[#DBE7F3]", // soft powder blue
+    comingSoon: true,
+  },
+  {
+    no: "04",
+    title: "Gifting",
+    intro: "Thoughtful protection, ready to gift.",
+    bullets: ["Travel gifting", "Family gifting", "Everyday essentials", "Seasonal gifting"],
+    paragraph: "Curated protection kits designed for the people you care about.",
+    tagline: "Ready to Gift",
+    bg: "from-[#FAF4EA] to-[#F0E5D2]", // soft cream beige
+    comingSoon: true,
+  },
 ];
 
-/* Five named editions — each maps 1:1 to a colour above (index = colour). */
-const variants = [
-  { no: "01", name: "AirShield Wrap", emoji: "☀️", tag: "Enhanced Protection", desc: "Sculpted coverage. Silent confidence. The flagship dual-layer edition." },
-  { no: "02", name: "Urban Veil", emoji: "🌬", tag: "Breathable Comfort", desc: "City-weight protection. Zero compromise. Engineered for the daily commute." },
-  { no: "03", name: "HeatGuard", emoji: "🛵", tag: "Everyday Movement", desc: "Thermal intelligence. All-day calm. Built for peak exposure hours." },
-  { no: "04", name: "MotionCover", emoji: "🛡", tag: "Full Coverage", desc: "Moves with you. Stays in place. Adaptive stretch-soft fabric." },
-  { no: "05", name: "AirLite Shield", emoji: "🛡", tag: "Full Coverage", desc: "Barely there. Completely covered. The lightest in the collection." },
-];
+/* Editorial "Built for Movement" insight cards (copied from homepage insight). */
 
 const eyebrow = "font-mono text-[0.6875rem] tracking-[0.34em] uppercase text-[#c76600] font-bold";
 
+/* Directional slide for the main gallery image (smooth horizontal slider). */
+const slideVariants = {
+  enter: (dir: number) => ({ x: dir >= 0 ? "100%" : "-100%", opacity: 0 }),
+  center: { x: "0%", opacity: 1 },
+  exit: (dir: number) => ({ x: dir >= 0 ? "-100%" : "100%", opacity: 0 }),
+};
+
 function CollectionRoute() {
-  const [colourIndex, setColourIndex] = useState(FIRST_LIVE);
-  const [qty, setQty] = useState(1);
+  const [editionIndex, setEditionIndex] = useState(1);
+  const [viewIndex, setViewIndex] = useState(0);
+  const [direction, setDirection] = useState(0); // slide direction: 1 = next, -1 = prev
   const [added, setAdded] = useState(false);
   const cart = useCart();
+  const navigate = useNavigate();
+  const setCheckoutItems = useCheckoutStore((s) => s.setItems);
 
-  const colour = colours[colourIndex];
+  const edition = editions[editionIndex];
+  const image = edition.images[viewIndex];
+  const VIEW_COUNT = edition.images.length;
 
-  const selectColour = (i: number) => setColourIndex(i);
+  // Switching colour resets the gallery to the Front View of that edition.
+  const selectEdition = (i: number) => {
+    setDirection(0);
+    setEditionIndex(i);
+    setViewIndex(0);
+  };
+  const nextView = () => {
+    setDirection(1);
+    setViewIndex((v) => (v + 1) % VIEW_COUNT);
+  };
+  const prevView = () => {
+    setDirection(-1);
+    setViewIndex((v) => (v - 1 + VIEW_COUNT) % VIEW_COUNT);
+  };
+  // Jump straight to a view (thumbnails) — slide toward the target.
+  const goToView = (i: number) => {
+    setDirection(i >= viewIndex ? 1 : -1);
+    setViewIndex(i);
+  };
 
-  const scrollToShowcase = () =>
-    document.getElementById("showcase")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const reduce = useReducedMotion();
 
   const addToCart = () => {
-    if (colour.comingSoon || !colour.image) return;
     cart.add({
       productId: "soliva-sunwrap",
       slug: "soliva-sunwrap",
-      name: `Soliva SunWrap™ — ${colour.name}`,
-      image: colour.image,
+      name: `SunWrap by Soliva — ${edition.name}`,
+      image: edition.images[0].src,
       priceCents: 79900,
       currency: "INR",
-      quantity: qty,
+      quantity: 1,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
+  // Buy Now → stage this edition as the checkout line, then jump to the
+  // checkout page (address/details) which in turn opens Razorpay.
+  const buyNow = () => {
+    setCheckoutItems([
+      {
+        productId: "soliva-sunwrap",
+        name: `SunWrap by Soliva — ${edition.name}`,
+        image: edition.images[0].src,
+        price: 799,
+        quantity: 1,
+      },
+    ]);
+    navigate({ to: "/checkout" });
+  };
+
   return (
     <div className="relative w-full bg-[#FAF7F3] text-[#3a2a22]">
-      {/* ════════ SECTION 1 — COLLECTION INTRO (compact) ════════ */}
-      <section className="relative pt-28 md:pt-32 pb-12 md:pb-14">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportOnce}
-          transition={{ duration: 1, ease: ease.smooth }}
-          className="mx-auto max-w-[820px] px-6 text-center flex flex-col items-center"
-        >
-          <div className="flex items-center gap-3 mb-5">
-            <span className="h-px w-8 bg-[#c76600]/40" />
-            <span className={eyebrow}>The Collection</span>
-            <span className="h-px w-8 bg-[#c76600]/40" />
-          </div>
-          <h1
-            className="font-display tracking-tight leading-[1.08]"
-            style={{ fontSize: "clamp(2.1rem, 4.4vw, 3.4rem)" }}
-          >
-            Protection.
-            <span className="block italic font-light text-[#c76600]/90">
-              Designed For Daily Movement.
-            </span>
-          </h1>
-          <p className="mt-5 max-w-[520px] text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light leading-relaxed">
-            One product, thoughtfully engineered. Five colours to live in. Full coverage that
-            moves with you — from the commute to the longest day outdoors.
-          </p>
-          <button
-            onClick={scrollToShowcase}
-            className="group mt-8 inline-flex items-center gap-2.5 rounded-full bg-[#3a2a22] px-8 py-3.5 font-mono text-[0.7rem] tracking-[0.25em] uppercase font-black text-[#f7f3ee] transition-[transform,background] duration-300 hover:bg-[#4a3a32] hover:-translate-y-0.5 shadow-editorial"
-          >
-            Explore Product
-            <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-          </button>
-        </motion.div>
-      </section>
-
-      {/* ════════ SECTION 2 — PRODUCT SHOWCASE (primary) ════════ */}
-      <section
-        id="showcase"
-        className="relative scroll-mt-24 pb-16 md:pb-20 lg:min-h-screen lg:flex lg:items-center lg:py-0"
-      >
+      {/* ════════ SECTION 1 — PRODUCT HERO ════════ */}
+      <section className="relative pt-24 md:pt-28 pb-14 md:pb-16 lg:min-h-screen lg:flex lg:items-center lg:pt-28 lg:pb-16">
         <div className="mx-auto w-full max-w-[1280px] px-5 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
-            {/* LEFT — product image */}
-            <div className="flex flex-col gap-3">
-              <div
-                className="group relative aspect-[4/5] lg:aspect-auto lg:h-[58vh] lg:max-h-[600px] w-full overflow-hidden rounded-[2rem] border border-[#3a2a22]/5 shadow-[0_18px_40px_-22px_rgba(58,42,34,0.35)] transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_34px_64px_-24px_rgba(58,42,34,0.42)]"
-                style={{ background: `${colour.swatch}1f` }}
-              >
-                <AnimatePresence mode="wait">
-                  {colour.comingSoon || !colour.image ? (
-                    <motion.div
-                      key={colour.id + "-soon"}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3, ease: ease.smooth }}
-                      className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center"
-                    >
-                      <span className="font-mono text-[0.625rem] tracking-[0.3em] uppercase text-[#3a2a22]/45 font-bold">
-                        {colour.name}
-                      </span>
-                      <span
-                        className="font-display italic text-[#3a2a22]/70 leading-none"
-                        style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)" }}
-                      >
-                        Coming Soon
-                      </span>
-                      <span className="font-mono text-[0.5625rem] tracking-[0.2em] uppercase text-[#7b6a5f]/70">
-                        This colour is on its way
-                      </span>
-                    </motion.div>
-                  ) : (
-                    <motion.img
-                      key={colour.id}
-                      src={colour.image}
-                      alt={`Soliva SunWrap — ${colour.name}`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3, ease: ease.smooth }}
-                      className="absolute inset-0 h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                    />
-                  )}
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1fr] gap-10 lg:gap-16 items-center">
+            {/* LEFT — premium product gallery (5 editions × 4 views) */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: ease.smooth }}
+              className="order-1 lg:order-none flex flex-col gap-4 w-full lg:max-w-[420px] lg:mx-auto"
+            >
+              {/* Main image — floating/breathing; slide on colour/view change, swipe on touch */}
+              <div className="relative aspect-[4/5] w-full">
+                <motion.div
+                  animate={reduce ? undefined : { y: [0, -4, 0], rotate: [-0.6, 0.6, -0.6], scale: [1, 1.012, 1] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="group relative h-full w-full overflow-hidden rounded-[2.25rem] border border-[#3a2a22]/5 bg-[#EDE6D8] shadow-[0_28px_60px_-30px_rgba(58,42,34,0.4)] will-change-transform"
+                >
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.img
+                    key={`${edition.id}-${viewIndex}`}
+                    src={image.src}
+                    alt={`SunWrap by Soliva — ${edition.name}, ${image.view}`}
+                    custom={direction}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.16}
+                    onDragEnd={(_, info) => {
+                      if (info.offset.x < -60) nextView();
+                      else if (info.offset.x > 60) prevView();
+                    }}
+                    transition={{
+                      x: { type: "spring", stiffness: 320, damping: 34 },
+                      opacity: { duration: 0.25, ease: ease.smooth },
+                    }}
+                    className={`absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing will-change-transform ${
+                      image.src.includes("/variant-") ? "object-contain p-4" : "object-cover"
+                    }`}
+                  />
                 </AnimatePresence>
-                <span className="absolute top-4 left-4 z-10 font-mono text-[0.5rem] tracking-[0.22em] uppercase font-bold text-[#3a2a22]/55 bg-white/60 px-2 py-1 rounded">
-                  {colour.name}
-                </span>
-              </div>
-            </div>
 
-            {/* RIGHT — product info */}
+                <span className="absolute top-5 left-5 z-10 font-mono text-[0.55rem] tracking-[0.24em] uppercase font-bold text-[#3a2a22]/60 bg-white/65 backdrop-blur px-2.5 py-1 rounded-full">
+                  {edition.name}
+                </span>
+                <span className="absolute top-5 right-5 z-10 font-mono text-[0.55rem] tracking-[0.22em] uppercase font-semibold text-[#3a2a22]/55 bg-white/65 backdrop-blur px-2.5 py-1 rounded-full">
+                  {image.view}
+                </span>
+
+                {/* Desktop hover arrows */}
+                <button
+                  onClick={prevView}
+                  aria-label="Previous image"
+                  className="hidden lg:grid absolute left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 place-items-center rounded-full bg-white/75 backdrop-blur text-[#3a2a22] shadow-md opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 hover:scale-110"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={nextView}
+                  aria-label="Next image"
+                  className="hidden lg:grid absolute right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 place-items-center rounded-full bg-white/75 backdrop-blur text-[#3a2a22] shadow-md opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 hover:scale-110"
+                >
+                  <ChevronRight size={18} />
+                </button>
+                </motion.div>
+              </div>
+
+              {/* Arrows + counter */}
+              <div className="flex items-center justify-center gap-5">
+                <button
+                  onClick={prevView}
+                  aria-label="Previous image"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#3a2a22]/15 text-[#3a2a22]/70 transition-[transform,color,border-color] duration-300 hover:text-[#3a2a22] hover:border-[#3a2a22]/40 hover:-translate-x-0.5"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="font-mono text-[0.75rem] tracking-[0.2em] text-[#3a2a22]/70 tabular-nums">
+                  {viewIndex + 1} / {VIEW_COUNT}
+                </span>
+                <button
+                  onClick={nextView}
+                  aria-label="Next image"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#3a2a22]/15 text-[#3a2a22]/70 transition-[transform,color,border-color] duration-300 hover:text-[#3a2a22] hover:border-[#3a2a22]/40 hover:translate-x-0.5"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+
+              {/* Thumbnails — switch with colour, current highlighted */}
+              <div className="grid grid-cols-4 gap-3">
+                {edition.images.map((img, i) => (
+                  <button
+                    key={img.view}
+                    onClick={() => goToView(i)}
+                    aria-label={img.view}
+                    title={img.view}
+                    className={`relative aspect-square overflow-hidden rounded-[0.9rem] border transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-1 ${
+                      i === viewIndex
+                        ? "border-[#c76600] shadow-[0_10px_22px_-12px_rgba(199,102,0,0.55)]"
+                        : "border-[#3a2a22]/10 hover:border-[#c76600]/40 hover:shadow-[0_10px_22px_-12px_rgba(199,102,0,0.4)]"
+                    }`}
+                    style={{ background: `linear-gradient(155deg, ${edition.swatch}1f, ${edition.swatch}08)` }}
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.view}
+                      loading="lazy"
+                      className={`absolute inset-0 h-full w-full ${
+                        img.src.includes("/variant-") ? "object-contain p-1.5" : "object-cover"
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* RIGHT — editorial copy + lifestyle tags */}
             <div className="flex flex-col">
-              <span className={eyebrow}>Soliva SunWrap™</span>
-              <h2
-                className="mt-3 font-display tracking-tight leading-[1.1]"
-                style={{ fontSize: "clamp(1.9rem, 3.4vw, 2.75rem)" }}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.35, ease: ease.smooth }}
+                className="flex items-center gap-3 mb-6"
               >
-                The Everyday Sun Wrap
-              </h2>
+                <span className="h-px w-8 bg-[#c76600]/40" />
+                <span className={eyebrow}>Women's Collection</span>
+              </motion.div>
 
-              <div className="mt-4 flex items-baseline gap-3">
-                <span className="font-display text-2xl md:text-[1.75rem] text-[#3a2a22]">₹799</span>
-                <span className="font-mono text-[0.6875rem] tracking-[0.18em] uppercase text-[#7b6a5f]/70">
-                  MRP incl. taxes
-                </span>
+              <motion.h1
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.45, ease: ease.smooth }}
+                className="font-display tracking-tight leading-[1.07] lg:whitespace-nowrap"
+                style={{ fontSize: "clamp(1.5rem, 2.9vw, 1.95rem)" }}
+              >
+                Thoughtful protection for{" "}
+                <span className="italic font-light text-[#c76600]/90">everyday movement.</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.55, ease: ease.smooth }}
+                className="mt-6 font-display text-xl md:text-2xl text-[#3a2a22]"
+              >
+                SunWrap by Soliva
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.65, ease: ease.smooth }}
+                className="mt-3 max-w-[440px] text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light leading-relaxed"
+              >
+                Full face, neck &amp; back coverage designed for everyday movement.
+              </motion.p>
+
+              {/* Lifestyle tags */}
+              <div className="mt-8 flex flex-wrap gap-2.5">
+                {lifestyleTags.map((t, i) => (
+                  <motion.span
+                    key={t.label}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 + i * 0.1, ease: ease.smooth }}
+                    whileHover={{ y: -2 }}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#3a2a22]/10 bg-white/60 px-3.5 py-2 font-mono text-[0.6875rem] tracking-[0.06em] uppercase text-[#3a2a22]/75 font-semibold transition-colors duration-300 hover:border-[#c76600]/30 hover:bg-white"
+                  >
+                    <span aria-hidden>{t.emoji}</span>
+                    {t.label}
+                  </motion.span>
+                ))}
               </div>
 
-              <p className="mt-5 max-w-[480px] text-[0.9375rem] md:text-[1rem] text-[#7b6a5f] font-light leading-relaxed">
-                A dual-layer wrap that delivers full face, neck, and back coverage without the
-                constant adjustment. Breathable, lightweight, and built to stay put through every
-                kind of movement.
-              </p>
-
-              {/* Colour selector */}
-              <div className="mt-8">
+              {/* Colour selector — Available in 5 Editions */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 1.25, ease: ease.smooth }}
+                className="mt-8"
+              >
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-mono text-[0.625rem] tracking-[0.28em] uppercase text-[#3a2a22]/55 font-bold">
-                    Colour
+                    Available in 5 Editions
                   </span>
                   <span className="font-mono text-[0.6875rem] tracking-[0.12em] text-[#3a2a22]/80">
-                    {colour.name}
-                    {colour.comingSoon && <span className="text-[#c76600]/80"> · Coming Soon</span>}
+                    {edition.name}
                   </span>
                 </div>
                 <div className="flex items-center gap-3.5">
-                  {colours.map((c, i) => (
+                  {editions.map((e, i) => (
                     <button
-                      key={c.id}
-                      onClick={() => selectColour(i)}
-                      aria-label={c.comingSoon ? `${c.name} — coming soon` : c.name}
-                      title={c.comingSoon ? `${c.name} — coming soon` : c.name}
-                      className={`relative h-9 w-9 rounded-full shadow-[0_2px_6px_-1px_rgba(58,42,34,0.25)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-110 ${
-                        c.comingSoon ? "opacity-55" : ""
-                      } ${
-                        i === colourIndex
+                      key={e.id}
+                      onClick={() => selectEdition(i)}
+                      aria-label={e.name}
+                      title={e.name}
+                      className={`relative h-9 w-9 rounded-full shadow-[0_2px_6px_-1px_rgba(58,42,34,0.25)] transition-transform duration-300 ease-out hover:scale-110 ${
+                        i === editionIndex
                           ? "scale-105 ring-2 ring-offset-2 ring-offset-[#FAF7F3] ring-[#3a2a22]"
-                          : "ring-0 ring-offset-0 ring-offset-[#FAF7F3] ring-transparent"
+                          : "ring-0 ring-offset-2 ring-offset-[#FAF7F3] ring-transparent"
                       }`}
-                      style={{ background: c.swatch }}
+                      style={{ background: e.swatch }}
                     >
                       <AnimatePresence>
-                        {i === colourIndex && (
+                        {i === editionIndex && (
                           <motion.span
-                            key="check"
                             initial={{ opacity: 0, scale: 0.4 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.4 }}
@@ -245,274 +431,228 @@ function CollectionRoute() {
                     </button>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Quantity + Add to cart */}
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <div className={`flex items-center rounded-full border border-[#3a2a22]/15 ${colour.comingSoon ? "opacity-50" : ""}`}>
-                  <button
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    disabled={colour.comingSoon}
-                    className="grid place-items-center h-11 w-11 text-[#3a2a22]/70 hover:text-[#3a2a22] transition-colors disabled:cursor-not-allowed"
-                    aria-label="Decrease quantity"
+              {/* ── Price — launch pricing · luxury presentation ── */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 1.32, ease: ease.smooth }}
+                className="mt-8"
+              >
+                <span className="font-mono text-[0.625rem] tracking-[0.28em] uppercase text-[#3a2a22]/55 font-bold">
+                  Launch Price
+                </span>
+                <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3.5 gap-y-1.5">
+                  <span
+                    className="font-display leading-none tracking-tight text-[#3a2a22]"
+                    style={{ fontSize: "clamp(2.4rem, 4vw, 3rem)" }}
                   >
-                    <Minus size={14} />
-                  </button>
-                  <span className="w-8 text-center font-mono text-sm tabular-nums">{qty}</span>
-                  <button
-                    onClick={() => setQty((q) => q + 1)}
-                    disabled={colour.comingSoon}
-                    className="grid place-items-center h-11 w-11 text-[#3a2a22]/70 hover:text-[#3a2a22] transition-colors disabled:cursor-not-allowed"
-                    aria-label="Increase quantity"
-                  >
-                    <Plus size={14} />
-                  </button>
+                    ₹799
+                  </span>
+                  <span className="text-[1.05rem] font-light text-[#7b6a5f]/65 line-through decoration-[#7b6a5f]/40">
+                    MRP ₹999
+                  </span>
+                  <span className="rounded-full border border-[#c76600]/25 bg-[#c76600]/[0.07] px-2.5 py-1 font-mono text-[0.625rem] font-bold uppercase tracking-[0.14em] text-[#c76600]">
+                    Save ₹200
+                  </span>
                 </div>
+                <div className="mt-3.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[0.75rem] font-light text-[#7b6a5f]">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Truck size={14} strokeWidth={1.75} className="text-[#c76600]/70" />
+                    Free Shipping Across India
+                  </span>
+                  <span aria-hidden className="h-3 w-px bg-[#3a2a22]/15" />
+                  <span className="inline-flex items-center gap-1.5">
+                    <ShieldCheck size={14} strokeWidth={1.75} className="text-[#c76600]/70" />
+                    GST Included
+                  </span>
+                </div>
+              </motion.div>
 
-                <button
-                  onClick={addToCart}
-                  disabled={colour.comingSoon}
-                  className={`group flex-1 min-w-[200px] inline-flex items-center justify-center gap-2.5 rounded-full bg-[#3a2a22] px-8 py-3.5 font-mono text-[0.7rem] tracking-[0.25em] uppercase font-black text-[#f7f3ee] transition-[transform,background] duration-300 shadow-editorial ${
-                    colour.comingSoon
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-[#4a3a32] hover:-translate-y-0.5"
-                  }`}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 1.4, ease: ease.smooth }}
+                className="mt-8 flex w-full max-w-[460px] items-stretch gap-3"
+              >
+                {/* Buy Now — primary → /checkout (details) → Razorpay */}
+                <motion.button
+                  onClick={buyNow}
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.3, ease: ease.smooth }}
+                  className="group inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[#3a2a22] px-4 py-4 font-mono text-[0.7rem] tracking-[0.16em] uppercase font-black text-[#f7f3ee] shadow-editorial transition-[background,box-shadow,transform] duration-300 hover:bg-[#2e211b] hover:shadow-[0_22px_46px_-18px_rgba(58,42,34,0.6)] sm:px-8 sm:tracking-[0.22em]"
                 >
-                  {colour.comingSoon ? (
-                    "Coming Soon"
-                  ) : added ? (
+                  Buy Now
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                </motion.button>
+
+                {/* Add to Cart — secondary */}
+                <motion.button
+                  onClick={addToCart}
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.3, ease: ease.smooth }}
+                  className="group inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[#3a2a22]/25 bg-white/50 px-4 py-4 font-mono text-[0.7rem] tracking-[0.16em] uppercase font-bold text-[#3a2a22] backdrop-blur transition-[background,border-color,box-shadow,transform] duration-300 hover:border-[#3a2a22]/45 hover:bg-white hover:shadow-[0_16px_36px_-22px_rgba(58,42,34,0.4)] sm:px-8 sm:tracking-[0.22em]"
+                >
+                  {added ? (
                     <>
-                      <Check size={15} /> Added
+                      <Check size={14} /> Added
                     </>
                   ) : (
                     <>
-                      Add to Cart
-                      <Plus size={15} className="transition-transform group-hover:rotate-90" />
+                      <ShoppingBag size={14} /> Add to Cart
                     </>
                   )}
-                </button>
-              </div>
-
-              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[#3a2a22]/8 pt-5 font-mono text-[0.625rem] tracking-[0.14em] uppercase text-[#7b6a5f]/80">
-                <span className="flex items-center gap-1.5">
-                  <Check size={11} className="text-[#c76600]" /> UPF 50+
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Check size={11} className="text-[#c76600]" /> Free shipping
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Check size={11} className="text-[#c76600]" /> 7-day returns
-                </span>
-              </div>
+                </motion.button>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ════════ ONE PRODUCT · FIVE COLOURS (variant editions) ════════ */}
-      <section className="relative py-16 md:py-20">
-        <div className="mx-auto max-w-[1280px] px-5 sm:px-8">
-          {/* Header */}
+      {/* ════════ FREEDOM — full image (object-contain, nothing cropped) ════════ */}
+      <section className="relative w-full overflow-hidden bg-[#3a2a22] py-12 md:py-16">
+        <div className="mx-auto max-w-[1360px] px-5 sm:px-8 flex items-center justify-center">
+          <img
+            src="/product_images/IMG_0491.webp"
+            alt="Soliva — everyday protection that moves with you"
+            decoding="async"
+            draggable={false}
+            className="w-auto max-w-full max-h-[85vh] rounded-[1.5rem] object-contain select-none shadow-[0_30px_70px_-30px_rgba(0,0,0,0.6)]"
+          />
+        </div>
+      </section>
+
+      {/* ════════ COLLECTION + SHOP + STATEMENT — combined into one screen ════════ */}
+      <section
+        id="pricing"
+        className="relative scroll-mt-24 min-h-screen flex flex-col justify-center overflow-hidden py-12 md:py-14"
+      >
+        <div className="mx-auto w-full max-w-[1320px] px-5 sm:px-8 flex flex-col gap-8 md:gap-10">
+          {/* 4 editorial cards · Desktop: 4-col · Tablet: 2×2 · Mobile: clean vertical stack */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+            {collections.map((c, i) => (
+              <motion.article
+                key={c.no}
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewportOnce}
+                transition={{ duration: 0.7, delay: i * 0.1, ease: ease.smooth }}
+                whileHover={{ y: -8, scale: 1.015 }}
+                className={`group relative flex flex-col rounded-[28px] bg-gradient-to-br ${c.bg} border border-white/60 p-5 lg:p-6 min-h-[260px] md:min-h-[300px] lg:min-h-[330px] shadow-[0_18px_50px_-30px_rgba(58,42,34,0.4)] transition-shadow duration-500 ease-out hover:shadow-[0_40px_80px_-36px_rgba(58,42,34,0.45)]`}
+              >
+                {/* Coming-soon status — keeps all content, just flags availability */}
+                {c.comingSoon && (
+                  <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full border border-[#c76600]/30 bg-[#c76600]/[0.08] px-2.5 py-1 font-mono text-[0.5625rem] font-bold uppercase tracking-[0.24em] text-[#c76600]">
+                    <span className="h-1 w-1 rounded-full bg-[#c76600] animate-pulse" />
+                    Coming Soon
+                  </span>
+                )}
+
+                {/* Title + index */}
+                <div className="flex items-start justify-between">
+                  <h3
+                    className="font-display tracking-tight text-[#2e211b] leading-none"
+                    style={{ fontSize: "clamp(1.45rem, 2vw, 1.85rem)" }}
+                  >
+                    {c.title}
+                  </h3>
+                </div>
+
+                {/* Italic serif intro */}
+                <p className="mt-3 font-display italic font-light text-[#5a4a40] leading-snug text-[0.9rem] md:text-[0.95rem]">
+                  {c.intro}
+                </p>
+
+                {/* Two-column bullets */}
+                <ul className="mt-4 grid grid-cols-2 gap-x-3 gap-y-2">
+                  {c.bullets.map((b) => (
+                    <li
+                      key={b}
+                      className="flex items-center gap-2 text-[0.75rem] text-[#4a3a30]/85 font-light"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-[#2e211b]/40 shrink-0" />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Supporting paragraph */}
+                <p className="mt-4 flex-1 text-[0.75rem] text-[#5a4a40]/80 font-light leading-relaxed">
+                  {c.paragraph}
+                </p>
+
+                {/* Divider */}
+                <div className="mt-4 h-px w-full bg-[#2e211b]/10" />
+
+                {/* Bottom tagline */}
+                <span className="mt-3 font-mono text-[0.5625rem] tracking-[0.26em] uppercase text-[#2e211b]/55 font-bold">
+                  {c.tagline}
+                </span>
+              </motion.article>
+            ))}
+          </div>
+
+          {/* Shop Now CTA + trust badges */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
             transition={{ duration: 0.9, ease: ease.smooth }}
-            className="max-w-[760px]"
+            className="flex flex-col items-center text-center"
           >
-            <span className={eyebrow}>Soliva SunWrap™</span>
-            <h2
-              className="mt-3 font-display tracking-tight leading-[1.1]"
-              style={{ fontSize: "clamp(1.7rem, 3.2vw, 2.5rem)" }}
+            <motion.button
+              onClick={addToCart}
+              whileHover={{ y: -3 }}
+              transition={{ duration: 0.3, ease: ease.smooth }}
+              className="group inline-flex items-center gap-2.5 rounded-full bg-[#3a2a22] px-12 py-4 font-mono text-[0.75rem] tracking-[0.28em] uppercase font-black text-[#f7f3ee] shadow-editorial transition-colors duration-300 hover:bg-[#4a3a32]"
             >
-              One Product. <span className="italic font-light text-[#c76600]/90">Five Colours.</span>
-            </h2>
-            <p className="mt-4 text-[0.9375rem] md:text-[1rem] text-[#7b6a5f] font-light leading-relaxed">
-              Protective essentials thoughtfully designed for everyday exposure — supporting
-              different routines, movement, and life stages.
-            </p>
-            <p className="mt-2 text-[0.8125rem] text-[#7b6a5f]/80 font-light leading-relaxed">
-              Designed for commuting, outdoor exposure, travel, work, college, and everyday movement.
-            </p>
+              {added ? (
+                <>
+                  <Check size={16} /> Added to Cart
+                </>
+              ) : (
+                <>
+                  Shop Now
+                  <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+                </>
+              )}
+            </motion.button>
+
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-[0.625rem] tracking-[0.14em] uppercase text-[#7b6a5f]/80">
+              <span className="flex items-center gap-1.5">
+                <Check size={11} className="text-[#c76600]" /> Secure Checkout
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check size={11} className="text-[#c76600]" /> Free shipping
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check size={11} className="text-[#c76600]" /> Delivery 5–7 Business Days
+              </span>
+            </div>
           </motion.div>
 
-          {/* Variant editions */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
-            {variants.map((v, i) => {
-              const isActive = i === colourIndex;
-              return (
-                <motion.button
-                  key={v.no}
-                  type="button"
-                  onClick={() => {
-                    selectColour(i);
-                    scrollToShowcase();
-                  }}
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewportOnce}
-                  transition={{ duration: 0.7, delay: i * 0.06, ease: ease.smooth }}
-                  className={`group relative flex flex-col text-left rounded-[1.25rem] border p-3.5 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-1 ${
-                    isActive
-                      ? "border-[#c76600]/50 bg-white shadow-[0_18px_36px_-20px_rgba(58,42,34,0.4)]"
-                      : "border-[#3a2a22]/8 bg-white/40 hover:bg-white hover:shadow-[0_16px_32px_-22px_rgba(58,42,34,0.4)]"
-                  }`}
-                  aria-label={`${v.name} — select ${colours[i].name}`}
-                >
-                  {/* image */}
-                  <div
-                    className="relative aspect-[4/5] w-full overflow-hidden rounded-[0.9rem]"
-                    style={{ background: `${colours[i].swatch}1f` }}
-                  >
-                    {colours[i].comingSoon || !colours[i].image ? (
-                      <div className="absolute inset-0 flex items-center justify-center px-2 text-center">
-                        <span className="font-display italic text-[#3a2a22]/60 text-[0.95rem] leading-tight">
-                          Coming Soon
-                        </span>
-                      </div>
-                    ) : (
-                      <img
-                        src={colours[i].image!}
-                        alt={v.name}
-                        loading="lazy"
-                        className="absolute inset-0 h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                      />
-                    )}
-                    <span
-                      className="absolute top-2 right-2 h-4 w-4 rounded-full ring-1 ring-white/70 shadow-sm"
-                      style={{ background: colours[i].swatch }}
-                    />
-                  </div>
-
-                  {/* meta */}
-                  <div className="mt-3.5 flex items-baseline justify-between">
-                    <span className="font-mono text-[0.5rem] tracking-[0.3em] uppercase text-[#c76600] font-bold">
-                      Variant
-                    </span>
-                    <span className="font-display text-lg text-[#3a2a22]/15 leading-none tabular-nums">
-                      {v.no}
-                    </span>
-                  </div>
-                  <h3 className="mt-1.5 font-display text-[1.05rem] text-[#3a2a22] leading-snug">
-                    {v.name}
-                  </h3>
-                  <p className="mt-1.5 flex items-center gap-1.5 font-mono text-[0.625rem] tracking-[0.06em] uppercase text-[#3a2a22]/65 font-semibold">
-                    <span aria-hidden>{v.emoji}</span>
-                    {v.tag}
-                  </p>
-                  <p className="mt-2.5 text-[0.78rem] text-[#7b6a5f] font-light leading-relaxed">
-                    {v.desc}
-                  </p>
-                </motion.button>
-              );
-            })}
-          </div>
-
-          {/* Explore Product CTA */}
-          <div className="mt-10 flex justify-center">
-            <button
-              onClick={scrollToShowcase}
-              className="group inline-flex items-center gap-2.5 font-mono text-[0.7rem] tracking-[0.25em] uppercase font-black text-[#3a2a22] transition-colors duration-300 hover:text-[#c76600]"
-            >
-              Explore Product
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ SECTION 3 — KEY BENEFITS (compact) ════════ */}
-      <section className="bg-[#f1e7d8] border-y border-[#3a2a22]/8 py-14 md:py-16">
-        <div className="mx-auto max-w-[1180px] px-5 sm:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
-            {benefits.map((b, i) => (
-              <motion.div
-                key={b.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={viewportOnce}
-                transition={{ duration: 0.8, delay: i * 0.08, ease: ease.smooth }}
-                className="flex flex-col"
-              >
-                <b.icon size={22} className="text-[#c76600] mb-4" strokeWidth={1.5} />
-                <h3 className="font-display text-lg text-[#3a2a22] leading-snug mb-2">{b.title}</h3>
-                <p className="text-[0.8125rem] text-[#7b6a5f] font-light leading-relaxed">{b.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ SECTION 4 — COMPARISON (compact) ════════ */}
-      <section className="py-16 md:py-20">
-        <div className="mx-auto max-w-[940px] px-5 sm:px-8">
-          <div className="text-center mb-10">
-            <span className={eyebrow}>Why Soliva</span>
-            <h2
-              className="mt-3 font-display tracking-tight leading-[1.1]"
-              style={{ fontSize: "clamp(1.6rem, 3vw, 2.25rem)" }}
-            >
-              A different kind of coverage.
-            </h2>
-          </div>
-
-          <div className="overflow-hidden rounded-[1.5rem] border border-[#3a2a22]/10">
-            <div className="grid grid-cols-[1fr_1fr_1fr] bg-[#3a2a22] text-[#f7f3ee]">
-              <div className="px-5 py-4" />
-              <div className="px-5 py-4 font-mono text-[0.625rem] tracking-[0.2em] uppercase text-center opacity-70">
-                Traditional
-              </div>
-              <div className="px-5 py-4 font-mono text-[0.625rem] tracking-[0.2em] uppercase text-center text-[#e3c187]">
-                Soliva
-              </div>
-            </div>
-            {comparison.map((row, i) => (
-              <div
-                key={row.label}
-                className={`grid grid-cols-[1fr_1fr_1fr] items-center ${
-                  i % 2 ? "bg-[#FAF7F3]" : "bg-[#f6efe5]"
-                }`}
-              >
-                <div className="px-5 py-4 font-display text-[0.95rem] text-[#3a2a22]">{row.label}</div>
-                <div className="px-5 py-4 flex items-center justify-center gap-2 text-center text-[0.8125rem] text-[#7b6a5f]/80 font-light">
-                  <X size={13} className="text-[#b9483a]/60 shrink-0" />
-                  <span className="hidden sm:inline">{row.trad}</span>
-                </div>
-                <div className="px-5 py-4 flex items-center justify-center gap-2 text-center text-[0.8125rem] text-[#3a2a22] font-medium">
-                  <Check size={13} className="text-[#5a8a4a] shrink-0" />
-                  <span className="hidden sm:inline">{row.soliva}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════ SECTION 5 — FINAL CTA ════════ */}
-      <section className="relative bg-[#3a2a22] py-20 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,rgba(245,130,13,0.06),transparent_70%)]" />
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportOnce}
-          transition={{ duration: 1, ease: ease.smooth }}
-          className="relative z-10 mx-auto max-w-[760px] px-6 text-center"
-        >
-          <h2
-            className="font-display text-[#FAF7F3] tracking-tight leading-[1.12]"
-            style={{ fontSize: "clamp(1.8rem, 3.6vw, 2.85rem)" }}
+          {/* Editorial statement */}
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewportOnce}
+            transition={{ duration: 1.1, ease: ease.smooth }}
+            className="relative z-10 mx-auto w-fit max-w-[92vw] overflow-hidden rounded-[1.5rem] bg-[#3a2a22] px-8 py-5 text-center font-display text-[#FAF7F3] tracking-tight leading-[1.12] md:px-12 md:py-6"
+            style={{ fontSize: "clamp(1.35rem, 2.8vw, 2.25rem)" }}
           >
-            Thoughtfully Layered.
-            <span className="block italic font-light text-[#e3c187]">Effortlessly Worn.</span>
-          </h2>
-          <button
-            onClick={scrollToShowcase}
-            className="group mt-9 inline-flex items-center gap-2.5 rounded-full bg-[#e3c187] px-10 py-4 font-mono text-[0.72rem] tracking-[0.28em] uppercase font-black text-[#3a2a22] transition-[transform,background] duration-300 hover:bg-[#eed3a0] hover:-translate-y-0.5"
-          >
-            Shop Now
-            <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-          </button>
-        </motion.div>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(245,130,13,0.1),transparent_70%)]"
+            />
+            <span className="relative whitespace-nowrap">
+              One philosophy.{" "}
+              <span className="italic font-light text-[#e3c187]">Many everyday lives.</span>
+            </span>
+          </motion.h2>
+        </div>
       </section>
     </div>
   );

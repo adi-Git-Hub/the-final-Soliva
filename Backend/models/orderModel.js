@@ -49,6 +49,13 @@ const orderSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    events: [
+      {
+        status: { type: String, required: true },
+        message: String,
+        timestamp: { type: Date, default: Date.now },
+      },
+    ],
     deliveredAt: Date,
   },
   { timestamps: true }

@@ -53,8 +53,23 @@ function buildFrom() {
   return `${name} <${addr}>`;
 }
 
+// Transient SMTP/network failures worth retrying. GoDaddy (smtpout.secureserver.net)
+// intermittently resets the connection (ECONNRESET) or stalls the greeting from
+// this server, so a single send can fail even when the host is otherwise fine.
+const TRANSIENT_ERRORS = new Set([
+  'ECONNRESET', 'ETIMEDOUT', 'ESOCKET', 'ECONNECTION', 'ECONNREFUSED', 'EAI_AGAIN', 'EPIPE',
+]);
+
+function isTransient(err) {
+  if (err && TRANSIENT_ERRORS.has(err.code)) return true;
+  // Nodemailer surfaces greeting/connection timeouts via message, not code.
+  return /greeting|timed?\s*out|connection|socket|econnreset/i.test(err?.message || '');
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 const sendEmail = async (options) => {
-  const transporter = buildTransport();
+  const maxAttempts = Number(process.env.SMTP_MAX_RETRIES) || 4;
 
   const message = {
     from: buildFrom(),
@@ -63,9 +78,31 @@ const sendEmail = async (options) => {
     html: options.html,
   };
 
-  const info = await transporter.sendMail(message);
-  logger.info(`[EMAIL] Sent to ${options.email} via ${process.env.SMTP_HOST}:${process.env.SMTP_PORT} (messageId=${info.messageId})`);
-  return info;
+  let lastErr;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    // Fresh transport per attempt so a reset connection isn't reused.
+    const transporter = buildTransport();
+    try {
+      const info = await transporter.sendMail(message);
+      logger.info(
+        `[EMAIL] Sent to ${options.email} via ${process.env.SMTP_HOST}:${process.env.SMTP_PORT} ` +
+        `(messageId=${info.messageId})${attempt > 1 ? ` on attempt ${attempt}/${maxAttempts}` : ''}`
+      );
+      return info;
+    } catch (err) {
+      lastErr = err;
+      const transient = isTransient(err);
+      logger.warn(
+        `[EMAIL] Attempt ${attempt}/${maxAttempts} to ${options.email} failed ` +
+        `(${err.code || 'ERR'}: ${err.message})${transient && attempt < maxAttempts ? ' — retrying' : ''}`
+      );
+      if (!transient || attempt === maxAttempts) break;
+      await sleep(attempt * 1000); // linear backoff: 1s, 2s, 3s
+    } finally {
+      transporter.close?.();
+    }
+  }
+  throw lastErr;
 };
 
 module.exports = sendEmail;

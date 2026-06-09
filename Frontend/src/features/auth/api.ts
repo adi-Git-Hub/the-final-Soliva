@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { authClient } from "@/lib/auth-client";
+import { signOutFirebase } from "@/lib/firebase";
 import { cartKeys, mergeGuestCartIntoServer } from "@/features/cart/api";
 import { sessionQueryKey } from "./hooks/useSession";
 import type {
@@ -50,6 +51,19 @@ export function useRegister() {
   });
 }
 
+export function useGoogleAuth() {
+  const qc = useQueryClient();
+  return useMutation({
+    // Takes the Firebase ID token from the Google popup and trades it for a
+    // Soliva session. Mirrors useLogin: refresh the session, merge guest cart.
+    mutationFn: (idToken: string) => authClient.googleSignIn(idToken),
+    onSuccess: async () => {
+      qc.invalidateQueries({ queryKey: sessionQueryKey });
+      await mergeGuestCartSafely(qc);
+    },
+  });
+}
+
 export function useVerifyEmail() {
   const qc = useQueryClient();
   return useMutation({
@@ -71,7 +85,12 @@ export function useResendOtp() {
 export function useLogout() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: () => authClient.logout(),
+    // Clear the backend session AND the Firebase client session so a Google
+    // user is fully signed out (no lingering Firebase auth state).
+    mutationFn: async () => {
+      await authClient.logout();
+      await signOutFirebase();
+    },
     onSuccess: () => {
       // Clear the session immediately; do not refetch — the cookie is gone.
       qc.setQueryData(sessionQueryKey, null);

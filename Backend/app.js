@@ -84,6 +84,9 @@ app.use(cors({
   origin(origin, cb) {
     // Allow same-origin / curl / server-to-server (no Origin header).
     if (!origin) return cb(null, true);
+    // In development, accept any origin so the app works whether it's opened
+    // via localhost, a LAN IP, or the machine's public IP (e.g. a cloud VM).
+    if (process.env.NODE_ENV === 'development') return cb(null, true);
     if (allowedOrigins.includes(origin)) return cb(null, true);
     return cb(new Error(`CORS: origin ${origin} not allowed`));
   },
@@ -132,6 +135,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const adminRoutes = require('./routes/adminRoutes');
@@ -144,6 +148,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/admin', adminRoutes);
