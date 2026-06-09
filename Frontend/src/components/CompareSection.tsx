@@ -164,22 +164,22 @@ function Half({ data, side }: { data: HalfData; side: "left" | "right" }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 1, ease: EASE }}
-        className={`px-7 pt-9 lg:px-12 lg:pt-14 ${isSoliva ? "lg:pl-20" : "lg:pr-20"}`}
+        className={`px-5 pt-6 lg:px-8 lg:pt-8 ${isSoliva ? "lg:pl-12" : "lg:pr-12"}`}
       >
         <span
-          className="mb-4 block text-[0.7rem] font-semibold uppercase tracking-[0.42em]"
+          className="mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.42em]"
           style={{ color: kickerColor }}
         >
           {data.kicker}
         </span>
         <h3
-          className="text-[1.75rem] uppercase leading-[1.04] tracking-tight sm:text-[2.2rem] lg:text-[2.75rem]"
+          className="text-[1.4rem] uppercase leading-[1.04] tracking-tight sm:text-[1.8rem] lg:text-[2.2rem]"
           style={{ fontFamily: SERIF, color: titleColor }}
         >
           {data.title.replace(/™$/, "")}
         </h3>
         <p
-          className="mt-3 text-[1.05rem] italic sm:text-[1.2rem] lg:text-[1.35rem]"
+          className="mt-2 text-[0.95rem] italic sm:text-[1.1rem] lg:text-[1.2rem]"
           style={{ fontFamily: SERIF, color: subColor }}
         >
           {data.subtitle}
@@ -187,14 +187,14 @@ function Half({ data, side }: { data: HalfData; side: "left" | "right" }) {
       </motion.div>
 
       {/* Image + features composition */}
-      <div className="mt-6 grid flex-1 grid-cols-1 items-stretch md:mt-9 md:grid-cols-2">
+      <div className="mt-4 grid flex-1 grid-cols-1 items-stretch md:mt-5 md:grid-cols-2">
         {Features}
         {Image}
       </div>
 
       {/* Footer strip */}
-      <div className="border-t px-7 py-5 lg:px-12 lg:py-7" style={{ borderColor: line }}>
-        <p className="text-[1.02rem] italic sm:text-[1.12rem]" style={{ fontFamily: SERIF, color: subColor }}>
+      <div className="border-t px-5 py-3 lg:px-8 lg:py-4" style={{ borderColor: line }}>
+        <p className="text-[0.95rem] italic sm:text-[1rem]" style={{ fontFamily: SERIF, color: subColor }}>
           {data.footer}
         </p>
       </div>
@@ -267,14 +267,14 @@ export function CompareSection() {
             <motion.div
               animate={reduce ? undefined : { y: [0, -10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="flex h-[5rem] w-[5rem] items-center justify-center rounded-full sm:h-[6rem] sm:w-[6rem] lg:h-[6.75rem] lg:w-[6.75rem]"
+              className="flex h-[4rem] w-[4rem] items-center justify-center rounded-full sm:h-[4.5rem] sm:w-[4.5rem] lg:h-[5.5rem] lg:w-[5.5rem]"
               style={{
                 backgroundColor: "#FBF8F4",
                 boxShadow: "0 32px 64px -20px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.85)",
                 border: "1px solid rgba(45,36,30,0.12)",
               }}
             >
-              <span className="text-2xl italic sm:text-3xl lg:text-4xl" style={{ fontFamily: SERIF, color: "#2D241E" }}>
+              <span className="text-xl italic sm:text-2xl lg:text-3xl" style={{ fontFamily: SERIF, color: "#2D241E" }}>
                 vs
               </span>
             </motion.div>
@@ -338,10 +338,10 @@ export function CompareSection() {
             ))}
           </ul>
 
-          {/* resolution — question → solution → CTA */}
-          <div className="mt-12 flex flex-col items-center text-center md:mt-16">
+        {/* resolution — question → solution → CTA */}
+          <div className="mt-8 flex flex-col items-center text-center md:mt-10">
             <h3
-              className="mx-auto text-[1.45rem] leading-[1.14] sm:text-[1.9rem] md:text-[2.1rem] lg:whitespace-nowrap"
+              className="mx-auto text-[1.3rem] leading-[1.14] sm:text-[1.7rem] md:text-[1.9rem] lg:whitespace-nowrap"
               style={{ fontFamily: SERIF, color: "#2D241E" }}
             >
               Why should protection work{" "}
@@ -350,14 +350,14 @@ export function CompareSection() {
               </span>
             </h3>
             <p
-              className="mt-3 text-[0.95rem] italic sm:text-[1.05rem]"
+              className="mt-2 text-[0.9rem] italic sm:text-[0.95rem]"
               style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.55)" }}
             >
               Move beyond adjustment.
             </p>
             <Link
               to="/collection"
-              className="group mt-7 inline-flex items-center gap-2.5 rounded-full bg-[#2D241E] px-9 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[#F7F3EC] shadow-[0_18px_40px_-18px_rgba(45,36,30,0.5)] transition-[transform,background-color] duration-500 hover:-translate-y-0.5 hover:bg-[#B88445]"
+              className="group mt-5 inline-flex items-center gap-2.5 rounded-full bg-[#2D241E] px-8 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-[#F7F3EC] shadow-[0_18px_40px_-18px_rgba(45,36,30,0.5)] transition-[transform,background-color] duration-500 hover:-translate-y-0.5 hover:bg-[#B88445]"
             >
               Discover Soliva
               <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>

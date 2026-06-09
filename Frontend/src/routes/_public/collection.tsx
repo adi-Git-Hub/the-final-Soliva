@@ -28,10 +28,10 @@ const editions = [
     name: "Blush Pink",
     swatch: "#E4B7C6",
     images: [
-      { view: "Front View", src: "/product_images/Blush_Pink.webp" },
-      { view: "Side View", src: "/product_images/IMG_6193.webp" },
-      { view: "Back View", src: "/product_images/IMG_6194.webp" },
-      { view: "Lifestyle View", src: "/product_images/IMG_0493.webp" },
+      { view: "Front View", src: "/product_images/pink-1.webp" },
+      { view: "Side View", src: "/product_images/pink-3.webp" },
+      { view: "Back View", src: "/product_images/pink-2.webp" },
+      { view: "Lifestyle View", src: "/product_images/pink-4.webp" },
     ],
   },
   {
@@ -39,10 +39,10 @@ const editions = [
     name: "Zesty Lime",
     swatch: "#AEC96B",
     images: [
-      { view: "Front View", src: "/product_images/zesty-lime-front.webp" },
-      { view: "Side View", src: "/product_images/IMG_6205.webp" },
-      { view: "Back View", src: "/product_images/IMG_6202.webp" },
-      { view: "Lifestyle View", src: "/product_images/IMG_4888.webp" },
+      { view: "Front View", src: "/product_images/lime-1.webp" },
+      { view: "Side View", src: "/product_images/lime-3.webp" },
+      { view: "Back View", src: "/product_images/lime-2.webp" },
+      { view: "Lifestyle View", src: "/product_images/lime-4.webp" },
     ],
   },
   {
@@ -50,10 +50,10 @@ const editions = [
     name: "Olive Green",
     swatch: "#6A7038",
     images: [
-      { view: "Front View", src: "/product_images/olive-green-front.webp" },
-      { view: "Side View", src: "/product_images/IMG_6200.webp" },
-      { view: "Back View", src: "/product_images/IMG_6201.webp" },
-      { view: "Lifestyle View", src: "/product_images/IMG_0494.webp" },
+      { view: "Front View", src: "/product_images/olive-1.webp" },
+      { view: "Side View", src: "/product_images/olive-3.webp" },
+      { view: "Back View", src: "/product_images/olive-2.webp" },
+      { view: "Lifestyle View", src: "/product_images/olive-4.webp" },
     ],
   },
   {
@@ -61,10 +61,10 @@ const editions = [
     name: "Deep Blue",
     swatch: "#33508A",
     images: [
-      { view: "Front View", src: "/product_images/Deep_Blue.webp" },
-      { view: "Side View", src: "/product_images/IMG_6196.webp" },
-      { view: "Back View", src: "/product_images/IMG_6195.webp" },
-      { view: "Lifestyle View", src: "/product_images/IMG_0492.webp" },
+      { view: "Front View", src: "/product_images/blue-1.webp" },
+      { view: "Side View", src: "/product_images/blue-3.webp" },
+      { view: "Back View", src: "/product_images/blue-2.webp" },
+      { view: "Lifestyle View", src: "/product_images/blue-4.webp" },
     ],
   },
   {
@@ -72,10 +72,10 @@ const editions = [
     name: "Classic Beige",
     swatch: "#D8C3A0",
     images: [
-      { view: "Front View", src: "/product_images/classic-beige-front.webp" },
-      { view: "Side View", src: "/product_images/IMG_6203.webp" },
-      { view: "Back View", src: "/product_images/IMG_6204.webp" },
-      { view: "Lifestyle View", src: "/product_images/IMG_0491.webp" },
+      { view: "Front View", src: "/product_images/beige-1.webp" },
+      { view: "Side View", src: "/product_images/beige-3.webp" },
+      { view: "Back View", src: "/product_images/beige-2.webp" },
+      { view: "Lifestyle View", src: "/product_images/beige-4.webp" },
     ],
   },
 ] as const;

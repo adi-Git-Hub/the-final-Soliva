@@ -380,13 +380,13 @@ export function UrbanStorytelling() {
                   className="font-display text-[#3a2a22] leading-[1.05] tracking-tight"
                   style={{ fontSize: "clamp(1.5rem, 3.4vw, 2.85rem)" }}
                 >
-                  Protection should move{" "}
+                  More than a product.{" "}
                   <span className="italic font-light text-[#c76600]">
-                    with everyday life.
+                    A different approach to protection.
                   </span>
                 </h2>
                 <p className="mt-3 text-[1rem] md:text-[1.15rem] text-[#3a2a22]/75 font-light italic leading-relaxed max-w-2xl mx-auto">
-                  Thoughtfully designed for daily movement, long hours, and everyday exposure.
+                  Soliva was created from a simple belief: protection should feel natural, not burdensome.
                 </p>
               </div>
 
@@ -396,21 +396,24 @@ export function UrbanStorytelling() {
                     <ul className="space-y-4 text-[1.1rem] md:text-[1.3rem] text-[#3a2a22]/80 font-light leading-relaxed max-w-xl">
                       <li className="flex gap-3">
                         <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c76600]" />
+                        <span>Everyday life already asks enough from people.</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c76600]" />
+                        <span>Protection should simplify movement, not complicate it.</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c76600]" />
                         <span>
-                          Protection shouldn’t demand constant adjustment, discomfort, or
-                          compromise.
+                          Good design disappears into the routine while continuing to do its job.
                         </span>
                       </li>
                       <li className="flex gap-3">
                         <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c76600]" />
                         <span>
-                          It should feel natural, comfortable, and effortless — whether you’re
-                          commuting, working, travelling, or simply moving through your day.
+                          Because comfort, confidence, and coverage should never compete with one
+                          another.
                         </span>
-                      </li>
-                      <li className="flex gap-3">
-                        <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c76600]" />
-                        <span>Because when protection works thoughtfully, life feels easier.</span>
                       </li>
                     </ul>
                   </div>
@@ -418,16 +421,16 @@ export function UrbanStorytelling() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-[#3a2a22]/15 pt-8">
                     {[
                       {
-                        title: "Move Freely",
-                        desc: "Designed to stay comfortable through everyday movement.",
+                        title: "Human-Centered",
+                        desc: "Designed around people, not assumptions.",
                       },
                       {
-                        title: "Stay Comfortable",
-                        desc: "Thoughtfully layered for long hours of wear.",
+                        title: "Everyday Ready",
+                        desc: "Built for routines that happen every day.",
                       },
                       {
-                        title: "Feel Protected",
-                        desc: "Coverage designed for everyday exposure.",
+                        title: "Thoughtfully Protective",
+                        desc: "Protection that works quietly in the background.",
                       },
                     ].map((block, i) => (
                       <div key={i} className="u-reveal u-p4-reveal group flex flex-col text-left">
@@ -444,6 +447,15 @@ export function UrbanStorytelling() {
                     ))}
                   </div>
 
+                  {/* Closing line */}
+                  <div className="u-reveal u-p4-reveal border-t border-[#3a2a22]/15 pt-8">
+                    <p className="text-[1.1rem] md:text-[1.25rem] text-[#3a2a22]/90 font-light italic leading-relaxed">
+                      The future of protection isn't more coverage.{" "}
+                      <span className="text-[#c76600] font-medium">
+                        It's more thoughtfulness.
+                      </span>
+                    </p>
+                  </div>
                 </div>
 
                 {/* Cinematic commuting image — softly integrated into the section */}

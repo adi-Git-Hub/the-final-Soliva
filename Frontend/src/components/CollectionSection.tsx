@@ -6,11 +6,11 @@ import { viewportOnce, ease } from "@/design-system";
 
 /* One product · five editions. Chip order kept consistent with the brief. */
 const editions = [
-  { id: "blush-pink", name: "Blush Pink", swatch: "#E4B7C6", image: "/variant-pink.webp", tone: "from-[#FFF5F7] to-[#FCE7F3]" },
-  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/variant-lime.webp", tone: "from-[#F5FFF7] to-[#DCFCE7]" },
-  { id: "green-edition", name: "Olive Green", swatch: "#6A7038", image: "/variant-gray.webp", tone: "from-[#EEF6EF] to-[#DCEDE0]" },
-  { id: "deep-blue", name: "Deep Blue", swatch: "#33508A", image: "/variant-blue.webp", tone: "from-[#F0F4FF] to-[#DBEAFE]" },
-  { id: "classic-beige", name: "Classic Beige", swatch: "#D8C3A0", image: "/variant-brown.webp", tone: "from-[#FBF6F0] to-[#EDE0D0]" },
+  { id: "blush-pink", name: "Blush Pink", swatch: "#E4B7C6", image: "/product_images/pink-1.webp", tone: "from-[#FFF5F7] to-[#FCE7F3]" },
+  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/product_images/lime-1.webp", tone: "from-[#F5FFF7] to-[#DCFCE7]" },
+  { id: "green-edition", name: "Olive Green", swatch: "#6A7038", image: "/product_images/olive-1.webp", tone: "from-[#EEF6EF] to-[#DCEDE0]" },
+  { id: "deep-blue", name: "Deep Blue", swatch: "#33508A", image: "/product_images/blue-1.webp", tone: "from-[#F0F4FF] to-[#DBEAFE]" },
+  { id: "classic-beige", name: "Classic Beige", swatch: "#D8C3A0", image: "/product_images/beige-1.webp", tone: "from-[#FBF6F0] to-[#EDE0D0]" },
 ] as const;
 
 const lifestyleTags = [
@@ -87,7 +87,7 @@ export function CollectionSection() {
         className="relative z-10 mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-center gap-4 px-5 pb-4 pt-24 sm:px-8 lg:gap-2.5 lg:px-10 lg:pb-2 lg:pt-16"
       >
         {/* ════ TOP — label · heading · product · usage badges ════ */}
-        <header className="flex flex-col items-center text-center">
+        <header className="flex flex-col items-center text-center mb-8 lg:mb-14">
           <h2
             className="font-display leading-[1.08] tracking-tight text-[#3a2a22]"
             style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}

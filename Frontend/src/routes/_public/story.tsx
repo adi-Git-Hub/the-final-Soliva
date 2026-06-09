@@ -12,6 +12,7 @@ function StoryImage({
   label,
   caption,
   src,
+  videoSrc,
   alt = "",
   aspect = "aspect-[4/5]",
   rounded = "rounded-[2.25rem]",
@@ -20,6 +21,7 @@ function StoryImage({
   label: string;
   caption?: string;
   src?: string;
+  videoSrc?: string;
   alt?: string;
   aspect?: string;
   rounded?: string;
@@ -30,7 +32,16 @@ function StoryImage({
       <div
         className={`relative ${aspect} w-full overflow-hidden ${rounded} bg-[#EDE6D8] border border-[#3a2a22]/8`}
       >
-        {src ? (
+        {videoSrc ? (
+          <video
+            src={videoSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : src ? (
           <img
             src={src}
             alt={alt}
@@ -444,18 +455,22 @@ function StoryRoute() {
             whileInView="visible"
             viewport={viewportOnceEarly}
             variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
-            className="grid grid-cols-3 gap-4 sm:gap-6 max-w-[760px] mx-auto"
+            className="grid grid-cols-3 gap-4 sm:gap-6 max-w-[920px] mx-auto"
           >
-            {["PRODUCT DEVELOPMENT", "PROTOTYPE", "MANUFACTURING"].map((label) => (
+            {[
+              { label: "PRODUCT DEVELOPMENT", src: "/product_images/Video-461-compressed.mp4" },
+              { label: "PROTOTYPE", src: "/product_images/Video-737-compressed.mp4" },
+              { label: "MANUFACTURING", src: "/product_images/IMG_6543-compressed.mp4" },
+            ].map((item) => (
               <motion.div
-                key={label}
+                key={item.label}
                 variants={{
                   hidden: { opacity: 0, y: 24 },
                   visible: { opacity: 1, y: 0 },
                 }}
                 transition={{ duration: 1, ease: ease.smooth }}
               >
-                <StoryImage label={label} aspect="aspect-[3/4]" />
+                <StoryImage label={item.label} videoSrc={item.src} aspect="aspect-[3/4]" />
               </motion.div>
             ))}
           </motion.div>

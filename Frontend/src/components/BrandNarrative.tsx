@@ -80,14 +80,14 @@ function Tilt3D({
 
 export function BrandNarrative() {
   return (
-    <div className="m-brand relative w-full bg-[#3a2a22] overflow-hidden z-10 min-h-screen flex flex-col justify-center pt-20 pb-8">
+    <div className="m-brand relative w-full bg-[#3a2a22] overflow-hidden z-10 min-h-screen flex flex-col justify-center pt-16 pb-10">
       {/* Ambient depth */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.02),transparent_70%)]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1320px] px-5 sm:px-8 w-full">
-        {/* ── HEADER — eyebrow + headline ── */}
+      <div className="relative z-10 mx-auto max-w-[1200px] px-5 sm:px-8 w-full flex flex-col items-center">
+        {/* 1. HEADLINE */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -95,7 +95,7 @@ export function BrandNarrative() {
           transition={{ duration: 1, ease: ease.smooth }}
           className="flex flex-col items-center text-center mb-6 lg:mb-8"
         >
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-3 mb-2">
             <span className="text-[#c76600] text-xs">✦</span>
             <span className="font-mono text-[0.7rem] tracking-[0.4em] text-[#c76600] uppercase font-black">
               ABOUT SOLIVA
@@ -103,172 +103,135 @@ export function BrandNarrative() {
           </div>
           <h2
             className="font-display text-white tracking-tight leading-[1.1]"
-            style={{ fontSize: "clamp(1.65rem, 3.2vw, 2.6rem)" }}
+            style={{ fontSize: "clamp(1.8rem, 3.8vw, 2.8rem)" }}
           >
             Thoughtful Protection,{" "}
             <span className="italic text-[#c76600]/90 font-light">Engineered For Real Life.</span>
           </h2>
         </motion.div>
 
-        {/* ── DATA LEFT · LOGO CENTER · DATA RIGHT ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.25fr_0.95fr] gap-x-8 xl:gap-x-12 gap-y-8 items-center">
-          {/* LEFT — Story + Philosophy/Standard */}
-          <motion.div
-            initial={{ opacity: 0, x: -16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1, ease: ease.smooth }}
-            className="flex flex-col gap-6 lg:text-right"
-          >
-            <div className="flex gap-3 lg:flex-row-reverse">
-              <span className="text-[#c76600] opacity-30">—</span>
-              <p className="text-[0.9375rem] text-white/75 font-light leading-relaxed">
-                Soliva was born from a simple observation: Indian movement is constant exposure.
-                We noticed that protection hadn’t evolved alongside the streets it was built for.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5 border-t border-white/10 pt-5">
-              <div className="space-y-1.5">
-                <span className={label}>The Philosophy</span>
-                <p className="text-[0.8125rem] text-white/60 font-light leading-relaxed">
-                  Wearable systems that balance coverage with breathable usability.
-                </p>
-              </div>
-              <div className="space-y-1.5">
-                <span className={label}>The Standard</span>
-                <p className="text-[0.8125rem] text-white/60 font-light leading-relaxed">
-                  Tested against harsh summer conditions to feel natural.
-                </p>
-              </div>
-            </div>
-          </motion.div>
+        {/* 2. LOGO (Increased Focal Point) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={viewportOnce}
+          transition={{ duration: 1.3, ease: ease.smooth }}
+          className="w-full flex items-center justify-center mb-6 lg:mb-8"
+        >
+          <div className="relative w-full max-w-[480px] lg:max-w-[720px] h-[38vh] max-h-[560px] mx-auto">
+            <ParticleLogo color="#e3c187" />
+          </div>
+        </motion.div>
 
-          {/* CENTER — Logo (focal) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.3, ease: ease.smooth }}
-            className="order-first lg:order-none flex items-center justify-center"
-          >
-            <div className="relative w-full max-w-[400px] lg:max-w-[540px] h-[46vh] max-h-[540px] mx-auto">
-              <ParticleLogo color="#e3c187" />
-            </div>
-          </motion.div>
+        {/* 3. SOCIAL/CONTACT ACTIONS */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 1, delay: 0.2, ease: ease.smooth }}
+          className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-20 mb-10 w-full"
+        >
+          {/* Action — WhatsApp */}
+          <div className="flex flex-col items-center gap-3">
+            <span className={label}>Connect</span>
+            <Tilt3D>
+              <a href="https://wa.me/917350640608" className="group flex flex-col items-center">
+                <div className="flex items-center gap-2.5 text-white/85 group-hover:text-[#c76600] transition-colors duration-500 font-mono text-[1.05rem] md:text-[1.15rem] tracking-[0.2em] font-black uppercase">
+                  <MessageCircle size={20} className="text-[#25D366] opacity-70 group-hover:opacity-100" />
+                  WhatsApp
+                </div>
+                <div className="h-px w-full bg-white/15 mt-1.5 group-hover:bg-[#c76600] transition-colors" />
+              </a>
+            </Tilt3D>
+          </div>
 
-          {/* RIGHT — Identity + Action + Explore + Presence */}
-          <motion.div
-            initial={{ opacity: 0, x: 16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={viewportOnce}
-            transition={{ duration: 1, ease: ease.smooth }}
-            className="grid grid-cols-2 gap-x-8 gap-y-7"
-          >
-            {/* Identity */}
-            <div className="col-span-2 space-y-2.5">
-              <span className={label}>Identity</span>
-              <h4 className="font-display text-base md:text-lg text-white tracking-wide leading-tight">
-                Solivaguard Private Limited
-              </h4>
-              <div className="flex items-start gap-2 text-white/50">
-                <MapPin size={11} className="text-[#c76600] mt-0.5 shrink-0 opacity-60" />
-                <p className="font-mono text-[0.625rem] tracking-[0.08em] leading-relaxed uppercase">
-                  D-12 Shourya Estate, Pipla <br /> Nagpur 440034, MH India
-                </p>
-              </div>
-            </div>
-
-            {/* Action + Explore */}
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <span className={label}>Action</span>
-                <Tilt3D className="w-fit">
-                  <a href="https://wa.me/917350640608" className="group flex flex-col w-fit">
-                    <div className="flex items-center gap-2.5 text-white/80 group-hover:text-[#c76600] transition-colors duration-500 font-mono text-[1rem] md:text-[1.1rem] tracking-[0.2em] font-black uppercase">
-                      <MessageCircle size={19} className="text-[#25D366] opacity-70 group-hover:opacity-100" />
-                      WhatsApp
-                    </div>
-                    <div className="h-px w-full bg-white/10 mt-1.5 group-hover:bg-[#c76600] transition-colors" />
+          {/* Presence — Socials */}
+          <div className="flex flex-col items-center gap-3">
+            <span className={label}>Presence</span>
+            <div className="flex items-center gap-6">
+              {socials.map((s) => (
+                <Tilt3D key={s.name}>
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.name}
+                    className="group relative flex items-center justify-center"
+                  >
+                    <span
+                      className="text-white/45 group-hover:text-[var(--hc)] transition-all duration-500 scale-105 md:scale-115"
+                      style={{ "--hc": s.color } as React.CSSProperties}
+                    >
+                      <s.icon size={21} strokeWidth={1.5} />
+                    </span>
                   </a>
                 </Tilt3D>
-              </div>
-              <div className="space-y-3">
-                <span className={label}>Explore</span>
-                <nav className="flex flex-col gap-3">
-                  {[
-                    { label: "Home", to: "/" },
-                    { label: "Collection", to: "/collection" },
-                    { label: "Story", to: "/story" },
-                    { label: "How It Works", to: "/technology" },
-                  ].map((l) => (
-                    <Tilt3D key={l.to} className="w-fit">
-                      <Link
-                        to={l.to}
-                        className="group flex items-center gap-2 font-mono text-[0.95rem] md:text-[1.05rem] tracking-[0.12em] text-white/45 hover:text-white uppercase transition-colors duration-500"
-                      >
-                        <ArrowRight
-                          size={14}
-                          className="opacity-0 -translate-x-1 group-hover:opacity-40 group-hover:translate-x-0 transition-all"
-                        />
-                        {l.label}
-                      </Link>
-                    </Tilt3D>
-                  ))}
-                </nav>
-              </div>
+              ))}
             </div>
-
-            {/* Presence */}
-            <div className="space-y-3">
-              <span className={label}>Presence</span>
-              <div className="flex flex-col gap-3.5">
-                {socials.map((s) => (
-                  <Tilt3D key={s.name} className="w-fit">
-                    <a
-                      href={s.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-3 font-mono text-[0.95rem] md:text-[1.05rem] tracking-[0.08em] text-white/45 hover:text-white transition-colors duration-500"
-                    >
-                      <span
-                        className="opacity-40 group-hover:opacity-100 transition-all duration-500 group-hover:text-[var(--hc)]"
-                        style={{ "--hc": s.color } as React.CSSProperties}
-                      >
-                        <s.icon size={20} strokeWidth={1.5} />
-                      </span>
-                      {s.name}
-                    </a>
-                  </Tilt3D>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ── Brand etymology (amber) — above the closure strip ── */}
-        <div className="mt-8 lg:mt-10 flex items-center justify-center gap-3 font-mono text-[12px] md:text-[14px] tracking-[0.14em] uppercase text-[#f59e0b] leading-none">
-          <span>
-            <span className="font-bold">Sol</span> — Sun
-          </span>
-          <span className="h-3.5 w-px bg-[#f59e0b]/40" aria-hidden />
-          <span>
-            <span className="font-bold">Iva</span> — Motion
-          </span>
-        </div>
-
-        {/* ── Terms & Conditions (compact summary + full modal) ── */}
-        <div className="mt-6 border-t border-white/5 pt-5">
-          <TermsAndConditions variant="dark" className="mx-auto max-w-3xl text-center" />
-        </div>
-
-        {/* ── Closure ── */}
-        <div className="mt-5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-20 font-mono text-[0.5rem] tracking-[0.4em] uppercase text-white border-t border-white/5 pt-5">
-          <div className="flex items-center gap-8">
-            <span>© 2026 SOLIVA</span>
-            <span>Sun · Motion</span>
           </div>
-          <span>Engineered in India</span>
-        </div>
+        </motion.div>
+
+        {/* 4. BRAND STATEMENT */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 1, delay: 0.4, ease: ease.smooth }}
+          className="max-w-2xl text-center mb-10"
+        >
+          <p className="text-[0.95rem] md:text-[1.05rem] text-white/85 font-light leading-relaxed font-display italic px-4">
+            Soliva was born from a simple observation: Indian movement is constant exposure. 
+            We noticed that protection hadn’t evolved alongside the streets it was built for.
+          </p>
+        </motion.div>
+
+        {/* Brand etymology (amber) */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={viewportOnce}
+          transition={{ duration: 1.2, delay: 0.6 }}
+          className="flex items-center justify-center gap-4 font-mono text-[11px] md:text-[12px] tracking-[0.22em] uppercase text-[#f59e0b] leading-none mb-10"
+        >
+          <span><span className="font-bold opacity-70">Sol</span> — Sun</span>
+          <span className="h-3 w-px bg-[#f59e0b]/20" aria-hidden />
+          <span><span className="font-bold opacity-70">Iva</span> — Motion</span>
+        </motion.div>
+
+        {/* 5. ADDRESS & LEGAL (Bottom Area) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewportOnce}
+          transition={{ duration: 1, delay: 0.8, ease: ease.smooth }}
+          className="w-full border-t border-white/5 pt-8 flex flex-col items-center gap-6"
+        >
+          {/* Identity/Address */}
+          <div className="flex flex-col items-center text-center space-y-2">
+            <h4 className="font-display text-base md:text-lg text-white/90 tracking-wide">
+              Solivaguard Private Limited
+            </h4>
+            <div className="flex items-start justify-center gap-2 text-white/40 max-w-sm">
+              <MapPin size={11} className="text-[#c76600] mt-0.5 shrink-0 opacity-40" />
+              <p className="font-mono text-[0.6rem] tracking-[0.12em] leading-relaxed uppercase">
+                D-12 Shourya Estate, Pipla, Nagpur 440034, MH India
+              </p>
+            </div>
+          </div>
+
+          {/* Terms & Conditions (The long text block) */}
+          <TermsAndConditions variant="dark" className="mx-auto max-w-2xl text-center opacity-85 text-[0.75rem]" />
+
+          {/* Legal Bar */}
+          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-3 opacity-30 font-mono text-[0.5rem] tracking-[0.45em] uppercase text-white pt-2">
+            <div className="flex items-center gap-6">
+              <span>© 2026 SOLIVA</span>
+              <span>Sun · Motion</span>
+            </div>
+            <span className="hidden md:inline-block">By using Soliva you agree to our Terms & Conditions.</span>
+            <span>Engineered in India</span>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
