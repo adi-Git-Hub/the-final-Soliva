@@ -41,17 +41,6 @@ const editions = [
     ],
   },
   {
-    id: "zesty-lime",
-    name: "Zesty Lime",
-    swatch: "#AEC96B",
-    images: [
-      { view: "Front View", src: "/product_images/lime-1.webp" },
-      { view: "Side View", src: "/product_images/lime-3.webp" },
-      { view: "Back View", src: "/product_images/lime-2.webp" },
-      { view: "Lifestyle View", src: "/product_images/lime-4.webp" },
-    ],
-  },
-  {
     id: "green-edition",
     name: "Olive Green",
     swatch: "#6A7038",
@@ -83,6 +72,18 @@ const editions = [
       { view: "Back View", src: "/product_images/beige-2.webp" },
       { view: "Lifestyle View", src: "/product_images/beige-4.webp" },
     ],
+  },
+  {
+    id: "zesty-lime",
+    name: "Zesty Lime",
+    swatch: "#AEC96B",
+    images: [
+      { view: "Front View", src: "/product_images/lime-1.webp" },
+      { view: "Side View", src: "/product_images/lime-3.webp" },
+      { view: "Back View", src: "/product_images/lime-2.webp" },
+      { view: "Lifestyle View", src: "/product_images/lime-4.webp" },
+    ],
+    isUnavailable: true,
   },
 ] as const;
 
@@ -154,9 +155,9 @@ function CollectionRoute() {
   const [editionIndex, setEditionIndex] = useState(() => {
     if (editionParam) {
       const idx = editions.findIndex((e) => e.id === editionParam);
-      return idx !== -1 ? idx : 1;
+      return idx !== -1 ? idx : 0;
     }
-    return 1;
+    return 0;
   });
 
   useEffect(() => {
@@ -462,22 +463,33 @@ function CollectionRoute() {
                 className="mt-8"
               >
                 <span className="font-mono text-[0.625rem] tracking-[0.28em] uppercase text-[#3a2a22]/55 font-bold">
-                  Launch Price
+                  {edition.isUnavailable ? "Status" : "Launch Price"}
                 </span>
-                <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3.5 gap-y-1.5">
-                  <span
-                    className="font-display leading-none tracking-tight text-[#3a2a22]"
-                    style={{ fontSize: "clamp(2.4rem, 4vw, 3rem)" }}
-                  >
-                    ₹799
-                  </span>
-                  <span className="text-[1.05rem] font-light text-[#7b6a5f]/65 line-through decoration-[#7b6a5f]/40">
-                    MRP ₹999
-                  </span>
-                  <span className="rounded-full border border-[#c76600]/25 bg-[#c76600]/[0.07] px-2.5 py-1 font-mono text-[0.625rem] font-bold uppercase tracking-[0.14em] text-[#c76600]">
-                    Save ₹200
-                  </span>
-                </div>
+                {edition.isUnavailable ? (
+                  <div className="mt-2.5">
+                    <span
+                      className="font-display leading-none tracking-tight text-[#3a2a22]"
+                      style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)" }}
+                    >
+                      Currently Unavailable
+                    </span>
+                  </div>
+                ) : (
+                  <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3.5 gap-y-1.5">
+                    <span
+                      className="font-display leading-none tracking-tight text-[#3a2a22]"
+                      style={{ fontSize: "clamp(2.4rem, 4vw, 3rem)" }}
+                    >
+                      ₹799
+                    </span>
+                    <span className="text-[1.05rem] font-light text-[#7b6a5f]/65 line-through decoration-[#7b6a5f]/40">
+                      MRP ₹999
+                    </span>
+                    <span className="rounded-full border border-[#c76600]/25 bg-[#c76600]/[0.07] px-2.5 py-1 font-mono text-[0.625rem] font-bold uppercase tracking-[0.14em] text-[#c76600]">
+                      Save ₹200
+                    </span>
+                  </div>
+                )}
                 <div className="mt-3.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[0.75rem] font-light text-[#7b6a5f]">
                   <span className="inline-flex items-center gap-1.5">
                     <Truck size={14} strokeWidth={1.75} className="text-[#c76600]/70" />
@@ -499,23 +511,33 @@ function CollectionRoute() {
               >
                 {/* Buy Now — primary → /checkout (details) → Razorpay */}
                 <motion.button
+                  disabled={edition.isUnavailable}
                   onClick={buyNow}
-                  whileHover={{ y: -3 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={edition.isUnavailable ? {} : { y: -3 }}
+                  whileTap={edition.isUnavailable ? {} : { scale: 0.98 }}
                   transition={{ duration: 0.3, ease: ease.smooth }}
-                  className="group inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[#3a2a22] px-4 py-4 font-mono text-[0.7rem] tracking-[0.16em] uppercase font-black text-[#f7f3ee] shadow-editorial transition-[background,box-shadow,transform] duration-300 hover:bg-[#2e211b] hover:shadow-[0_22px_46px_-18px_rgba(58,42,34,0.6)] sm:px-8 sm:tracking-[0.22em]"
+                  className={`group inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full px-4 py-4 font-mono text-[0.7rem] tracking-[0.16em] uppercase font-black shadow-editorial transition-[background,box-shadow,transform] duration-300 sm:px-8 sm:tracking-[0.22em] ${
+                    edition.isUnavailable
+                      ? "bg-[#3a2a22]/40 text-[#f7f3ee]/60 cursor-not-allowed"
+                      : "bg-[#3a2a22] text-[#f7f3ee] hover:bg-[#2e211b] hover:shadow-[0_22px_46px_-18px_rgba(58,42,34,0.6)]"
+                  }`}
                 >
-                  Buy Now
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                  {edition.isUnavailable ? "Out of Stock" : "Buy Now"}
+                  {!edition.isUnavailable && <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />}
                 </motion.button>
 
                 {/* Add to Cart — secondary */}
                 <motion.button
+                  disabled={edition.isUnavailable}
                   onClick={addToCart}
-                  whileHover={{ y: -3 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={edition.isUnavailable ? {} : { y: -3 }}
+                  whileTap={edition.isUnavailable ? {} : { scale: 0.98 }}
                   transition={{ duration: 0.3, ease: ease.smooth }}
-                  className="group inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[#3a2a22]/25 bg-white/50 px-4 py-4 font-mono text-[0.7rem] tracking-[0.16em] uppercase font-bold text-[#3a2a22] backdrop-blur transition-[background,border-color,box-shadow,transform] duration-300 hover:border-[#3a2a22]/45 hover:bg-white hover:shadow-[0_16px_36px_-22px_rgba(58,42,34,0.4)] sm:px-8 sm:tracking-[0.22em]"
+                  className={`group inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border px-4 py-4 font-mono text-[0.7rem] tracking-[0.16em] uppercase font-bold backdrop-blur transition-[background,border-color,box-shadow,transform] duration-300 sm:px-8 sm:tracking-[0.22em] ${
+                    edition.isUnavailable
+                      ? "border-[#3a2a22]/10 bg-white/20 text-[#3a2a22]/40 cursor-not-allowed"
+                      : "border-[#3a2a22]/25 bg-white/50 text-[#3a2a22] hover:border-[#3a2a22]/45 hover:bg-white hover:shadow-[0_16px_36px_-22px_rgba(58,42,34,0.4)]"
+                  }`}
                 >
                   {added ? (
                     <>

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Search, ShoppingBag, Menu } from "lucide-react";
 
@@ -23,6 +23,8 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Keyboard shortcut Cmd+K / Ctrl+K
   useEffect(() => {
@@ -60,6 +62,22 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleHomeClick = (e: React.MouseEvent) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+      
+      // Force the cinematic intro to play again by clearing the seen flag
+      try {
+        sessionStorage.removeItem("soliva:loader-seen");
+      } catch (err) {
+        console.warn("Failed to clear intro state:", err);
+      }
+
+      // Hard refresh to reset the landing page entirely
+      window.location.href = "/";
+    }
+  };
+
   return (
     <>
       <header
@@ -86,7 +104,11 @@ export function Header() {
             )}
           >
             <div className="flex items-center gap-8 lg:gap-12 h-full">
-              <Link to="/" className="flex items-center outline-none group h-full py-3 md:py-3.5">
+              <Link
+                to="/"
+                onClick={handleHomeClick}
+                className="flex items-center outline-none group h-full py-3 md:py-3.5"
+              >
                 <img
                   src="/soliva-nav-new.webp"
                   alt="Soliva"
@@ -102,6 +124,7 @@ export function Header() {
                     key={l.label}
                     to={l.to}
                     search={l.search as any}
+                    onClick={l.to === "/" ? handleHomeClick : undefined}
                     className="text-[13px] font-medium tracking-tight text-white/85 hover:text-white transition-colors outline-none"
                     activeOptions={{ exact: l.to === "/" }}
                     activeProps={{ className: "text-white font-semibold" }}
@@ -170,7 +193,10 @@ export function Header() {
                             key={l.label}
                             to={l.to}
                             search={l.search as any}
-                            onClick={() => setMobileOpen(false)}
+                            onClick={() => {
+                              setMobileOpen(false);
+                              if (l.to === "/") handleHomeClick(null as any);
+                            }}
                             className="py-2.5 text-sm font-medium border-b border-border/5 text-ink-default hover:text-orange-glow"
                           >
                             {l.label}

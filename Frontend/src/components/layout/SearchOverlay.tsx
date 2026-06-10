@@ -14,15 +14,15 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 /* ── Product Data (Mirrored from collection.tsx) ── */
 const EDITIONS = [
   { id: "blush-pink", name: "Blush Pink", swatch: "#E4B7C6", image: "/product_images/pink-1.webp" },
-  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/product_images/lime-1.webp" },
   { id: "green-edition", name: "Olive Green", swatch: "#6A7038", image: "/product_images/olive-1.webp" },
   { id: "deep-blue", name: "Deep Blue", swatch: "#33508A", image: "/product_images/blue-1.webp" },
   { id: "classic-beige", name: "Classic Beige", swatch: "#D8C3A0", image: "/product_images/beige-1.webp" },
+  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/product_images/lime-1.webp" },
 ];
 
 const RECOMMENDATIONS = {
   available: [
-    { name: "SunWrap™", to: "/collection", icon: Sun, color: "#B88445" },
+    { name: "SunWrap", to: "/collection", icon: Sun, color: "#B88445" },
   ],
   future: [
     { name: "Men Series", icon: User, status: "Coming Soon", color: "#6A7038" },

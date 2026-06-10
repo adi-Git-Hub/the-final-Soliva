@@ -7,10 +7,10 @@ import { viewportOnce, ease } from "@/design-system";
 /* One product · five editions. Chip order kept consistent with the brief. */
 const editions = [
   { id: "blush-pink", name: "Blush Pink", swatch: "#E4B7C6", image: "/product_images/pink-1.webp", tone: "from-[#FFF5F7] to-[#FCE7F3]" },
-  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/product_images/lime-1.webp", tone: "from-[#F5FFF7] to-[#DCFCE7]" },
   { id: "green-edition", name: "Olive Green", swatch: "#6A7038", image: "/product_images/olive-1.webp", tone: "from-[#EEF6EF] to-[#DCEDE0]" },
   { id: "deep-blue", name: "Deep Blue", swatch: "#33508A", image: "/product_images/blue-1.webp", tone: "from-[#F0F4FF] to-[#DBEAFE]" },
   { id: "classic-beige", name: "Classic Beige", swatch: "#D8C3A0", image: "/product_images/beige-1.webp", tone: "from-[#FBF6F0] to-[#EDE0D0]" },
+  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/product_images/lime-1.webp", tone: "from-[#F5FFF7] to-[#DCFCE7]", isUnavailable: true },
 ] as const;
 
 const lifestyleTags = [
@@ -260,15 +260,28 @@ export function CollectionSection() {
           <div className="relative flex flex-col items-center gap-3 text-center md:flex-row md:justify-between md:gap-6 md:text-left">
             {/* price */}
             <div className="flex items-baseline gap-2.5">
-              <span className="flex flex-col items-start leading-none">
-                <span className="font-mono text-[0.5625rem] font-bold uppercase tracking-[0.28em] text-[#c76600]">
-                  Launch Price
-                </span>
-              </span>
-              <span className="font-display text-3xl tracking-tight text-[#3a2a22]">₹799</span>
-              <span className="font-mono text-[0.8125rem] font-light text-[#7b6a5f]/70 line-through">
-                MRP ₹999
-              </span>
+              {editions[active].isUnavailable ? (
+                <div className="flex flex-col items-start leading-none">
+                  <span className="font-mono text-[0.5625rem] font-bold uppercase tracking-[0.28em] text-[#c76600]">
+                    Status
+                  </span>
+                  <span className="font-display text-xl md:text-2xl tracking-tight text-[#3a2a22] mt-1">
+                    Currently Unavailable
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <span className="flex flex-col items-start leading-none">
+                    <span className="font-mono text-[0.5625rem] font-bold uppercase tracking-[0.28em] text-[#c76600]">
+                      Launch Price
+                    </span>
+                  </span>
+                  <span className="font-display text-3xl tracking-tight text-[#3a2a22]">₹799</span>
+                  <span className="font-mono text-[0.8125rem] font-light text-[#7b6a5f]/70 line-through">
+                    MRP ₹999
+                  </span>
+                </>
+              )}
             </div>
 
             {/* tagline */}
@@ -280,17 +293,22 @@ export function CollectionSection() {
             {/* CTA */}
             <motion.button
               type="button"
+              disabled={editions[active].isUnavailable}
               onClick={() => navigate({ to: "/collection" })}
-              whileHover={{ y: -3, scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={editions[active].isUnavailable ? {} : { y: -3, scale: 1.03 }}
+              whileTap={editions[active].isUnavailable ? {} : { scale: 0.97 }}
               transition={{ duration: 0.3, ease: ease.smooth }}
-              className="group relative inline-flex shrink-0 items-center gap-2.5 overflow-hidden rounded-full bg-[#3a2a22] px-7 py-3 font-mono text-[0.6875rem] font-black uppercase tracking-[0.28em] text-[#f7f3ee] shadow-[0_18px_40px_-18px_rgba(58,42,34,0.6)] transition-colors duration-500 hover:bg-[#c76600] hover:shadow-[0_22px_46px_-16px_rgba(199,102,0,0.6)]"
+              className={`group relative inline-flex shrink-0 items-center gap-2.5 overflow-hidden rounded-full px-7 py-3 font-mono text-[0.6875rem] font-black uppercase tracking-[0.28em] transition-colors duration-500 ${
+                editions[active].isUnavailable
+                  ? "bg-[#3a2a22]/40 text-[#f7f3ee]/60 cursor-not-allowed"
+                  : "bg-[#3a2a22] text-[#f7f3ee] shadow-[0_18px_40px_-18px_rgba(58,42,34,0.6)] hover:bg-[#c76600] hover:shadow-[0_22px_46px_-16px_rgba(199,102,0,0.6)]"
+              }`}
             >
               <span
                 aria-hidden
                 className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
               />
-              <span className="relative">Shop Now</span>
+              <span className="relative">{editions[active].isUnavailable ? "Out of Stock" : "Shop Now"}</span>
               <ArrowRight size={14} className="relative transition-transform duration-500 ease-out group-hover:translate-x-1" />
             </motion.button>
           </div>
