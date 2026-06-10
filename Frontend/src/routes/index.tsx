@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLocation } from "@tanstack/react-router";
 import { Hero } from "@/components/Hero";
 import { ProblemSection } from "@/components/ProblemSection";
 import { UrbanStorytelling } from "@/components/UrbanStorytelling";
@@ -27,6 +27,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const location = useLocation();
+  const navKey = location.key;
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -73,12 +76,12 @@ function Index() {
       lenis.destroy();
       gsap.ticker.remove(tick);
     };
-  }, []);
+  }, [navKey]);
 
   return (
     <>
       <Header />
-      <main className="relative min-h-screen bg-transparent w-full">
+      <main key={navKey} className="relative min-h-screen bg-transparent w-full">
         <Hero isRevealed />
         <VideoSection />
         <UrbanStorytelling />

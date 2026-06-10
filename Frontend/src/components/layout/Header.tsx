@@ -9,6 +9,7 @@ import { AccountMenu } from "./AccountMenu";
 import { useCart } from "@/features/cart/hooks/useCart";
 import { cn } from "@/lib/utils";
 import { SearchOverlay } from "./SearchOverlay";
+import { getLenis } from "@/lib/smooth-scroll";
 
 const primaryLinks: readonly { to: string; label: string; search?: Record<string, string> }[] = [
   { to: "/", label: "Home" },
@@ -66,15 +67,18 @@ export function Header() {
     if (location.pathname === "/") {
       e.preventDefault();
       
-      // Force the cinematic intro to play again by clearing the seen flag
-      try {
-        sessionStorage.removeItem("soliva:loader-seen");
-      } catch (err) {
-        console.warn("Failed to clear intro state:", err);
+      // Reuse the same navigation + scroll restoration flow:
+      // 1. Ensure scroll is enabled and jump to top immediately.
+      const lenis = getLenis();
+      if (lenis) {
+        lenis.start();
+        lenis.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
       }
 
-      // Hard refresh to reset the landing page entirely
-      window.location.href = "/";
+      // 2. Perform a fresh navigation to trigger the route's internal reset flow.
+      navigate({ to: "/" });
     }
   };
 
