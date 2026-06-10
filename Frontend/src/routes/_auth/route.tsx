@@ -2,6 +2,7 @@ import { Link, Outlet, createFileRoute, useNavigate } from "@tanstack/react-rout
 import { useEffect } from "react";
 
 import { useSession } from "@/features/auth/hooks/useSession";
+import { SolivaLogo } from "@/components/SolivaLogo";
 
 // We can't use `beforeLoad` for the redirect anymore: the session is now
 // async (React Query → /auth/me) and not available synchronously on the
@@ -23,8 +24,8 @@ function AuthLayout() {
     <div className="flex min-h-screen flex-col bg-transparent safe-x">
       <header className="border-b border-border/40 bg-luxury-beige/40 backdrop-blur-subtle">
         <div className="mx-auto flex h-14 sm:h-16 max-w-7xl items-center px-4 md:px-8">
-          <Link to="/" className="font-display text-xl sm:text-2xl tracking-tight text-foreground">
-            Soliva
+          <Link to="/" aria-label="Soliva — home" className="inline-flex items-center text-foreground">
+            <SolivaLogo variant="primary" height={36} />
           </Link>
         </div>
       </header>

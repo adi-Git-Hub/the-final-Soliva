@@ -37,7 +37,7 @@ const LEFT: HalfData = {
     "Designed for coverage, not exposure",
   ],
   footer: "Everyday adjustment became everyday habit.",
-  image: "/product_images/Gemini_Generated_Image_e61dwqe61dwqe61d.png",
+  image: "/IMG_6255.jpg",
   alt: "Traditional dupatta wrapped over the face — borrowed protection that slips and needs constant adjustment",
 };
 
@@ -53,7 +53,7 @@ const RIGHT: HalfData = {
     "Built for everyday exposure",
   ],
   footer: "Protection should quietly work in the background.",
-  image: "/DSC05489.webp",
+  image: "/IMG_3739.jpg",
   alt: "Soliva Protection System designed for everyday movement and exposure",
 };
 
@@ -70,7 +70,7 @@ const STEPS = [
 function Check({ color }: { color: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 sm:h-[18px] sm:w-[18px]" aria-hidden="true">
-      <path d="M5 12.5l4 4L19 6.5" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 12.5l4 4L19 6.5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -87,9 +87,13 @@ function Half({ data, side }: { data: HalfData; side: "left" | "right" }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-2%", "2%"]);
 
   const isSoliva = side === "right";
+  // Symmetrical logic: Left side (Traditional) = Image Left, Content Right
+  // Right side (Soliva) = Content Left, Image Right
+  const isImageLeft = !isSoliva;
+
   const bg = isSoliva ? "#F6EFE4" : "#E9E9EC";
   const kickerColor = isSoliva ? ACCENT : "rgba(45,36,30,0.42)";
   const titleColor = isSoliva ? "#2D241E" : "rgba(45,36,30,0.78)";
@@ -98,106 +102,104 @@ function Half({ data, side }: { data: HalfData; side: "left" | "right" }) {
   const textColor = isSoliva ? "#2D241E" : "rgba(45,36,30,0.6)";
   const markColor = isSoliva ? ACCENT : "rgba(45,36,30,0.45)";
 
-  const Features = (
-    <ul
-      className={`order-1 flex flex-col justify-center px-7 py-6 lg:px-12 lg:py-10 ${
-        isSoliva ? "md:order-1" : "md:order-2"
-      }`}
-    >
-      {data.points.map((p, i) => (
-        <motion.li
-          key={p}
-          initial={{ opacity: 0, x: isSoliva ? 16 : -16 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.15 + i * 0.07 }}
-          className="flex items-center gap-4 border-b py-3.5 last:border-b-0 sm:py-4 lg:py-5"
-          style={{ borderColor: line }}
-        >
-          <span
-            className="flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-full sm:h-[32px] sm:w-[32px]"
-            style={{ backgroundColor: isSoliva ? "rgba(184,132,69,0.12)" : "rgba(45,36,30,0.05)" }}
-          >
-            {isSoliva ? <Check color={markColor} /> : <Cross color={markColor} />}
-          </span>
-          <span
-            className="text-[0.95rem] leading-snug sm:text-[1.05rem] lg:text-[1.12rem]"
-            style={{ color: textColor, fontWeight: isSoliva ? 500 : 400 }}
-          >
-            {p}
-          </span>
-        </motion.li>
-      ))}
-    </ul>
-  );
-
-  const Image = (
-    <div
-      className={`relative order-2 h-[320px] self-end overflow-hidden sm:h-[420px] lg:h-[520px] ${
-        isSoliva ? "md:order-2" : "md:order-1"
-      }`}
-    >
-      <motion.img
-        src={data.image}
-        alt={data.alt}
-        loading="lazy"
-        style={{
-          y: reduce ? 0 : imgY,
-          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 13%)",
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 13%)",
-        }}
-        className="absolute inset-x-0 bottom-0 h-[110%] w-full scale-[1.02] object-cover object-top"
-      />
-      {/* warm/cool wash so the image melts into the half */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{ background: `linear-gradient(to bottom, ${bg} 0%, transparent 20%, transparent 92%, ${bg} 100%)` }}
-      />
-    </div>
-  );
-
-  return (
-    <div ref={ref} className="relative flex flex-col" style={{ backgroundColor: bg }}>
+  const Content = (
+    <div className={`flex flex-col justify-start w-full lg:w-1/2 px-4 pt-8 pb-4 md:px-6 md:pt-10 lg:px-8 lg:pt-12 z-10 relative ${isImageLeft ? "order-2" : "order-1"}`}>
       {/* Heading block */}
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 1, ease: EASE }}
-        className={`px-5 pt-6 lg:px-8 lg:pt-8 ${isSoliva ? "lg:pl-12" : "lg:pr-12"}`}
+        transition={{ duration: 0.6, ease: EASE }}
+        className="flex flex-col mb-4 md:mb-5"
       >
         <span
-          className="mb-2 block text-[0.65rem] font-semibold uppercase tracking-[0.42em]"
+          className="mb-1 block text-[0.55rem] font-semibold uppercase tracking-[0.42em]"
           style={{ color: kickerColor }}
         >
           {data.kicker}
         </span>
         <h3
-          className="text-[1.4rem] uppercase leading-[1.04] tracking-tight sm:text-[1.8rem] lg:text-[2.2rem]"
+          className="text-[1.1rem] uppercase leading-[1.04] tracking-tight sm:text-[1.25rem] lg:text-[1.4rem] whitespace-nowrap"
           style={{ fontFamily: SERIF, color: titleColor }}
         >
           {data.title.replace(/™$/, "")}
         </h3>
         <p
-          className="mt-2 text-[0.95rem] italic sm:text-[1.1rem] lg:text-[1.2rem]"
+          className="mt-1 text-[0.75rem] italic sm:text-[0.85rem] lg:text-[0.95rem]"
           style={{ fontFamily: SERIF, color: subColor }}
         >
           {data.subtitle}
         </p>
       </motion.div>
 
-      {/* Image + features composition */}
-      <div className="mt-4 grid flex-1 grid-cols-1 items-stretch md:mt-5 md:grid-cols-2">
-        {Features}
-        {Image}
-      </div>
+      <ul className="flex flex-col border-t pt-1.5" style={{ borderColor: line }}>
+        {data.points.map((p, i) => (
+          <motion.li
+            key={p}
+            initial={{ opacity: 0, x: isSoliva ? 6 : -6 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.4, ease: EASE, delay: 0.1 + i * 0.04 }}
+            className="flex items-center gap-3 border-b py-2 last:border-b-0 sm:py-2.5"
+            style={{ borderColor: line }}
+          >
+            <span
+              className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full sm:h-[22px] sm:w-[22px]"
+              style={{ backgroundColor: isSoliva ? "rgba(184,132,69,0.12)" : "rgba(45,36,30,0.05)" }}
+            >
+              {isSoliva ? <Check color={markColor} /> : <Cross color={markColor} />}
+            </span>
+            <span
+              className="text-[0.75rem] leading-snug sm:text-[0.85rem] lg:text-[0.95rem]"
+              style={{ color: textColor, fontWeight: isSoliva ? 500 : 400 }}
+            >
+              {p}
+            </span>
+          </motion.li>
+        ))}
+      </ul>
 
       {/* Footer strip */}
-      <div className="border-t px-5 py-3 lg:px-8 lg:py-4" style={{ borderColor: line }}>
-        <p className="text-[0.95rem] italic sm:text-[1rem]" style={{ fontFamily: SERIF, color: subColor }}>
+      <div className="mt-3 pt-3 border-t" style={{ borderColor: line }}>
+        <p className="text-[0.75rem] italic sm:text-[0.85rem]" style={{ fontFamily: SERIF, color: subColor }}>
           {data.footer}
         </p>
       </div>
+    </div>
+  );
+
+  const Image = (
+    <div className={`relative w-full lg:w-1/2 min-h-[200px] sm:min-h-[260px] lg:min-h-[380px] xl:min-h-[420px] overflow-hidden flex items-end justify-center ${isImageLeft ? "order-1" : "order-2"}`}>
+      <motion.img
+        src={data.image}
+        alt={data.alt}
+        loading="lazy"
+        style={{
+          y: reduce ? 0 : imgY,
+          WebkitMaskImage: isImageLeft 
+            ? "linear-gradient(to left, transparent 0%, black 15%)" 
+            : "linear-gradient(to right, transparent 0%, black 15%)",
+          maskImage: isImageLeft 
+            ? "linear-gradient(to left, transparent 0%, black 15%)" 
+            : "linear-gradient(to right, transparent 0%, black 15%)",
+        }}
+        className="absolute inset-0 h-full w-full object-cover object-[center_25%] scale-[1.02]"
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ 
+          background: isImageLeft
+            ? `linear-gradient(to left, ${bg} 0%, transparent 40%)` 
+            : `linear-gradient(to right, ${bg} 0%, transparent 40%)` 
+        }}
+      />
+    </div>
+  );
+
+  return (
+    <div ref={ref} className="relative flex flex-col lg:flex-row items-stretch w-full overflow-hidden" style={{ backgroundColor: bg }}>
+      {Content}
+      {Image}
     </div>
   );
 }
@@ -208,161 +210,157 @@ export function CompareSection() {
   return (
     <section
       aria-labelledby="compare-heading"
-      className="m-compare relative z-20 flex w-full flex-col items-center px-4 py-12 sm:px-8 sm:py-16"
+      // Reduced top padding to sit tighter with the marquee strip
+      className="m-compare relative z-10 flex w-full flex-col items-center px-4 pt-12 pb-4 sm:px-8 sm:pt-16 sm:pb-6 md:pt-20 lg:min-h-screen lg:justify-center"
       style={{ backgroundColor: "#F7F3EC", color: "#2D241E" }}
     >
-
       <div className="relative mx-auto w-full max-w-[84rem]">
         {/* ── HEADER ── */}
         <motion.header
-          initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
+          initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 1.1, ease: EASE }}
-          className="mx-auto mb-9 max-w-2xl text-center md:mb-12"
+          transition={{ duration: 0.9, ease: EASE }}
+          // Reduced margin-bottom from mb-3 to mb-2 to pull table up
+          className="mx-auto mb-2 max-w-2xl text-center md:mb-3"
         >
           <h2
             id="compare-heading"
-            className="text-[1.9rem] leading-[1.04] sm:text-4xl md:text-5xl"
+            className="text-[1.5rem] leading-[1.04] sm:text-[2rem] md:text-[2.6rem]"
             style={{ fontFamily: SERIF, color: "#2D241E" }}
           >
             Still adjusting <span className="italic" style={{ color: ACCENT }}>everyday?</span>
           </h2>
-          <p className="mx-auto mt-3 text-[0.9rem] leading-relaxed sm:whitespace-nowrap sm:text-[0.95rem]" style={{ color: "rgba(45,36,30,0.6)" }}>
-            What feels like protection isn't always designed for everyday exposure.
-          </p>
         </motion.header>
 
-        {/* ── EDITORIAL SPLIT-SCREEN CANVAS ── */}
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 1.1, ease: EASE }}
-          className="relative grid grid-cols-1 overflow-hidden rounded-[20px] md:grid-cols-2"
-          style={{ boxShadow: "0 40px 90px -50px rgba(45,36,30,0.4)", border: "1px solid rgba(45,36,30,0.08)" }}
+          transition={{ duration: 0.9, ease: EASE }}
+          className="flex flex-col w-full"
         >
-          <Half data={LEFT} side="left" />
-          <Half data={RIGHT} side="right" />
-
-          {/* centre vertical divider (desktop) */}
-          <motion.div
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 1.2, ease: EASE, delay: 0.3 }}
-            style={{ originY: 0, backgroundColor: "rgba(45,36,30,0.14)" }}
-            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 md:block"
-          />
-
-          {/* floating VS badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease: EASE, delay: 0.55 }}
-            className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2"
-            aria-hidden="true"
+          <div
+            className="relative grid grid-cols-1 overflow-hidden rounded-[16px] md:grid-cols-2"
+            style={{ boxShadow: "0 20px 40px -15px rgba(45,36,30,0.3)", border: "1px solid rgba(45,36,30,0.08)" }}
           >
-            <motion.div
-              animate={reduce ? undefined : { y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="flex h-[4rem] w-[4rem] items-center justify-center rounded-full sm:h-[4.5rem] sm:w-[4.5rem] lg:h-[5.5rem] lg:w-[5.5rem]"
-              style={{
-                backgroundColor: "#FBF8F4",
-                boxShadow: "0 32px 64px -20px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.85)",
-                border: "1px solid rgba(45,36,30,0.12)",
-              }}
+            <Half data={LEFT} side="left" />
+            <Half data={RIGHT} side="right" />
+
+            {/* centre vertical divider (desktop) */}
+            <div
+              style={{ backgroundColor: "rgba(45,36,30,0.14)" }}
+              className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 md:block"
+            />
+
+            {/* floating VS badge */}
+            <div
+              className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2"
+              aria-hidden="true"
             >
-              <span className="text-xl italic sm:text-2xl lg:text-3xl" style={{ fontFamily: SERIF, color: "#2D241E" }}>
-                vs
-              </span>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-
-        {/* ════ THE ADJUSTMENT CYCLE — continuation of the same comparison story ════ */}
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 1, ease: EASE }}
-          className="mt-12 w-full md:mt-16"
-        >
-          {/* bridge line — ties the panel above into the sequence below */}
-          <p
-            className="text-center text-[0.95rem] italic sm:text-[1.05rem]"
-            style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.55)" }}
-          >
-            Covered doesn't always mean protected.
-          </p>
-
-          {/* question heading */}
-          <h3
-            className="mx-auto mt-3 text-center text-[1.5rem] leading-[1.12] sm:text-[2rem] md:text-[2.2rem] lg:whitespace-nowrap"
-            style={{ fontFamily: SERIF, color: "#2D241E" }}
-          >
-            How many times do you adjust protection{" "}
-            <span className="italic" style={{ color: ACCENT }}>
-              everyday?
-            </span>
-          </h3>
-
-          {/* 5-step adjustment illustration row — single row on desktop, swipe on mobile */}
-          <ul className="mx-auto mt-8 flex max-w-[72rem] snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] md:mt-10 md:grid md:grid-cols-5 md:overflow-visible [&::-webkit-scrollbar]:hidden">
-            {STEPS.map((s, i) => (
-              <motion.li
-                key={s.label}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, ease: EASE, delay: i * 0.1 }}
-                className="flex w-[46%] shrink-0 snap-center flex-col items-center px-3 first:border-l-0 sm:w-[33%] sm:px-5 md:w-auto md:border-l"
-                style={{ borderColor: "rgba(45,36,30,0.10)" }}
+              <motion.div
+                animate={reduce ? undefined : { y: [0, -3, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="flex h-[2.2rem] w-[2.2rem] items-center justify-center rounded-full sm:h-[3.2rem] sm:w-[3.2rem]"
+                style={{
+                  backgroundColor: "#FBF8F4",
+                  boxShadow: "0 12px 24px -8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.85)",
+                  border: "1px solid rgba(45,36,30,0.12)",
+                }}
               >
-                <div className="flex h-24 w-full items-end justify-center sm:h-28 md:h-32">
-                  <img
-                    src={s.img}
-                    alt={`Adjusting traditional protection: ${s.label}`}
-                    loading="lazy"
-                    className="h-full w-auto max-w-full object-contain"
-                  />
-                </div>
-                <span
-                  className="mt-3 text-center text-[0.9rem] italic sm:text-[0.98rem]"
-                  style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.78)" }}
-                >
-                  {s.label}
+                <span className="text-[0.7rem] italic sm:text-[0.8rem] lg:text-[1rem]" style={{ fontFamily: SERIF, color: "#2D241E" }}>
+                  vs
                 </span>
-              </motion.li>
-            ))}
-          </ul>
-
-        {/* resolution — question → solution → CTA */}
-          <div className="mt-8 flex flex-col items-center text-center md:mt-10">
-            <h3
-              className="mx-auto text-[1.3rem] leading-[1.14] sm:text-[1.7rem] md:text-[1.9rem] lg:whitespace-nowrap"
-              style={{ fontFamily: SERIF, color: "#2D241E" }}
-            >
-              Why should protection work{" "}
-              <span className="italic" style={{ color: ACCENT }}>
-                harder than life?
-              </span>
-            </h3>
-            <p
-              className="mt-2 text-[0.9rem] italic sm:text-[0.95rem]"
-              style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.55)" }}
-            >
-              Move beyond adjustment.
-            </p>
-            <Link
-              to="/collection"
-              className="group mt-5 inline-flex items-center gap-2.5 rounded-full bg-[#2D241E] px-8 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-[#F7F3EC] shadow-[0_18px_40px_-18px_rgba(45,36,30,0.5)] transition-[transform,background-color] duration-500 hover:-translate-y-0.5 hover:bg-[#B88445]"
-            >
-              Discover Soliva
-              <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
-            </Link>
+              </motion.div>
+            </div>
           </div>
+
+          <div className="mt-3 w-full md:mt-4 flex flex-col">
+            <div className="flex items-center gap-3 px-2 md:px-4 mb-2 justify-center">
+              <span className="h-px flex-1" style={{ backgroundColor: "rgba(45,36,30,0.06)" }} />
+              <p
+                className="text-[0.7rem] uppercase tracking-[0.24em] font-semibold md:text-[0.85rem] whitespace-nowrap"
+                style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.45)" }}
+              >
+                The Everyday Adjustment Cycle
+              </p>
+              <span className="h-px flex-1" style={{ backgroundColor: "rgba(45,36,30,0.06)" }} />
+            </div>
+
+            <ul className="mx-auto flex w-full max-w-[68rem] snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] md:grid md:grid-cols-5 md:overflow-visible [&::-webkit-scrollbar]:hidden">
+              {STEPS.map((s, i) => (
+                <motion.li
+                  key={s.label}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.5, ease: EASE, delay: 0.2 + i * 0.05 }}
+                  className="flex w-[35%] shrink-0 snap-center flex-col items-center px-2 first:border-l-0 sm:w-[25%] sm:px-3 md:w-auto md:border-l"
+                  style={{ borderColor: "rgba(45,36,30,0.10)" }}
+                >
+                  <div className="flex h-12 w-full items-end justify-center sm:h-16 md:h-20">
+                    <img
+                      src={s.img}
+                      alt={`Adjusting traditional protection: ${s.label}`}
+                      loading="lazy"
+                      className="h-full w-auto max-w-full object-contain"
+                    />
+                  </div>
+                  <span
+                    className="mt-1.5 text-center text-[0.7rem] italic sm:text-[0.8rem] md:text-[0.9rem]"
+                    style={{ fontFamily: SERIF, color: "rgba(45,36,30,0.78)" }}
+                  >
+                    {s.label}
+                  </span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ── 3D CTA BUTTON ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
+            className="mt-6 flex justify-center md:mt-8"
+          >
+            <Link to="/collection" className="group relative">
+              {/* Button Shadow/Base (3D) */}
+              <div
+                className="absolute inset-0 translate-y-1 rounded-full transition-transform duration-200 group-hover:translate-y-1.5"
+                style={{ backgroundColor: "rgba(184,132,69,0.25)", filter: "blur(4px)" }}
+              />
+              
+              {/* Button Face */}
+              <motion.div
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 1 }}
+                className="relative flex items-center gap-3 rounded-full border px-8 py-3.5 transition-colors sm:px-10 lg:px-12"
+                style={{ 
+                  backgroundColor: "#2D241E", 
+                  borderColor: ACCENT,
+                  boxShadow: "0 10px 20px -10px rgba(0,0,0,0.5)"
+                }}
+              >
+                <span 
+                  className="text-[0.85rem] font-medium uppercase tracking-[0.18em] text-white sm:text-[0.9rem]"
+                  style={{ fontFamily: SERIF }}
+                >
+                  Shop Now
+                </span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                  stroke="white"
+                  strokeWidth="2"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </motion.div>
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
     </section>

@@ -27,7 +27,7 @@ const exposureCards = [
     headline: "Trapped heat.",
     desc: "Heavy coverings and poor airflow can make long outdoor hours uncomfortable.",
     micro: "Protection shouldn’t feel exhausting.",
-    image: "/heate-sufacation.webp",
+    image: "/trapped-heat-new.png",
   },
   {
     id: 4,
@@ -43,11 +43,11 @@ const exposureCards = [
     headline: "Areas often left exposed.",
     desc: "Neck, ears, side profile, and movement zones frequently remain uncovered.",
     micro: "Small gaps create everyday exposure.",
-    image: "/incompelete-protection.webp",
+    image: "/product_images/hidden-exposure-new.png",
   },
 ];
 
-const PANEL_COUNT = 3;
+const PANEL_COUNT = 2;
 
 export function UrbanStorytelling() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -137,10 +137,10 @@ export function UrbanStorytelling() {
       >
         <div
           ref={containerRef}
-          className="flex flex-col md:flex-row md:flex-nowrap md:w-[300%] md:h-full items-start z-10 relative"
+          className="flex flex-col md:flex-row md:flex-nowrap md:w-[200%] md:h-full items-start z-10 relative"
         >
           {/* ═══ PANEL 1 — HERO IDENTITY + PROBLEM STORY ═══ */}
-          <div className="u-panel relative flex flex-col w-full md:h-full md:w-1/3 justify-start px-6 md:px-10 lg:px-16 pt-[84px] md:pt-[92px] pb-8 md:pb-6 flex-shrink-0 overflow-hidden bg-[#F5F5DC]">
+          <div className="u-panel relative flex flex-col w-full md:h-full md:w-1/2 justify-start px-6 md:px-10 lg:px-16 pt-[84px] md:pt-[92px] pb-8 md:pb-6 flex-shrink-0 overflow-hidden bg-[#F5F5DC]">
             <div className="u-hero-stack max-w-[1280px] mx-auto w-full flex flex-col items-center relative z-10">
               {/* ── Heading ── */}
               <motion.h2
@@ -259,108 +259,8 @@ export function UrbanStorytelling() {
             </div>
           </div>
 
-          {/* ═══ PANEL 2: SECTION 3 — BRAND INSIGHT ═══ */}
-          <div
-            className="u-panel relative flex flex-col w-full md:h-full md:w-1/3 justify-start pt-[84px] md:pt-[92px] pb-8 px-8 md:px-12 lg:px-20 flex-shrink-0 overflow-hidden bg-cover bg-center"
-            style={{ backgroundImage: "url('/luxury-bg.webp')" }}
-          >
-            {/* Gradient divider — static */}
-            <div
-              aria-hidden
-              className="hidden md:block absolute left-0 top-[12%] bottom-[12%] w-px bg-gradient-to-b from-transparent via-[#c08b4f]/55 to-transparent pointer-events-none z-30"
-            />
-            <div className="max-w-[1240px] mx-auto w-full relative z-10">
-              {/* ── Header — single line ── */}
-              <div className="u-reveal u-p2-reveal text-center mb-3 lg:mb-5">
-                <h2
-                  className="font-display text-[#3a2a22] leading-[1.1] tracking-tight whitespace-nowrap"
-                  style={{ fontSize: "clamp(1.15rem, 2.9vw, 2.6rem)" }}
-                >
-                  Protection became routine.{" "}
-                  <span className="italic font-light text-[#c76600]">
-                    It was never designed for it.
-                  </span>
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-8 lg:gap-16 items-start">
-                {/* LEFT — body */}
-                <div className="u-reveal u-p2-reveal">
-                  <div className="space-y-5 text-[1.3rem] md:text-[1.6rem] text-[#4a3a31] font-light leading-relaxed text-left">
-                    <p className="font-bold text-[#3a2a22] whitespace-nowrap text-[1.2rem] md:text-[1.55rem] mb-9 md:mb-12">
-                      For years, we adapted around discomfort instead of solving it.
-                    </p>
-                    <motion.ul
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, amount: 0.4 }}
-                      variants={{
-                        visible: { transition: { staggerChildren: 0.14, delayChildren: 0.1 } },
-                      }}
-                      className="text-[1.05rem] md:text-[1.25rem] text-[#4a3a31]"
-                    >
-                      {[
-                        "Adjusting scarves during movement.",
-                        "Managing heat.",
-                        "Accepting exposure gaps.",
-                        "Repeating the same routine every day.",
-                      ].map((item) => (
-                        <motion.li
-                          key={item}
-                          variants={{
-                            hidden: { opacity: 0, x: -18 },
-                            visible: { opacity: 1, x: 0 },
-                          }}
-                          transition={{ duration: 0.65, ease: ease.smooth }}
-                          className="group flex items-center gap-3.5 py-3 transition-colors hover:text-[#3a2a22]"
-                        >
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#c76600] flex-shrink-0 transition-transform duration-300 group-hover:scale-150" />
-                          <span>{item}</span>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
-                    <motion.p
-                      initial={{ opacity: 0, y: 14 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.6 }}
-                      transition={{ duration: 0.8, delay: 0.7, ease: ease.smooth }}
-                      className="italic text-[#3a2a22] text-[1.05rem] md:text-[1.3rem] leading-snug"
-                    >
-                      What became common was never actually designed for everyday movement
-                      and exposure.
-                    </motion.p>
-                  </div>
-                </div>
-
-                {/* RIGHT — smaller storytelling image + caption */}
-                <div className="u-reveal u-p2-reveal flex flex-col items-center order-first lg:order-none">
-                  <figure className="relative w-full max-w-[460px] aspect-[4/5] max-h-[62vh] overflow-hidden rounded-[1.75rem] shadow-cinematic border border-[#3a2a22]/10">
-                    <img
-                      src="/constant-slipping.webp"
-                      alt="Adjusting coverage during everyday movement"
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#3a2a22]/30 via-transparent to-transparent pointer-events-none" />
-                  </figure>
-                </div>
-              </div>
-
-              {/* ── Footer line — single line, bold ── */}
-              <div className="u-reveal u-p2-reveal mt-8 lg:mt-10 text-center">
-                <p className="font-mono text-[12px] md:text-[14px] tracking-[0.18em] text-[#3a2a22] font-bold leading-none whitespace-nowrap">
-                  We adapted to the problem.{" "}
-                  <span className="text-[#c76600] normal-case italic">
-                    We rarely questioned the solution.
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* ═══ PANEL 3: SECTION 7 — REAL WORLD UTILITY ═══ */}
-          <div className="u-panel relative flex flex-col w-full md:h-full md:w-1/3 justify-center md:justify-start px-8 md:px-12 lg:px-24 md:pt-[96px] md:pb-8 overflow-hidden flex-shrink-0 bg-[#ffd9b5]">
+          {/* ═══ PANEL 2: SECTION 7 — REAL WORLD UTILITY ═══ */}
+          <div className="u-panel relative flex flex-col w-full md:h-full md:w-1/2 justify-center md:justify-start px-8 md:px-12 lg:px-24 md:pt-[110px] md:pb-8 overflow-hidden flex-shrink-0 bg-[#ffd9b5]">
             {/* Gradient divider — static */}
             <div
               aria-hidden
@@ -368,29 +268,22 @@ export function UrbanStorytelling() {
             />
             <div className="max-w-[1400px] mx-auto w-full relative z-10">
               {/* ── Header — single line ── */}
-              <div className="u-reveal u-p4-reveal text-center mb-5 lg:mb-7">
-                <div className="flex items-center justify-center gap-3 mb-3">
-                  <span className="block h-px w-10 bg-[#c76600]/40" />
-                  <span className="font-mono text-[10px] tracking-[0.34em] text-[#c76600] uppercase font-semibold">
-                    Everyday Protection
-                  </span>
-                  <span className="block h-px w-10 bg-[#c76600]/40" />
-                </div>
+              <div className="u-reveal u-p4-reveal text-center mb-6">
                 <h2
                   className="font-display text-[#3a2a22] leading-[1.05] tracking-tight"
-                  style={{ fontSize: "clamp(1.5rem, 3.4vw, 2.85rem)" }}
+                  style={{ fontSize: "clamp(1.6rem, 3.4vw, 2.8rem)" }}
                 >
                   More than a product.{" "}
                   <span className="italic font-light text-[#c76600]">
                     A different approach to protection.
                   </span>
                 </h2>
-                <p className="mt-3 text-[1rem] md:text-[1.15rem] text-[#3a2a22]/75 font-light italic leading-relaxed max-w-2xl mx-auto">
+                <p className="mt-3 text-[1rem] md:text-[1.2rem] text-[#3a2a22]/75 font-light italic leading-relaxed whitespace-nowrap mx-auto">
                   Soliva was created from a simple belief: protection should feel natural, not burdensome.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-14 items-center">
+              <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-14 items-center">
                 <div className="flex flex-col gap-8">
                   <div className="u-reveal u-p4-reveal max-w-4xl text-left">
                     <ul className="space-y-4 text-[1.1rem] md:text-[1.3rem] text-[#3a2a22]/80 font-light leading-relaxed max-w-xl">
@@ -449,7 +342,7 @@ export function UrbanStorytelling() {
 
                   {/* Closing line */}
                   <div className="u-reveal u-p4-reveal border-t border-[#3a2a22]/15 pt-8">
-                    <p className="text-[1.1rem] md:text-[1.25rem] text-[#3a2a22]/90 font-light italic leading-relaxed">
+                    <p className="text-[1.1rem] md:text-[1.25rem] text-[#3a2a22]/90 font-light italic leading-relaxed whitespace-nowrap">
                       The future of protection isn't more coverage.{" "}
                       <span className="text-[#c76600] font-medium">
                         It's more thoughtfulness.

@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { SolivaLogo } from "@/components/SolivaLogo";
 
 const groups: {
   title: string;
@@ -31,16 +30,7 @@ const groups: {
 export function Footer() {
   return (
     <footer className="m-footer mt-16 sm:mt-24 border-t border-border/40 bg-background/60 safe-x">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 py-10 sm:gap-10 sm:py-14 md:grid-cols-4 md:py-16 md:px-8">
-        <div className="col-span-2 md:col-span-1">
-          <Link to="/" aria-label="Soliva — home" className="inline-flex items-center">
-            <SolivaLogo variant="primary" height={40} />
-          </Link>
-          <p className="mt-4 max-w-xs text-sm text-muted-foreground">
-            Considered objects for a quieter ritual.
-          </p>
-        </div>
-
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 py-10 sm:gap-10 sm:py-14 md:grid-cols-3 md:py-16 md:px-8">
         {groups.map((g) => (
           <div key={g.title}>
             <h4 className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
@@ -77,7 +67,7 @@ export function Footer() {
 
       <div className="border-t border-border/40">
         <div className="mx-auto flex max-w-7xl flex-col items-start gap-2 px-4 py-5 text-micro-lg text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-xs md:px-8 md:py-6 safe-bottom">
-          <span>© {new Date().getFullYear()} Soliva. All rights reserved.</span>
+          <span>© 2026 Soliva. All rights reserved.</span>
           <span>Made with care</span>
         </div>
       </div>

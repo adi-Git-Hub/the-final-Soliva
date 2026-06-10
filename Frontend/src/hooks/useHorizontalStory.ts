@@ -70,8 +70,9 @@ export function useHorizontalStory({
       // SEEING every panel in order. The track never jumps across panels: each
       // animation moves exactly one panel, and the next starts the instant the
       // previous finishes.
-      const PANEL_PX = 120; // accumulated wheel distance that queues one panel
-      const DUR_NORMAL = 0.65; // a lone, deliberate step (0.6–0.7s band)
+      const PANEL_PX = 200; // increased threshold for a premium, deliberate feel
+      const DUR_NORMAL = 0.7; // a lone, deliberate step
+      const DUR_QUEUED = 0.45; // faster playback for queued panels (never drops below this)
       const ENTRY_ABSORB = 520; // swallow the scroll that carried the user in
 
       let index = 0; // panel currently shown
@@ -104,11 +105,9 @@ export function useHorizontalStory({
         }
         const dir = target > index ? 1 : -1;
         const remaining = Math.abs(target - index);
-        // Duration adapts to how much is queued: a single step settles gently
-        // (0.65s); a backlog (aggressive scroll) plays fast, deeper = faster,
-        // clamped to the 0.25–0.35s band.
-        const duration =
-          remaining > 1 ? Math.max(0.25, 0.36 - remaining * 0.02) : DUR_NORMAL;
+        // Use a luxurious normal duration, or a slightly accelerated one if
+        // multiple panels are queued, but never go too fast.
+        const duration = remaining > 1 ? DUR_QUEUED : DUR_NORMAL;
         index += dir;
         animating = true;
         onChange?.(index);
@@ -119,6 +118,10 @@ export function useHorizontalStory({
           overwrite: true,
           onComplete: () => {
             animating = false;
+            // FIX: Clear any stale release intents once reaching an edge boundary safely
+            if (index === 0 || index === steps) {
+               releaseDir = 0;
+            }
             pump(); // continue to the next queued panel at once
           },
         });
@@ -127,15 +130,34 @@ export function useHorizontalStory({
       // Queue one panel in `dir`. Over-scrolling past an edge arms a release;
       // the move itself is always ±1, so panels are never skipped.
       const requestStep = (dir: 1 | -1) => {
+        // Limit queue depth to a maximum of 2 panels ahead of the currently animating index.
+        // This prevents massive delta accumulation from fast trackpad swipes.
+        if (dir === 1 && target >= index + 2) {
+          accum = 0; // bleed off excess forward momentum
+          return;
+        }
+        if (dir === -1 && target <= index - 2) {
+          accum = 0; // bleed off excess backward momentum
+          return;
+        }
+
         const next = target + dir;
         if (next < 0) {
-          releaseDir = -1;
-          pump();
+          // FIX: Only arm release if we are ALREADY sitting motionless on the first panel
+          if (!animating && index === 0) {
+            releaseDir = -1;
+            pump();
+          }
+          accum = 0;
           return;
         }
         if (next > steps) {
-          releaseDir = 1;
-          pump();
+           // FIX: Only arm release if we are ALREADY sitting motionless on the last panel
+          if (!animating && index === steps) {
+            releaseDir = 1;
+            pump();
+          }
+          accum = 0;
           return;
         }
         releaseDir = 0;
@@ -156,17 +178,30 @@ export function useHorizontalStory({
         gsap.set(track, { xPercent: -per * startIndex, willChange: "transform" });
         onChange?.(startIndex);
         const l = getLenis();
+        
+        // FIX: If the viewport is already within a small tolerance (e.g. ±5px), 
+        // bypass the forced scrollTo animation to prevent visual "auto-adjust" stutters.
+        const currentTop = section.getBoundingClientRect().top;
+
         if (l) {
-          // SMOOTH freeze: ease the section flush into the viewport, then stop.
-          l.scrollTo(absTop(), { duration: 0.45, lock: true, force: true });
-          stepFloor = performance.now() + 560; // cover settle + entry inertia
-          clearTimeout(settleTimer);
-          settleTimer = setTimeout(() => {
-            getLenis()?.stop();
-            observer.enable();
-          }, 460);
+          if (Math.abs(currentTop) < 5) {
+             l.stop();
+             observer.enable();
+             stepFloor = performance.now() + 100;
+          } else {
+             // SMOOTH freeze: ease the section flush into the viewport, then stop.
+             l.scrollTo(absTop(), { duration: 0.45, lock: true, force: true });
+             stepFloor = performance.now() + 560; // cover settle + entry inertia
+             clearTimeout(settleTimer);
+             settleTimer = setTimeout(() => {
+               l.stop();
+               observer.enable();
+             }, 460);
+          }
         } else {
-          window.scrollTo({ top: absTop(), behavior: "smooth" });
+          if (Math.abs(currentTop) >= 5) {
+             window.scrollTo({ top: absTop(), behavior: "smooth" });
+          }
           stepFloor = performance.now() + ENTRY_ABSORB;
           observer.enable();
         }
@@ -227,8 +262,9 @@ export function useHorizontalStory({
         lastScroll = cur;
         const top = section.getBoundingClientRect().top;
         if (!active && performance.now() >= guardUntil) {
-          if (goingDown && prevTop > 0 && top <= 0) engage(0);
-          else if (goingUp && prevTop < 0 && top >= 0) engage(steps);
+          // Magnetic buffer zone (40px) catches fast scrolls and exact-zero starts reliably
+          if (goingDown && prevTop > -10 && top <= 40) engage(0);
+          else if (goingUp && prevTop < 10 && top >= -40) engage(steps);
         }
         prevTop = top;
       };

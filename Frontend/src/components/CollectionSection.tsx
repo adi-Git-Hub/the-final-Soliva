@@ -72,7 +72,7 @@ export function CollectionSection() {
   };
 
   return (
-    <section className="m-collection relative z-20 flex min-h-screen w-full flex-col overflow-hidden bg-transparent lg:h-screen lg:overflow-hidden">
+    <section className="m-collection relative z-20 flex min-h-screen w-full flex-col bg-transparent">
       {/* Soft warm glow — seamless hand-off to neighbouring sections */}
       <div
         aria-hidden

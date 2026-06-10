@@ -80,7 +80,7 @@ function Tilt3D({
 
 export function BrandNarrative() {
   return (
-    <div className="m-brand relative w-full bg-[#3a2a22] overflow-hidden z-10 min-h-screen flex flex-col justify-center pt-16 pb-10">
+    <div className="m-brand relative w-full bg-[#3a2a22] overflow-hidden z-10 lg:min-h-screen flex flex-col justify-center pt-[140px] pb-6 sm:pb-8">
       {/* Ambient depth */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,130,13,0.02),transparent_70%)]" />
@@ -93,9 +93,9 @@ export function BrandNarrative() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 1, ease: ease.smooth }}
-          className="flex flex-col items-center text-center mb-6 lg:mb-8"
+          className="flex flex-col items-center text-center mb-2 lg:mb-3"
         >
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-3 mb-1.5">
             <span className="text-[#c76600] text-xs">✦</span>
             <span className="font-mono text-[0.7rem] tracking-[0.4em] text-[#c76600] uppercase font-black">
               ABOUT SOLIVA
@@ -103,7 +103,7 @@ export function BrandNarrative() {
           </div>
           <h2
             className="font-display text-white tracking-tight leading-[1.1]"
-            style={{ fontSize: "clamp(1.8rem, 3.8vw, 2.8rem)" }}
+            style={{ fontSize: "clamp(1.6rem, 3.2vw, 2.4rem)" }}
           >
             Thoughtful Protection,{" "}
             <span className="italic text-[#c76600]/90 font-light">Engineered For Real Life.</span>
@@ -116,9 +116,9 @@ export function BrandNarrative() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={viewportOnce}
           transition={{ duration: 1.3, ease: ease.smooth }}
-          className="w-full flex items-center justify-center mb-6 lg:mb-8"
+          className="w-full flex items-center justify-center mb-4 lg:mb-5"
         >
-          <div className="relative w-full max-w-[480px] lg:max-w-[720px] h-[38vh] max-h-[560px] mx-auto">
+          <div className="relative w-full max-w-[600px] lg:max-w-[900px] h-[35vh] lg:h-[40vh] max-h-[600px] mx-auto">
             <ParticleLogo color="#e3c187" />
           </div>
         </motion.div>
@@ -129,15 +129,15 @@ export function BrandNarrative() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 1, delay: 0.2, ease: ease.smooth }}
-          className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-20 mb-10 w-full"
+          className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16 mb-6 w-full"
         >
           {/* Action — WhatsApp */}
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-2">
             <span className={label}>Connect</span>
             <Tilt3D>
               <a href="https://wa.me/917350640608" className="group flex flex-col items-center">
-                <div className="flex items-center gap-2.5 text-white/85 group-hover:text-[#c76600] transition-colors duration-500 font-mono text-[1.05rem] md:text-[1.15rem] tracking-[0.2em] font-black uppercase">
-                  <MessageCircle size={20} className="text-[#25D366] opacity-70 group-hover:opacity-100" />
+                <div className="flex items-center gap-2.5 text-white/85 group-hover:text-[#c76600] transition-colors duration-500 font-mono text-[1rem] md:text-[1.1rem] tracking-[0.2em] font-black uppercase">
+                  <MessageCircle size={18} className="text-[#25D366] opacity-70 group-hover:opacity-100" />
                   WhatsApp
                 </div>
                 <div className="h-px w-full bg-white/15 mt-1.5 group-hover:bg-[#c76600] transition-colors" />
@@ -146,9 +146,9 @@ export function BrandNarrative() {
           </div>
 
           {/* Presence — Socials */}
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-2">
             <span className={label}>Presence</span>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-5">
               {socials.map((s) => (
                 <Tilt3D key={s.name}>
                   <a
@@ -159,10 +159,10 @@ export function BrandNarrative() {
                     className="group relative flex items-center justify-center"
                   >
                     <span
-                      className="text-white/45 group-hover:text-[var(--hc)] transition-all duration-500 scale-105 md:scale-115"
+                      className="text-white/45 group-hover:text-[var(--hc)] transition-all duration-500 scale-100 md:scale-110"
                       style={{ "--hc": s.color } as React.CSSProperties}
                     >
-                      <s.icon size={21} strokeWidth={1.5} />
+                      <s.icon size={19} strokeWidth={1.5} />
                     </span>
                   </a>
                 </Tilt3D>
@@ -177,9 +177,9 @@ export function BrandNarrative() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 1, delay: 0.4, ease: ease.smooth }}
-          className="max-w-2xl text-center mb-10"
+          className="max-w-2xl text-center mb-4"
         >
-          <p className="text-[0.95rem] md:text-[1.05rem] text-white/85 font-light leading-relaxed font-display italic px-4">
+          <p className="text-[0.9rem] md:text-[1rem] text-white/85 font-light leading-relaxed font-display italic px-4">
             Soliva was born from a simple observation: Indian movement is constant exposure. 
             We noticed that protection hadn’t evolved alongside the streets it was built for.
           </p>
@@ -191,7 +191,7 @@ export function BrandNarrative() {
           whileInView={{ opacity: 1 }}
           viewport={viewportOnce}
           transition={{ duration: 1.2, delay: 0.6 }}
-          className="flex items-center justify-center gap-4 font-mono text-[11px] md:text-[12px] tracking-[0.22em] uppercase text-[#f59e0b] leading-none mb-10"
+          className="flex items-center justify-center gap-4 font-mono text-[10px] md:text-[11px] tracking-[0.22em] uppercase text-[#f59e0b] leading-none mb-6"
         >
           <span><span className="font-bold opacity-70">Sol</span> — Sun</span>
           <span className="h-3 w-px bg-[#f59e0b]/20" aria-hidden />
@@ -204,27 +204,27 @@ export function BrandNarrative() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 1, delay: 0.8, ease: ease.smooth }}
-          className="w-full border-t border-white/5 pt-8 flex flex-col items-center gap-6"
+          className="w-full border-t border-white/5 pt-4 flex flex-col items-center gap-4"
         >
           {/* Identity/Address */}
-          <div className="flex flex-col items-center text-center space-y-2">
-            <h4 className="font-display text-base md:text-lg text-white/90 tracking-wide">
+          <div className="flex flex-col items-center text-center space-y-1">
+            <h4 className="font-display text-sm md:text-base text-white/90 tracking-wide">
               Solivaguard Private Limited
             </h4>
             <div className="flex items-start justify-center gap-2 text-white/40 max-w-sm">
-              <MapPin size={11} className="text-[#c76600] mt-0.5 shrink-0 opacity-40" />
-              <p className="font-mono text-[0.6rem] tracking-[0.12em] leading-relaxed uppercase">
+              <MapPin size={10} className="text-[#c76600] mt-0.5 shrink-0 opacity-40" />
+              <p className="font-mono text-[0.55rem] tracking-[0.12em] leading-relaxed uppercase">
                 D-12 Shourya Estate, Pipla, Nagpur 440034, MH India
               </p>
             </div>
           </div>
 
           {/* Terms & Conditions (The long text block) */}
-          <TermsAndConditions variant="dark" className="mx-auto max-w-2xl text-center opacity-85 text-[0.75rem]" />
+          <TermsAndConditions variant="dark" className="mx-auto max-w-2xl text-center opacity-85 text-[0.7rem]" />
 
           {/* Legal Bar */}
-          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-3 opacity-30 font-mono text-[0.5rem] tracking-[0.45em] uppercase text-white pt-2">
-            <div className="flex items-center gap-6">
+          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-2 opacity-30 font-mono text-[0.45rem] tracking-[0.45em] uppercase text-white pt-1.5">
+            <div className="flex items-center gap-4">
               <span>© 2026 SOLIVA</span>
               <span>Sun · Motion</span>
             </div>
