@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { viewportOnce, ease } from "@/design-system";
 import { useCart } from "@/features/cart/hooks/useCart";
 import { useCheckoutStore } from "@/features/checkout/store";
 import { Check, ArrowRight, ChevronLeft, ChevronRight, ShoppingBag, Truck, ShieldCheck } from "lucide-react";
+import { z } from "zod";
+
+const collectionSearchSchema = z.object({
+  edition: z.string().optional(),
+});
 
 export const Route = createFileRoute("/_public/collection")({
+  validateSearch: (search) => collectionSearchSchema.parse(search),
   component: CollectionRoute,
   head: () => ({
     meta: [
@@ -144,7 +150,22 @@ const slideVariants = {
 };
 
 function CollectionRoute() {
-  const [editionIndex, setEditionIndex] = useState(1);
+  const { edition: editionParam } = Route.useSearch();
+  const [editionIndex, setEditionIndex] = useState(() => {
+    if (editionParam) {
+      const idx = editions.findIndex((e) => e.id === editionParam);
+      return idx !== -1 ? idx : 1;
+    }
+    return 1;
+  });
+
+  useEffect(() => {
+    if (editionParam) {
+      const idx = editions.findIndex((e) => e.id === editionParam);
+      if (idx !== -1) setEditionIndex(idx);
+    }
+  }, [editionParam]);
+
   const [viewIndex, setViewIndex] = useState(0);
   const [direction, setDirection] = useState(0); // slide direction: 1 = next, -1 = prev
   const [added, setAdded] = useState(false);

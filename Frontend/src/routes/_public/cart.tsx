@@ -50,7 +50,7 @@ function CartRoute() {
           description="Browse the collection and add a piece you love."
           action={
             <Button asChild>
-              <Link to="/products" search={{ sort: "newest" }}>
+              <Link to="/collection">
                 Shop all
               </Link>
             </Button>

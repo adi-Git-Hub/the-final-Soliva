@@ -404,7 +404,7 @@ function ProfilePage() {
                           asChild
                           className="rounded-full bg-brown-deep text-white px-8 sm:px-10 py-5 sm:py-6 uppercase font-bold tracking-cta sm:tracking-cta text-micro-md"
                         >
-                          <Link to="/products" search={{ sort: "newest" }}>
+                          <Link to="/collection">
                             Explore collection
                           </Link>
                         </Button>

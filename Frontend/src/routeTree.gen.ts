@@ -17,7 +17,6 @@ import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as PublicTermsRouteImport } from './routes/_public/terms'
 import { Route as PublicTechnologyRouteImport } from './routes/_public/technology'
 import { Route as PublicStoryRouteImport } from './routes/_public/story'
-import { Route as PublicSearchRouteImport } from './routes/_public/search'
 import { Route as PublicProfileRouteImport } from './routes/_public/profile'
 import { Route as PublicOrderConfirmedRouteImport } from './routes/_public/order-confirmed'
 import { Route as PublicCollectionRouteImport } from './routes/_public/collection'
@@ -28,7 +27,6 @@ import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-pass
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
-import { Route as PublicProductsIndexRouteImport } from './routes/_public/products/index'
 import { Route as PublicProductsSlugRouteImport } from './routes/_public/products/$slug'
 
 const AdminRouteRoute = AdminRouteRouteImport.update({
@@ -67,11 +65,6 @@ const PublicTechnologyRoute = PublicTechnologyRouteImport.update({
 const PublicStoryRoute = PublicStoryRouteImport.update({
   id: '/story',
   path: '/story',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicSearchRoute = PublicSearchRouteImport.update({
-  id: '/search',
-  path: '/search',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicProfileRoute = PublicProfileRouteImport.update({
@@ -124,11 +117,6 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const PublicProductsIndexRoute = PublicProductsIndexRouteImport.update({
-  id: '/products/',
-  path: '/products/',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
 const PublicProductsSlugRoute = PublicProductsSlugRouteImport.update({
   id: '/products/$slug',
   path: '/products/$slug',
@@ -148,13 +136,11 @@ export interface FileRoutesByFullPath {
   '/collection': typeof PublicCollectionRoute
   '/order-confirmed': typeof PublicOrderConfirmedRoute
   '/profile': typeof PublicProfileRoute
-  '/search': typeof PublicSearchRoute
   '/story': typeof PublicStoryRoute
   '/technology': typeof PublicTechnologyRoute
   '/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/products/$slug': typeof PublicProductsSlugRoute
-  '/products/': typeof PublicProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -169,13 +155,11 @@ export interface FileRoutesByTo {
   '/collection': typeof PublicCollectionRoute
   '/order-confirmed': typeof PublicOrderConfirmedRoute
   '/profile': typeof PublicProfileRoute
-  '/search': typeof PublicSearchRoute
   '/story': typeof PublicStoryRoute
   '/technology': typeof PublicTechnologyRoute
   '/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/products/$slug': typeof PublicProductsSlugRoute
-  '/products': typeof PublicProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -193,13 +177,11 @@ export interface FileRoutesById {
   '/_public/collection': typeof PublicCollectionRoute
   '/_public/order-confirmed': typeof PublicOrderConfirmedRoute
   '/_public/profile': typeof PublicProfileRoute
-  '/_public/search': typeof PublicSearchRoute
   '/_public/story': typeof PublicStoryRoute
   '/_public/technology': typeof PublicTechnologyRoute
   '/_public/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/_public/products/$slug': typeof PublicProductsSlugRoute
-  '/_public/products/': typeof PublicProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -216,13 +198,11 @@ export interface FileRouteTypes {
     | '/collection'
     | '/order-confirmed'
     | '/profile'
-    | '/search'
     | '/story'
     | '/technology'
     | '/terms'
     | '/admin/dashboard'
     | '/products/$slug'
-    | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -237,13 +217,11 @@ export interface FileRouteTypes {
     | '/collection'
     | '/order-confirmed'
     | '/profile'
-    | '/search'
     | '/story'
     | '/technology'
     | '/terms'
     | '/admin/dashboard'
     | '/products/$slug'
-    | '/products'
   id:
     | '__root__'
     | '/'
@@ -260,13 +238,11 @@ export interface FileRouteTypes {
     | '/_public/collection'
     | '/_public/order-confirmed'
     | '/_public/profile'
-    | '/_public/search'
     | '/_public/story'
     | '/_public/technology'
     | '/_public/terms'
     | '/admin/dashboard'
     | '/_public/products/$slug'
-    | '/_public/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -332,13 +308,6 @@ declare module '@tanstack/react-router' {
       path: '/story'
       fullPath: '/story'
       preLoaderRoute: typeof PublicStoryRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/search': {
-      id: '/_public/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof PublicSearchRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_public/profile': {
@@ -411,13 +380,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_public/products/': {
-      id: '/_public/products/'
-      path: '/products'
-      fullPath: '/products/'
-      preLoaderRoute: typeof PublicProductsIndexRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
     '/_public/products/$slug': {
       id: '/_public/products/$slug'
       path: '/products/$slug'
@@ -454,12 +416,10 @@ interface PublicRouteRouteChildren {
   PublicCollectionRoute: typeof PublicCollectionRoute
   PublicOrderConfirmedRoute: typeof PublicOrderConfirmedRoute
   PublicProfileRoute: typeof PublicProfileRoute
-  PublicSearchRoute: typeof PublicSearchRoute
   PublicStoryRoute: typeof PublicStoryRoute
   PublicTechnologyRoute: typeof PublicTechnologyRoute
   PublicTermsRoute: typeof PublicTermsRoute
   PublicProductsSlugRoute: typeof PublicProductsSlugRoute
-  PublicProductsIndexRoute: typeof PublicProductsIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
@@ -468,12 +428,10 @@ const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicCollectionRoute: PublicCollectionRoute,
   PublicOrderConfirmedRoute: PublicOrderConfirmedRoute,
   PublicProfileRoute: PublicProfileRoute,
-  PublicSearchRoute: PublicSearchRoute,
   PublicStoryRoute: PublicStoryRoute,
   PublicTechnologyRoute: PublicTechnologyRoute,
   PublicTermsRoute: PublicTermsRoute,
   PublicProductsSlugRoute: PublicProductsSlugRoute,
-  PublicProductsIndexRoute: PublicProductsIndexRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(

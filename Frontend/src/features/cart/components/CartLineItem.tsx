@@ -12,8 +12,8 @@ export function CartLineItem({ line }: { line: CartLine }) {
   return (
     <div className="flex gap-3 sm:gap-4 border-b border-border/40 py-4 sm:py-5">
       <Link
-        to="/products/$slug"
-        params={{ slug: line.slug }}
+        to="/collection"
+        search={{ edition: line.slug }}
         className="block h-24 w-20 sm:h-28 sm:w-24 shrink-0 overflow-hidden rounded-xl bg-secondary"
       >
         <img
@@ -27,8 +27,8 @@ export function CartLineItem({ line }: { line: CartLine }) {
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">
         <div className="flex items-start justify-between gap-3">
           <Link
-            to="/products/$slug"
-            params={{ slug: line.slug }}
+            to="/collection"
+            search={{ edition: line.slug }}
             className="font-display text-base sm:text-lg leading-tight text-foreground hover:underline break-words"
           >
             {line.name}
