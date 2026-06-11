@@ -55,7 +55,11 @@ export function Footer() {
 
           {/* Center Column — Logo */}
           <div className="flex justify-center order-1 md:order-2">
-            <Link to="/" aria-label="Soliva — Home" className="transition-transform duration-500 hover:scale-110">
+            <Link
+              to="/"
+              aria-label="Soliva — Home"
+              className="transition-transform duration-500 hover:scale-110"
+            >
               <SolivaLogo height={64} />
             </Link>
           </div>

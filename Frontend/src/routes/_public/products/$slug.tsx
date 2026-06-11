@@ -1,7 +1,8 @@
 import { Link, createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ChevronRight, Check } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,6 +12,7 @@ import { useSession } from "@/features/auth/hooks/useSession";
 import { useCheckoutStore } from "@/features/checkout/store";
 import { viewportOnce } from "@/design-system";
 import { TermsAndConditions } from "@/components/TermsAndConditions";
+import { useFlyToCart } from "@/features/cart/components/FlyToCart";
 
 export const Route = createFileRoute("/_public/products/$slug")({
   component: ProductRoute,
@@ -161,11 +163,128 @@ function ProductRoute() {
   return <ApiProductDetail slug={slug} />;
 }
 
+// --- NEW COMPONENT: Premium Add To Cart Button ---
+function AddToCartButton({ 
+  productName, 
+  priceCents, 
+  onAdd, 
+  imageSrc, 
+  imageRef 
+}: { 
+  productName: string; 
+  priceCents: number; 
+  onAdd: () => void;
+  imageSrc: string;
+  imageRef: React.RefObject<HTMLImageElement>;
+}) {
+  const [state, setState] = useState<"idle" | "adding" | "added">("idle");
+  const { flyToCart } = useFlyToCart();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (state !== "idle") return;
+
+    // 1. Button compresses, text changes to "Adding..."
+    setState("adding");
+
+    // 2. Soft loading transition for 500ms
+    setTimeout(() => {
+      setState("added");
+      
+      // 3. Trigger actual cart logic
+      onAdd();
+
+      // 4. Trigger fly-to-cart animation using the product image
+      if (imageRef.current) {
+        flyToCart(imageSrc, imageRef.current);
+      }
+
+      // 5. Reset after 2 seconds
+      setTimeout(() => {
+        setState("idle");
+      }, 2000);
+
+    }, 500);
+  };
+
+  return (
+    <motion.button
+      onClick={handleClick}
+      disabled={state !== "idle"}
+      className="relative w-full rounded-full py-5 sm:py-6 overflow-hidden font-bold uppercase tracking-cta text-micro-lg transition-all duration-300"
+      animate={{
+        scale: state === "adding" ? 0.98 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      style={{
+        // Maintain base styling depending on state
+        backgroundColor: state === "added" ? "transparent" : "#3a2a22", // brown-deep
+        color: state === "added" ? "#3a2a22" : "#ffffff",
+      }}
+    >
+      {/* Background Layer for Idle/Adding */}
+      <motion.div 
+        className="absolute inset-0 bg-brown-deep -z-10"
+        animate={{ opacity: state === "added" ? 0 : 1 }}
+        transition={{ duration: 0.3 }}
+      />
+
+      {/* Premium Champagne Fill for Added State (Left to Right) */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-[#f3dcb2] to-[#e3c187] -z-10 shadow-[0_0_20px_rgba(243,220,178,0.5)]"
+        initial={{ x: "-100%" }}
+        animate={{ x: state === "added" ? "0%" : "-100%" }}
+        transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+      />
+
+      {/* Button Content */}
+      <div className="relative z-10 flex items-center justify-center">
+        <AnimatePresence mode="wait">
+          {state === "idle" && (
+            <motion.span
+              key="idle"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              Add to Cart — ₹{(priceCents / 100).toLocaleString("en-IN")}
+            </motion.span>
+          )}
+          {state === "adding" && (
+            <motion.span
+              key="adding"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              Adding...
+            </motion.span>
+          )}
+          {state === "added" && (
+            <motion.span
+              key="added"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center gap-2"
+            >
+              <Check className="w-5 h-5" /> Added To Cart
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.button>
+  );
+}
+
 function SolivaProductDetail({ product }: { product: SolivaProduct }) {
   const { add: addToCart } = useCart();
   const navigate = useNavigate();
   const session = useSession();
   const setCheckoutItems = useCheckoutStore((s) => s.setItems);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const { data: dbProduct } = useProduct(product.slug);
   const productId = dbProduct?.id ?? product.slug;
@@ -181,7 +300,6 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
       priceCents: product.priceCents,
       currency: "INR",
     });
-    toast.success(`${product.name} added to cart`);
   }
 
   function onBuyNow() {
@@ -254,6 +372,7 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
                 />
                 <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-10 md:p-12">
                   <motion.img
+                    ref={imageRef}
                     src={product.image}
                     alt={product.name}
                     fetchPriority="high"
@@ -313,10 +432,10 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
             {/* Pricing */}
             <div className="mt-6 sm:mt-8 flex items-baseline gap-4">
               <span className="font-mono text-2xl sm:text-3xl text-brown-deep tracking-tight font-medium">
-                ₹799
+                ₹{(product.priceCents / 100).toLocaleString("en-IN")}
               </span>
               <span className="font-mono text-sm text-ink-muted/50 line-through tracking-tight">
-                ₹1,200
+                ₹{(product.compareAtCents / 100).toLocaleString("en-IN")}
               </span>
             </div>
             <span className="mt-1.5 font-mono text-micro-xs tracking-cta text-orange-glow uppercase font-bold">
@@ -350,13 +469,13 @@ function SolivaProductDetail({ product }: { product: SolivaProduct }) {
 
             {/* CTAs */}
             <div className="mt-8 sm:mt-10 flex flex-col gap-3">
-              <Button
-                size="lg"
-                className="w-full rounded-full py-5 sm:py-6 bg-brown-deep text-white hover:bg-brown transition-all duration-500 font-bold uppercase tracking-cta text-micro-lg hover:shadow-[0_8px_24px_rgba(58,42,34,0.25)]"
-                onClick={onAdd}
-              >
-                Add to Cart — ₹799
-              </Button>
+              <AddToCartButton 
+                productName={product.name} 
+                priceCents={product.priceCents} 
+                onAdd={onAdd} 
+                imageSrc={product.image}
+                imageRef={imageRef}
+              />
               <Button
                 size="lg"
                 variant="outline"
@@ -426,6 +545,7 @@ function ApiProductDetail({ slug }: { slug: string }) {
   const navigate = useNavigate();
   const session = useSession();
   const setCheckoutItems = useCheckoutStore((s) => s.setItems);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   if (isError) throw notFound();
 
@@ -453,7 +573,6 @@ function ApiProductDetail({ slug }: { slug: string }) {
       priceCents: product.priceCents,
       currency: product.currency,
     });
-    toast.success(`${product.name} added to cart`);
   }
 
   function onBuyNow() {
@@ -500,6 +619,7 @@ function ApiProductDetail({ slug }: { slug: string }) {
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-panel bg-cream/30 border border-line-hairline shadow-editorial backdrop-blur-medium">
               <img
+                ref={imageRef}
                 src={product.images[0]}
                 alt={product.name}
                 fetchPriority="high"
@@ -523,14 +643,13 @@ function ApiProductDetail({ slug }: { slug: string }) {
               {product.description}
             </p>
             <div className="flex flex-col gap-3">
-              <Button
-                size="lg"
-                className="w-full rounded-full py-5 sm:py-6 bg-brown-deep text-white hover:bg-brown transition-all duration-500 font-bold uppercase tracking-cta text-micro-lg"
-                onClick={onAdd}
-                disabled={!product.inStock}
-              >
-                {product.inStock ? "Add to cart" : "Out of stock"}
-              </Button>
+              <AddToCartButton 
+                productName={product.name} 
+                priceCents={product.priceCents} 
+                onAdd={onAdd} 
+                imageSrc={product.images[0]}
+                imageRef={imageRef}
+              />
               {product.inStock && (
                 <Button
                   size="lg"

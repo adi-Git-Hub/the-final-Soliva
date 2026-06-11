@@ -799,7 +799,11 @@ function CheckoutRoute() {
                               ₹{(LAUNCH_MRP_PER_UNIT * item.quantity).toLocaleString("en-IN")}
                             </span>
                             <span className="mt-1 font-mono text-micro-xs text-[#c76600] font-bold">
-                              −₹{((LAUNCH_MRP_PER_UNIT - item.price) * item.quantity).toLocaleString("en-IN")} off
+                              −₹
+                              {((LAUNCH_MRP_PER_UNIT - item.price) * item.quantity).toLocaleString(
+                                "en-IN",
+                              )}{" "}
+                              off
                             </span>
                           </div>
                         </div>
@@ -946,7 +950,9 @@ function CheckoutRoute() {
               <span className="font-mono text-micro-xs tracking-cta text-ink-muted uppercase font-bold">
                 Total
               </span>
-              <span className="font-mono text-micro-xs text-ink-muted/40 uppercase">incl. taxes</span>
+              <span className="font-mono text-micro-xs text-ink-muted/40 uppercase">
+                incl. taxes
+              </span>
             </div>
             <span className="font-display text-2xl text-brown-deep tracking-tight">
               ₹{total.toLocaleString("en-IN")}
@@ -1044,7 +1050,13 @@ function CheckoutSteps({
   );
 }
 
-function CheckoutCard({ active = false, children }: { active?: boolean; children: React.ReactNode }) {
+function CheckoutCard({
+  active = false,
+  children,
+}: {
+  active?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div
       className={`rounded-[1.75rem] border bg-[#fdfbf8]/85 p-6 sm:p-7 backdrop-blur-xl transition-[box-shadow,border-color,background-color] duration-700 ${
@@ -1096,7 +1108,9 @@ function SectionHeader({
             {title}
           </h3>
           {subtitle && (
-            <p className="mt-0.5 truncate text-[0.78rem] font-light text-ink-muted/70">{subtitle}</p>
+            <p className="mt-0.5 truncate text-[0.78rem] font-light text-ink-muted/70">
+              {subtitle}
+            </p>
           )}
         </div>
       </div>

@@ -28,9 +28,7 @@ export function TermsAndConditions({
 
   const summaryColor = variant === "dark" ? "text-white/45" : "text-ink-muted";
   const linkColor =
-    variant === "dark"
-      ? "text-[#d9b27a] hover:text-white"
-      : "text-[#c76600] hover:text-[#a3530a]";
+    variant === "dark" ? "text-[#d9b27a] hover:text-white" : "text-[#c76600] hover:text-[#a3530a]";
 
   return (
     <div className={`text-[11px] leading-relaxed ${summaryColor} ${className}`}>
@@ -68,7 +66,9 @@ export function TermsAndConditions({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-5">
-      <h3 className="font-display text-base font-semibold tracking-tight text-[#3a2a22]">{title}</h3>
+      <h3 className="font-display text-base font-semibold tracking-tight text-[#3a2a22]">
+        {title}
+      </h3>
       <div className="mt-1.5 space-y-2 text-[13px] font-light leading-relaxed text-[#5a4a40]">
         {children}
       </div>
@@ -153,9 +153,7 @@ function TermsBody() {
 
       <Section title="6. Refunds">
         <p>Approved refunds will be processed to the original payment method.</p>
-        <p>
-          Processing times may vary depending on the payment provider and banking institution.
-        </p>
+        <p>Processing times may vary depending on the payment provider and banking institution.</p>
       </Section>
 
       <Section title="7. Intellectual Property">

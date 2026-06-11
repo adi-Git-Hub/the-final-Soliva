@@ -24,7 +24,11 @@ function AuthLayout() {
     <div className="flex min-h-screen flex-col bg-transparent safe-x">
       <header className="border-b border-border/40 bg-luxury-beige/40 backdrop-blur-subtle">
         <div className="mx-auto flex h-14 sm:h-16 max-w-7xl items-center px-4 md:px-8">
-          <Link to="/" aria-label="Soliva — home" className="inline-flex items-center text-foreground">
+          <Link
+            to="/"
+            aria-label="Soliva — home"
+            className="inline-flex items-center text-foreground"
+          >
             <SolivaLogo variant="primary" height={36} />
           </Link>
         </div>

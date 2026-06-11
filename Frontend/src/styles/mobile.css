@@ -151,11 +151,7 @@
     min-height: 100svh;
     height: auto;
     /* Soft warm radial glow behind the composition — subtle depth, no blur. */
-    background-image: radial-gradient(
-      circle at 50% 38%,
-      rgba(245, 130, 13, 0.07),
-      transparent 62%
-    );
+    background-image: radial-gradient(circle at 50% 38%, rgba(245, 130, 13, 0.07), transparent 62%);
   }
   /* Stacks the composition from the top — video → information → chips →
      WhatsApp CTA. Flows from the top (never centred) so nothing is ever

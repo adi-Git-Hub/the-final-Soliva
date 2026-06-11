@@ -1181,10 +1181,18 @@
    ───────────────────────────────────────────────────────────── */
 
 @keyframes u-sheen {
-  0%   { background-position: 200% 50%; }
-  45%  { background-position: -50% 50%; }
-  55%  { background-position: -50% 50%; }
-  100% { background-position: -200% 50%; }
+  0% {
+    background-position: 200% 50%;
+  }
+  45% {
+    background-position: -50% 50%;
+  }
+  55% {
+    background-position: -50% 50%;
+  }
+  100% {
+    background-position: -200% 50%;
+  }
 }
 
 /* CTA — diagonal sheen sweep on hover */
@@ -1214,10 +1222,11 @@
   transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--cs));
   transform-style: preserve-3d;
   will-change: transform;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.7s ease,
-              background-color 0.7s ease,
-              border-color 0.7s ease;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.7s ease,
+    background-color 0.7s ease,
+    border-color 0.7s ease;
 }
 .u-card:hover {
   --cs: 1.04;
@@ -1234,8 +1243,9 @@
 /* Panels 2 & 4 storytelling images — restrained hover atmosphere */
 .u-p2-image-wrap .u-p2-img,
 .u-p4-image-wrap .u-p4-img {
-  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1),
-              filter 1.6s ease;
+  transition:
+    transform 1.6s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1.6s ease;
 }
 .u-p2-image-wrap:hover .u-p2-img {
   transform: scale(1.035) translateY(-6px);
@@ -1247,15 +1257,22 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .u-card { transform: none !important; }
-  .u-cta-shimmer { display: none; }
-  .u-wordmark { animation: none !important; }
+  .u-card {
+    transform: none !important;
+  }
+  .u-cta-shimmer {
+    display: none;
+  }
+  .u-wordmark {
+    animation: none !important;
+  }
   .u-p2-image-wrap:hover .u-p2-img,
-  .u-p4-image-wrap:hover .u-p4-img { transform: none !important; }
+  .u-p4-image-wrap:hover .u-p4-img {
+    transform: none !important;
+  }
 }
 
 /* NOTE: All mobile-only styling now lives in ./styles/mobile.css, loaded
    after this file in routes/__root.tsx. Keeps desktop + mobile CSS
    cleanly separated. (Touch experience layer, mobile typography, and
    per-component mobile blocks moved there.) */
-

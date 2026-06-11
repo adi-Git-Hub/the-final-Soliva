@@ -4,7 +4,15 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { viewportOnce, ease } from "@/design-system";
 import { useCart } from "@/features/cart/hooks/useCart";
 import { useCheckoutStore } from "@/features/checkout/store";
-import { Check, ArrowRight, ChevronLeft, ChevronRight, ShoppingBag, Truck, ShieldCheck } from "lucide-react";
+import {
+  Check,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  ShoppingBag,
+  Truck,
+  ShieldCheck,
+} from "lucide-react";
 import { z } from "zod";
 
 const collectionSearchSchema = z.object({
@@ -245,59 +253,60 @@ function CollectionRoute() {
               {/* Main image — floating/breathing; slide on colour/view change, swipe on touch */}
               <div className="relative aspect-[4/5] w-full">
                 <motion.div
-                  animate={reduce ? undefined : { y: [0, -4, 0], rotate: [-0.6, 0.6, -0.6], scale: [1, 1.012, 1] }}
+                  animate={
+                    reduce
+                      ? undefined
+                      : { y: [0, -4, 0], rotate: [-0.6, 0.6, -0.6], scale: [1, 1.012, 1] }
+                  }
                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   className="group relative h-full w-full overflow-hidden rounded-[2.25rem] border border-[#3a2a22]/5 bg-[#EDE6D8] shadow-[0_28px_60px_-30px_rgba(58,42,34,0.4)] will-change-transform"
                 >
-                <AnimatePresence initial={false} custom={direction}>
-                  <motion.img
-                    key={`${edition.id}-${viewIndex}`}
-                    src={image.src}
-                    alt={`SunWrap by Soliva — ${edition.name}, ${image.view}`}
-                    custom={direction}
-                    variants={slideVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    drag="x"
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.16}
-                    onDragEnd={(_, info) => {
-                      if (info.offset.x < -60) nextView();
-                      else if (info.offset.x > 60) prevView();
-                    }}
-                    transition={{
-                      x: { type: "spring", stiffness: 320, damping: 34 },
-                      opacity: { duration: 0.25, ease: ease.smooth },
-                    }}
-                    className={`absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing will-change-transform ${
-                      image.src.includes("/variant-") ? "object-contain p-4" : "object-cover"
-                    }`}
-                  />
-                </AnimatePresence>
+                  <AnimatePresence initial={false} custom={direction}>
+                    <motion.img
+                      key={`${edition.id}-${viewIndex}`}
+                      src={image.src}
+                      alt={`SunWrap by Soliva — ${edition.name}, ${image.view}`}
+                      custom={direction}
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={0.16}
+                      onDragEnd={(_, info) => {
+                        if (info.offset.x < -60) nextView();
+                        else if (info.offset.x > 60) prevView();
+                      }}
+                      transition={{
+                        x: { type: "spring", stiffness: 320, damping: 34 },
+                        opacity: { duration: 0.25, ease: ease.smooth },
+                      }}
+                      className={`absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing will-change-transform ${
+                        image.src.includes("/variant-") ? "object-contain p-4" : "object-cover"
+                      }`}
+                    />
+                  </AnimatePresence>
 
-                <span className="absolute top-5 left-5 z-10 font-mono text-[0.55rem] tracking-[0.24em] uppercase font-bold text-[#3a2a22]/60 bg-white/65 backdrop-blur px-2.5 py-1 rounded-full">
-                  {edition.name}
-                </span>
-                <span className="absolute top-5 right-5 z-10 font-mono text-[0.55rem] tracking-[0.22em] uppercase font-semibold text-[#3a2a22]/55 bg-white/65 backdrop-blur px-2.5 py-1 rounded-full">
-                  {image.view}
-                </span>
+                  <span className="absolute top-5 left-5 z-10 font-mono text-[0.55rem] tracking-[0.24em] uppercase font-bold text-[#3a2a22]/60 bg-white/65 backdrop-blur px-2.5 py-1 rounded-full">
+                    {edition.name}
+                  </span>
 
-                {/* Desktop hover arrows */}
-                <button
-                  onClick={prevView}
-                  aria-label="Previous image"
-                  className="hidden lg:grid absolute left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 place-items-center rounded-full bg-white/75 backdrop-blur text-[#3a2a22] shadow-md opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 hover:scale-110"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <button
-                  onClick={nextView}
-                  aria-label="Next image"
-                  className="hidden lg:grid absolute right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 place-items-center rounded-full bg-white/75 backdrop-blur text-[#3a2a22] shadow-md opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 hover:scale-110"
-                >
-                  <ChevronRight size={18} />
-                </button>
+                  {/* Desktop hover arrows */}
+                  <button
+                    onClick={prevView}
+                    aria-label="Previous image"
+                    className="hidden lg:grid absolute left-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 place-items-center rounded-full bg-white/75 backdrop-blur text-[#3a2a22] shadow-md opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 hover:scale-110"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <button
+                    onClick={nextView}
+                    aria-label="Next image"
+                    className="hidden lg:grid absolute right-4 top-1/2 -translate-y-1/2 z-10 h-10 w-10 place-items-center rounded-full bg-white/75 backdrop-blur text-[#3a2a22] shadow-md opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-300 hover:scale-110"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
                 </motion.div>
               </div>
 
@@ -335,7 +344,9 @@ function CollectionRoute() {
                         ? "border-[#c76600] shadow-[0_10px_22px_-12px_rgba(199,102,0,0.55)]"
                         : "border-[#3a2a22]/10 hover:border-[#c76600]/40 hover:shadow-[0_10px_22px_-12px_rgba(199,102,0,0.4)]"
                     }`}
-                    style={{ background: `linear-gradient(155deg, ${edition.swatch}1f, ${edition.swatch}08)` }}
+                    style={{
+                      background: `linear-gradient(155deg, ${edition.swatch}1f, ${edition.swatch}08)`,
+                    }}
                   >
                     <img
                       src={img.src}
@@ -523,7 +534,12 @@ function CollectionRoute() {
                   }`}
                 >
                   {edition.isUnavailable ? "Out of Stock" : "Buy Now"}
-                  {!edition.isUnavailable && <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />}
+                  {!edition.isUnavailable && (
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  )}
                 </motion.button>
 
                 {/* Add to Cart — secondary */}
@@ -567,7 +583,6 @@ function CollectionRoute() {
           />
         </div>
       </section>
-
     </div>
   );
 }

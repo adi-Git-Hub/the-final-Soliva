@@ -50,9 +50,7 @@ function CartRoute() {
           description="Browse the collection and add a piece you love."
           action={
             <Button asChild>
-              <Link to="/collection">
-                Shop all
-              </Link>
+              <Link to="/collection">Shop all</Link>
             </Button>
           }
         />

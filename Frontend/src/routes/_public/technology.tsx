@@ -1,11 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { viewportOnce, ease } from "@/design-system";
-import {
-  SunlightVisual,
-  AirflowSystem,
-  CoverageFigure,
-} from "@/components/technology/visuals";
+import { SunlightVisual, AirflowSystem, CoverageFigure } from "@/components/technology/visuals";
 
 export const Route = createFileRoute("/_public/technology")({
   component: HowItWorksRoute,
@@ -85,12 +81,13 @@ function HowItWorksRoute() {
               <div className="max-w-xl space-y-5 text-[1rem] md:text-[1.0625rem] text-[#7b6a5f] font-light leading-[1.75]">
                 <p>
                   Every day, your skin faces long hours of sun, heat, dust, and environmental
-                  exposure. Yet most coverings were never specifically designed for these conditions.
+                  exposure. Yet most coverings were never specifically designed for these
+                  conditions.
                 </p>
                 <p>
-                  Soliva was created as a thoughtful everyday protection system—combining comfortable
-                  coverage, breathable construction, and effortless wearability into one solution
-                  designed for the way modern India moves.
+                  Soliva was created as a thoughtful everyday protection system—combining
+                  comfortable coverage, breathable construction, and effortless wearability into one
+                  solution designed for the way modern India moves.
                 </p>
               </div>
 
@@ -124,12 +121,11 @@ function HowItWorksRoute() {
               style={{ fontSize: "clamp(1.3rem, 3.2vw, 2.5rem)" }}
             >
               Comfortable enough{" "}
-              <span className="italic font-light text-[#c76600]">
-                to wear every day.
-              </span>
+              <span className="italic font-light text-[#c76600]">to wear every day.</span>
             </h2>
             <p className="mt-4 mx-auto max-w-2xl text-[0.95rem] md:text-[1rem] text-[#7b6a5f] font-light leading-[1.7]">
-              Protection should feel natural, not restrictive — air circulates, heat escapes, comfort lasts.
+              Protection should feel natural, not restrictive — air circulates, heat escapes,
+              comfort lasts.
             </p>
           </motion.div>
 
@@ -183,13 +179,14 @@ function HowItWorksRoute() {
                 <p>Protection is only effective where it is present.</p>
                 <p>
                   Soliva is intentionally shaped to provide coverage across the areas most commonly
-                  exposed during commuting, outdoor activity, and everyday movement—including the face,
-                  nose, ears, neck, shoulders, and upper back.
+                  exposed during commuting, outdoor activity, and everyday movement—including the
+                  face, nose, ears, neck, shoulders, and upper back.
                 </p>
               </div>
               <p className="mt-6 font-display italic text-[#3a2a22]/70 text-[1.05rem] md:text-[1.15rem] leading-[1.6]">
-                Unlike makeshift coverings that shift, slip, or leave gaps throughout the day, Soliva is
-                designed to stay comfortable while providing consistent coverage where it matters most.
+                Unlike makeshift coverings that shift, slip, or leave gaps throughout the day,
+                Soliva is designed to stay comfortable while providing consistent coverage where it
+                matters most.
               </p>
             </motion.div>
 

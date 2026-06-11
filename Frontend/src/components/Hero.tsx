@@ -159,7 +159,6 @@ export function Hero({ isRevealed = false }: { isRevealed?: boolean }) {
               </span>
             </a>
           </div>
-
         </div>
 
         {/* ── Marquee strip — desktop only (the mobile hero ends at the chips) ── */}

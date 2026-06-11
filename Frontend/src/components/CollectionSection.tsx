@@ -6,11 +6,42 @@ import { viewportOnce, ease } from "@/design-system";
 
 /* One product · five editions. Chip order kept consistent with the brief. */
 const editions = [
-  { id: "blush-pink", name: "Blush Pink", swatch: "#E4B7C6", image: "/product_images/pink-1.webp", tone: "from-[#FFF5F7] to-[#FCE7F3]" },
-  { id: "green-edition", name: "Olive Green", swatch: "#6A7038", image: "/product_images/olive-1.webp", tone: "from-[#EEF6EF] to-[#DCEDE0]" },
-  { id: "deep-blue", name: "Deep Blue", swatch: "#33508A", image: "/product_images/blue-1.webp", tone: "from-[#F0F4FF] to-[#DBEAFE]" },
-  { id: "classic-beige", name: "Classic Beige", swatch: "#D8C3A0", image: "/product_images/beige-1.webp", tone: "from-[#FBF6F0] to-[#EDE0D0]" },
-  { id: "zesty-lime", name: "Zesty Lime", swatch: "#AEC96B", image: "/product_images/lime-1.webp", tone: "from-[#F5FFF7] to-[#DCFCE7]", isUnavailable: true },
+  {
+    id: "blush-pink",
+    name: "Blush Pink",
+    swatch: "#E4B7C6",
+    image: "/product_images/pink-1.webp",
+    tone: "from-[#FFF5F7] to-[#FCE7F3]",
+  },
+  {
+    id: "green-edition",
+    name: "Olive Green",
+    swatch: "#6A7038",
+    image: "/product_images/olive-1.webp",
+    tone: "from-[#EEF6EF] to-[#DCEDE0]",
+  },
+  {
+    id: "deep-blue",
+    name: "Deep Blue",
+    swatch: "#33508A",
+    image: "/product_images/blue-1.webp",
+    tone: "from-[#F0F4FF] to-[#DBEAFE]",
+  },
+  {
+    id: "classic-beige",
+    name: "Classic Beige",
+    swatch: "#D8C3A0",
+    image: "/product_images/beige-1.webp",
+    tone: "from-[#FBF6F0] to-[#EDE0D0]",
+  },
+  {
+    id: "zesty-lime",
+    name: "Zesty Lime",
+    swatch: "#AEC96B",
+    image: "/product_images/lime-1.webp",
+    tone: "from-[#F5FFF7] to-[#DCFCE7]",
+    isUnavailable: true,
+  },
 ] as const;
 
 const lifestyleTags = [
@@ -22,11 +53,36 @@ const lifestyleTags = [
 ];
 
 const features = [
-  { no: "01", Icon: Sun, title: "Certified UV Protection", desc: "Tested fabric designed to help reduce everyday UV exposure." },
-  { no: "02", Icon: Layers, title: "Thoughtful Materials", desc: "Chosen to balance protection, comfort, and everyday wearability." },
-  { no: "03", Icon: Wind, title: "Breathable Comfort", desc: "Layered for comfortable wear through long outdoor hours." },
-  { no: "04", Icon: Shield, title: "Full Coverage Design", desc: "Extended coverage for the face, neck, and upper back." },
-  { no: "05", Icon: Lock, title: "Secure Fit", desc: "Designed to stay in place through everyday movement." },
+  {
+    no: "01",
+    Icon: Sun,
+    title: "Certified UV Protection",
+    desc: "Tested fabric designed to help reduce everyday UV exposure.",
+  },
+  {
+    no: "02",
+    Icon: Layers,
+    title: "Thoughtful Materials",
+    desc: "Chosen to balance protection, comfort, and everyday wearability.",
+  },
+  {
+    no: "03",
+    Icon: Wind,
+    title: "Breathable Comfort",
+    desc: "Layered for comfortable wear through long outdoor hours.",
+  },
+  {
+    no: "04",
+    Icon: Shield,
+    title: "Full Coverage Design",
+    desc: "Extended coverage for the face, neck, and upper back.",
+  },
+  {
+    no: "05",
+    Icon: Lock,
+    title: "Secure Fit",
+    desc: "Designed to stay in place through everyday movement.",
+  },
 ];
 
 const trustLines = [
@@ -97,7 +153,9 @@ export function CollectionSection() {
           </h2>
 
           <p className="mt-2 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1">
-            <span className="font-display text-lg text-[#3a2a22] md:text-xl">SunWrap by Soliva</span>
+            <span className="font-display text-lg text-[#3a2a22] md:text-xl">
+              SunWrap by Soliva
+            </span>
             <span aria-hidden className="hidden h-3.5 w-px bg-[#3a2a22]/20 sm:inline-block" />
             <span className="text-[0.85rem] font-light text-[#7b6a5f]">
               Full face, neck &amp; back coverage designed for everyday movement.
@@ -189,7 +247,10 @@ export function CollectionSection() {
                   >
                     <span
                       className="relative h-4 w-4 shrink-0 rounded-full ring-1 ring-white transition-shadow duration-300 group-hover/chip:shadow-[0_0_0_4px_rgba(0,0,0,0.04)]"
-                      style={{ background: e.swatch, boxShadow: isActive ? `0 0 0 3px ${e.swatch}33` : undefined }}
+                      style={{
+                        background: e.swatch,
+                        boxShadow: isActive ? `0 0 0 3px ${e.swatch}33` : undefined,
+                      }}
                     >
                       <AnimatePresence>
                         {isActive && (
@@ -308,8 +369,13 @@ export function CollectionSection() {
                 aria-hidden
                 className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
               />
-              <span className="relative">{editions[active].isUnavailable ? "Out of Stock" : "Shop Now"}</span>
-              <ArrowRight size={14} className="relative transition-transform duration-500 ease-out group-hover:translate-x-1" />
+              <span className="relative">
+                {editions[active].isUnavailable ? "Out of Stock" : "Shop Now"}
+              </span>
+              <ArrowRight
+                size={14}
+                className="relative transition-transform duration-500 ease-out group-hover:translate-x-1"
+              />
             </motion.button>
           </div>
         </motion.div>

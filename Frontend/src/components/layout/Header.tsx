@@ -7,6 +7,8 @@ import { ApiStatusDot } from "@/components/shared/ApiStatusDot";
 import { SolivaLogo } from "@/components/SolivaLogo";
 import { AccountMenu } from "./AccountMenu";
 import { useCart } from "@/features/cart/hooks/useCart";
+import { useCartUIStore } from "@/features/cart/store";
+import { MiniCartDrawer } from "@/features/cart/components/MiniCartDrawer";
 import { cn } from "@/lib/utils";
 import { SearchOverlay } from "./SearchOverlay";
 import { getLenis } from "@/lib/smooth-scroll";
@@ -20,6 +22,7 @@ const primaryLinks: readonly { to: string; label: string; search?: Record<string
 
 export function Header() {
   const { itemCount: cartCount } = useCart();
+  const openCart = useCartUIStore((s) => s.openCart);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -66,7 +69,7 @@ export function Header() {
   const handleHomeClick = (e: React.MouseEvent) => {
     if (location.pathname === "/") {
       e.preventDefault();
-      
+
       // Reuse the same navigation + scroll restoration flow:
       // 1. Ensure scroll is enabled and jump to top immediately.
       const lenis = getLenis();
@@ -157,11 +160,11 @@ export function Header() {
               <div className="flex items-center gap-1.5">
                 <AccountMenu />
 
-                <Link
-                  to="/cart"
+                <button
+                  onClick={() => openCart()}
                   className="flex h-10.5 px-4 items-center justify-center gap-2.5 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-all outline-none"
                 >
-                  <div className="relative">
+                  <div id="cart-icon-target" className="relative">
                     <ShoppingBag className="h-[18px] w-[18px]" />
                     {cartCount > 0 && (
                       <span className="absolute -top-1.5 -right-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-white px-1.5 text-[9px] font-black text-[#f97316] shadow-sm">
@@ -172,7 +175,7 @@ export function Header() {
                   <span className="hidden lg:inline text-[13px] font-medium tracking-tight">
                     Cart
                   </span>
-                </Link>
+                </button>
 
                 <div className="hidden lg:flex items-center ml-2 border-l border-border/10 pl-3">
                   <ApiStatusDot />
@@ -217,6 +220,7 @@ export function Header() {
       </header>
 
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+      <MiniCartDrawer />
     </>
   );
 }

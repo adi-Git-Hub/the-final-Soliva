@@ -76,18 +76,9 @@ function StoryImage({
 /* ─── Animated speaker / mute icon ────────────────────────────── */
 function SpeakerIcon({ muted }: { muted: boolean }) {
   return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      className="relative z-10"
-    >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="relative z-10">
       {/* Speaker body */}
-      <path
-        d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4Z"
-        fill="currentColor"
-      />
+      <path d="M4 9.5v5h3.2L12 18.5v-13L7.2 9.5H4Z" fill="currentColor" />
 
       {/* Sound waves — drawn + pulsing when unmuted */}
       <motion.path
@@ -97,9 +88,7 @@ function SpeakerIcon({ muted }: { muted: boolean }) {
         strokeLinecap="round"
         initial={false}
         animate={
-          muted
-            ? { pathLength: 0, opacity: 0 }
-            : { pathLength: 1, opacity: [0.55, 1, 0.55] }
+          muted ? { pathLength: 0, opacity: 0 } : { pathLength: 1, opacity: [0.55, 1, 0.55] }
         }
         transition={
           muted
@@ -117,9 +106,7 @@ function SpeakerIcon({ muted }: { muted: boolean }) {
         strokeLinecap="round"
         initial={false}
         animate={
-          muted
-            ? { pathLength: 0, opacity: 0 }
-            : { pathLength: 1, opacity: [0.4, 0.85, 0.4] }
+          muted ? { pathLength: 0, opacity: 0 } : { pathLength: 1, opacity: [0.4, 0.85, 0.4] }
         }
         transition={
           muted
@@ -237,10 +224,7 @@ function StoryRoute() {
       {/* ════════════════════════════════════════════════════════════════
          PAGE 01 — A DAILY PROBLEM WORTH SOLVING
          ════════════════════════════════════════════════════════════════ */}
-      <section
-        ref={heroRef}
-        className="relative snap-start pt-24 pb-12 sm:pt-28 sm:pb-16"
-      >
+      <section ref={heroRef} className="relative snap-start pt-24 pb-12 sm:pt-28 sm:pb-16">
         <div className="mx-auto max-w-[1340px] w-full px-5 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-20 items-center">
             {/* LEFT — Founder narrative */}
@@ -263,8 +247,8 @@ function StoryRoute() {
                 <p>
                   Like many people, I spent years relying on everyday coverings while commuting,
                   travelling, and spending time outdoors. Over time, I noticed how much effort went
-                  into making them work — adjusting, repositioning, and constantly managing something
-                  that was meant to feel protective.
+                  into making them work — adjusting, repositioning, and constantly managing
+                  something that was meant to feel protective.
                 </p>
                 <p>What started as a personal frustration became a larger realization.</p>
                 <p>
@@ -285,7 +269,10 @@ function StoryRoute() {
               viewport={viewportOnce}
               transition={{ duration: 1.3, ease: ease.smooth, delay: 0.1 }}
             >
-              <motion.div style={{ y: heroParallax }} className="max-w-[26rem] mx-auto lg:mx-0 lg:ml-auto">
+              <motion.div
+                style={{ y: heroParallax }}
+                className="max-w-[26rem] mx-auto lg:mx-0 lg:ml-auto"
+              >
                 <StoryImage
                   label="FOUNDER · CHENALI BISEN"
                   src="/founder-commute.webp"
@@ -321,8 +308,7 @@ function StoryRoute() {
               className="font-display leading-[1.05] tracking-tight mb-2"
               style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)" }}
             >
-              Designed around{" "}
-              <span className="italic font-light text-[#c76600]">real life.</span>
+              Designed around <span className="italic font-light text-[#c76600]">real life.</span>
             </motion.h2>
 
             <div className="mx-auto max-w-2xl space-y-3 text-[0.95rem] md:text-[1.05rem] text-[#7b6a5f] font-light leading-[1.6]">
@@ -333,9 +319,8 @@ function StoryRoute() {
                 }}
                 transition={{ duration: 0.8, ease: ease.smooth }}
               >
-                Soliva wasn't created in a boardroom. It was shaped by everyday
-                commutes, outdoor hours, changing weather, and the realities of
-                daily movement.
+                Soliva wasn't created in a boardroom. It was shaped by everyday commutes, outdoor
+                hours, changing weather, and the realities of daily movement.
               </motion.p>
               <motion.p
                 variants={{
@@ -345,8 +330,8 @@ function StoryRoute() {
                 transition={{ duration: 0.8, ease: ease.smooth }}
                 className="font-display italic text-[#3a2a22]/80 text-[1.05rem] md:text-[1.2rem] leading-[1.5] pt-1"
               >
-                Every decision begins with a simple question: Will this make
-                everyday life easier for the wearer?
+                Every decision begins with a simple question: Will this make everyday life easier
+                for the wearer?
               </motion.p>
             </div>
           </motion.div>

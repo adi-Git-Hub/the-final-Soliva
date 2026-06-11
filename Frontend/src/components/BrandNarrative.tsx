@@ -16,11 +16,31 @@ import { ParticleLogo } from "./ParticleLogo";
 import { TermsAndConditions } from "./TermsAndConditions";
 
 const socials = [
-  { name: "Instagram", url: "https://www.instagram.com/solivaguard/", color: "#E1306C", icon: Instagram },
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/solivaguard/",
+    color: "#E1306C",
+    icon: Instagram,
+  },
   { name: "YouTube", url: "https://www.youtube.com/@SolivaGuard", color: "#FF0000", icon: Youtube },
-  { name: "Facebook", url: "https://www.facebook.com/people/Soliva/61585231307391/", color: "#1877F2", icon: Facebook },
-  { name: "LinkedIn", url: "https://www.linkedin.com/company/solivaguard/", color: "#0077B5", icon: Linkedin },
-  { name: "Pinterest", url: "https://in.pinterest.com/solivaguard/", color: "#BD081C", icon: Share2 },
+  {
+    name: "Facebook",
+    url: "https://www.facebook.com/people/Soliva/61585231307391/",
+    color: "#1877F2",
+    icon: Facebook,
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/company/solivaguard/",
+    color: "#0077B5",
+    icon: Linkedin,
+  },
+  {
+    name: "Pinterest",
+    url: "https://in.pinterest.com/solivaguard/",
+    color: "#BD081C",
+    icon: Share2,
+  },
 ];
 
 const label =
@@ -137,7 +157,10 @@ export function BrandNarrative() {
             <Tilt3D>
               <a href="https://wa.me/917350640608" className="group flex flex-col items-center">
                 <div className="flex items-center gap-2.5 text-white/85 group-hover:text-[#c76600] transition-colors duration-500 font-mono text-[1rem] md:text-[1.1rem] tracking-[0.2em] font-black uppercase">
-                  <MessageCircle size={18} className="text-[#25D366] opacity-70 group-hover:opacity-100" />
+                  <MessageCircle
+                    size={18}
+                    className="text-[#25D366] opacity-70 group-hover:opacity-100"
+                  />
                   WhatsApp
                 </div>
                 <div className="h-px w-full bg-white/15 mt-1.5 group-hover:bg-[#c76600] transition-colors" />
@@ -180,22 +203,26 @@ export function BrandNarrative() {
           className="max-w-2xl text-center mb-4"
         >
           <p className="text-[0.9rem] md:text-[1rem] text-white/85 font-light leading-relaxed font-display italic px-4">
-            Soliva was born from a simple observation: Indian movement is constant exposure. 
-            We noticed that protection hadn’t evolved alongside the streets it was built for.
+            Soliva was born from a simple observation: Indian movement is constant exposure. We
+            noticed that protection hadn’t evolved alongside the streets it was built for.
           </p>
         </motion.div>
 
         {/* Brand etymology (amber) */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={viewportOnce}
           transition={{ duration: 1.2, delay: 0.6 }}
           className="flex items-center justify-center gap-4 font-mono text-[10px] md:text-[11px] tracking-[0.22em] uppercase text-[#f59e0b] leading-none mb-6"
         >
-          <span><span className="font-bold opacity-70">Sol</span> — Sun</span>
+          <span>
+            <span className="font-bold opacity-70">Sol</span> — Sun
+          </span>
           <span className="h-3 w-px bg-[#f59e0b]/20" aria-hidden />
-          <span><span className="font-bold opacity-70">Iva</span> — Motion</span>
+          <span>
+            <span className="font-bold opacity-70">Iva</span> — Motion
+          </span>
         </motion.div>
 
         {/* 5. ADDRESS & LEGAL (Bottom Area) */}
@@ -220,7 +247,10 @@ export function BrandNarrative() {
           </div>
 
           {/* Terms & Conditions (The long text block) */}
-          <TermsAndConditions variant="dark" className="mx-auto max-w-2xl text-center opacity-85 text-[0.7rem]" />
+          <TermsAndConditions
+            variant="dark"
+            className="mx-auto max-w-2xl text-center opacity-85 text-[0.7rem]"
+          />
 
           {/* Legal Bar */}
           <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-2 opacity-30 font-mono text-[0.45rem] tracking-[0.45em] uppercase text-white pt-1.5">
@@ -228,7 +258,9 @@ export function BrandNarrative() {
               <span>© 2026 SOLIVA</span>
               <span>Sun · Motion</span>
             </div>
-            <span className="hidden md:inline-block">By using Soliva you agree to our Terms & Conditions.</span>
+            <span className="hidden md:inline-block">
+              By using Soliva you agree to our Terms & Conditions.
+            </span>
             <span>Engineered in India</span>
           </div>
         </motion.div>

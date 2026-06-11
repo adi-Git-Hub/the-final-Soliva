@@ -63,15 +63,10 @@ export function GoogleAuthButton({
     } catch (err) {
       // User closing the popup is not a real error — stay quiet.
       const code = (err as { code?: string })?.code;
-      if (
-        code === "auth/popup-closed-by-user" ||
-        code === "auth/cancelled-popup-request"
-      ) {
+      if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") {
         return;
       }
-      toast.error(
-        err instanceof Error ? err.message : "Google sign-in failed. Please try again.",
-      );
+      toast.error(err instanceof Error ? err.message : "Google sign-in failed. Please try again.");
     } finally {
       setLoading(false);
     }

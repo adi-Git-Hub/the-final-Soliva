@@ -152,9 +152,7 @@ export function UrbanStorytelling() {
                 style={{ fontSize: "clamp(1rem, 2.9vw, 2.4rem)" }}
               >
                 Everyday exposure doesn’t feel harmful.{" "}
-                <span className="italic font-bold text-[#8a5e3c]">
-                  Until it becomes everyday.
-                </span>
+                <span className="italic font-bold text-[#8a5e3c]">Until it becomes everyday.</span>
               </motion.h2>
 
               {/* ── Subtext ── */}
@@ -279,7 +277,8 @@ export function UrbanStorytelling() {
                   </span>
                 </h2>
                 <p className="mt-3 text-[1rem] md:text-[1.2rem] text-[#3a2a22]/75 font-light italic leading-relaxed whitespace-nowrap mx-auto">
-                  Soliva was created from a simple belief: protection should feel natural, not burdensome.
+                  Soliva was created from a simple belief: protection should feel natural, not
+                  burdensome.
                 </p>
               </div>
 
@@ -344,9 +343,7 @@ export function UrbanStorytelling() {
                   <div className="u-reveal u-p4-reveal border-t border-[#3a2a22]/15 pt-8">
                     <p className="text-[1.1rem] md:text-[1.25rem] text-[#3a2a22]/90 font-light italic leading-relaxed whitespace-nowrap">
                       The future of protection isn't more coverage.{" "}
-                      <span className="text-[#c76600] font-medium">
-                        It's more thoughtfulness.
-                      </span>
+                      <span className="text-[#c76600] font-medium">It's more thoughtfulness.</span>
                     </p>
                   </div>
                 </div>
@@ -375,8 +372,7 @@ export function UrbanStorytelling() {
                       className="u-p4-img absolute inset-0 w-full h-full object-cover select-none will-change-transform"
                       style={{
                         objectPosition: "50% 28%",
-                        filter:
-                          "saturate(0.9) contrast(1.04) brightness(0.95) sepia(0.05)",
+                        filter: "saturate(0.9) contrast(1.04) brightness(0.95) sepia(0.05)",
                       }}
                     />
                     {/* Warm sunlight glow — upper-right */}
@@ -398,7 +394,6 @@ export function UrbanStorytelling() {
                       </span>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>

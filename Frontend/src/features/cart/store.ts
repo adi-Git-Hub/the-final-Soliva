@@ -56,9 +56,12 @@ export const useCartStore = create<CartState>()(
   ),
 );
 
-// Selectors — still useful when reading the guest store directly (e.g. the
-// merge helper that runs once on login).
-export const selectCartCount = (s: CartState) => s.lines.reduce((sum, l) => sum + l.quantity, 0);
-
-export const selectCartSubtotalCents = (s: CartState) =>
-  s.lines.reduce((sum, l) => sum + l.priceCents * l.quantity, 0);
+export const useCartUIStore = create<{
+  isOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
+}>((set) => ({
+  isOpen: false,
+  openCart: () => set({ isOpen: true }),
+  closeCart: () => set({ isOpen: false }),
+}));

@@ -68,7 +68,10 @@ function LogoFallback({ color = "#e3c187" }: { color?: string }) {
       {/* soft orange ambient glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[78%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: `radial-gradient(circle, ${color}33, transparent 62%)`, filter: "blur(26px)" }}
+        style={{
+          background: `radial-gradient(circle, ${color}33, transparent 62%)`,
+          filter: "blur(26px)",
+        }}
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.92 }}
@@ -94,7 +97,10 @@ function LogoFallback({ color = "#e3c187" }: { color?: string }) {
           {/* glossy top highlight */}
           <span
             className="pointer-events-none absolute inset-x-5 top-3 h-1/3 rounded-full"
-            style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)", filter: "blur(3px)" }}
+            style={{
+              background: "linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)",
+              filter: "blur(3px)",
+            }}
           />
           <span
             className="font-display leading-none"

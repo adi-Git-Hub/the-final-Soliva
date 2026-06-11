@@ -32,8 +32,7 @@ export const mockProducts: Product[] = [
     id: "prod_1",
     slug: "soliva-airshield-wrap",
     name: "Soliva AirShield Wrap",
-    description:
-      "Sculpted coverage. Silent confidence. The flagship dual-layer edition.",
+    description: "Sculpted coverage. Silent confidence. The flagship dual-layer edition.",
     priceCents: 79900,
     compareAtCents: 120000,
     currency: "USD",
@@ -78,8 +77,7 @@ export const mockProducts: Product[] = [
     id: "prod_4",
     slug: "soliva-motioncover",
     name: "Soliva MotionCover",
-    description:
-      "Adaptive stretch-soft fabric. Moves with you. Stays in place.",
+    description: "Adaptive stretch-soft fabric. Moves with you. Stays in place.",
     priceCents: 79900,
     compareAtCents: 120000,
     currency: "USD",

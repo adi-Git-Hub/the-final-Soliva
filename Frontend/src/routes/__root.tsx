@@ -26,7 +26,7 @@ const introGateScript = `try{if(sessionStorage.getItem(${JSON.stringify(
 // Paint the brand background BEFORE any CSS loads so a slow first paint
 // doesn't show a black/white flash. Also keep the pre-hydration intro-gate
 // rule that hides the SSR'd overlay for return visitors.
-const introGateStyle = `html,body{background:#f7f3ee;color:#3a2a22}body{background-image:url('/luxury-bg.webp');background-size:cover;background-position:center}@keyframes soliva-reveal{from{opacity:0}to{opacity:1}}html:not([data-soliva-intro="hide"])::after{content:"";position:fixed;inset:0;z-index:99;background-image:url('/luxury-bg.webp');background-size:cover;background-position:center;pointer-events:none;animation:soliva-reveal .5s ease-out both}html:not([data-soliva-intro="hide"]) [data-soliva-intro-root]{animation:soliva-reveal .5s ease-out both}html[data-soliva-intro="hide"] [data-soliva-intro-root]{display:none!important}html[data-soliva-intro="hide"]::after{display:none!important}`;
+const introGateStyle = `html,body{background:#f7f3ee;color:#3a2a22}body{background-image:url('/luxury-bg.webp');background-size:cover;background-position:center}@keyframes soliva-reveal{from{opacity:0}to{opacity:1}}html:not([data-soliva-intro="hide"])::after{content:"";position:fixed;inset:0;z-index:99;background:#0D0F11;pointer-events:none;animation:soliva-reveal .5s ease-out both}html:not([data-soliva-intro="hide"]) [data-soliva-intro-root]{animation:soliva-reveal .5s ease-out both}html[data-soliva-intro="hide"] [data-soliva-intro-root]{display:none!important}html[data-soliva-intro="hide"]::after{display:none!important}`;
 
 function NotFoundComponent() {
   return (

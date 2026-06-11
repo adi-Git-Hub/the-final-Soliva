@@ -120,7 +120,7 @@ export function useHorizontalStory({
             animating = false;
             // FIX: Clear any stale release intents once reaching an edge boundary safely
             if (index === 0 || index === steps) {
-               releaseDir = 0;
+              releaseDir = 0;
             }
             pump(); // continue to the next queued panel at once
           },
@@ -152,7 +152,7 @@ export function useHorizontalStory({
           return;
         }
         if (next > steps) {
-           // FIX: Only arm release if we are ALREADY sitting motionless on the last panel
+          // FIX: Only arm release if we are ALREADY sitting motionless on the last panel
           if (!animating && index === steps) {
             releaseDir = 1;
             pump();
@@ -178,29 +178,29 @@ export function useHorizontalStory({
         gsap.set(track, { xPercent: -per * startIndex, willChange: "transform" });
         onChange?.(startIndex);
         const l = getLenis();
-        
-        // FIX: If the viewport is already within a small tolerance (e.g. ±5px), 
+
+        // FIX: If the viewport is already within a small tolerance (e.g. ±5px),
         // bypass the forced scrollTo animation to prevent visual "auto-adjust" stutters.
         const currentTop = section.getBoundingClientRect().top;
 
         if (l) {
           if (Math.abs(currentTop) < 5) {
-             l.stop();
-             observer.enable();
-             stepFloor = performance.now() + 100;
+            l.stop();
+            observer.enable();
+            stepFloor = performance.now() + 100;
           } else {
-             // SMOOTH freeze: ease the section flush into the viewport, then stop.
-             l.scrollTo(absTop(), { duration: 0.45, lock: true, force: true });
-             stepFloor = performance.now() + 560; // cover settle + entry inertia
-             clearTimeout(settleTimer);
-             settleTimer = setTimeout(() => {
-               l.stop();
-               observer.enable();
-             }, 460);
+            // SMOOTH freeze: ease the section flush into the viewport, then stop.
+            l.scrollTo(absTop(), { duration: 0.45, lock: true, force: true });
+            stepFloor = performance.now() + 560; // cover settle + entry inertia
+            clearTimeout(settleTimer);
+            settleTimer = setTimeout(() => {
+              l.stop();
+              observer.enable();
+            }, 460);
           }
         } else {
           if (Math.abs(currentTop) >= 5) {
-             window.scrollTo({ top: absTop(), behavior: "smooth" });
+            window.scrollTo({ top: absTop(), behavior: "smooth" });
           }
           stepFloor = performance.now() + ENTRY_ABSORB;
           observer.enable();

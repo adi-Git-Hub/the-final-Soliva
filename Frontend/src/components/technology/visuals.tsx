@@ -13,7 +13,13 @@ const ORANGE = "#c76600";
 const BRONZE = "#d9b27a";
 
 /* ── small caption used under every visual ── */
-function VisualCaption({ children, tone = "warm" }: { children: React.ReactNode; tone?: "warm" | "dark" }) {
+function VisualCaption({
+  children,
+  tone = "warm",
+}: {
+  children: React.ReactNode;
+  tone?: "warm" | "dark";
+}) {
   const c = tone === "dark" ? "text-white/40" : "text-[#3a2a22]/45";
   const rule = tone === "dark" ? "bg-[#d9b27a]/40" : "bg-[#c76600]/40";
   return (
@@ -43,7 +49,7 @@ export function SunlightVisual() {
   const cx = 360;
   const cy = 132;
   const rays = Array.from({ length: 11 }, (_, i) => {
-    const a = (Math.PI * (0.52 + (i / 10) * 0.96)); // sweep down-left
+    const a = Math.PI * (0.52 + (i / 10) * 0.96); // sweep down-left
     return { x2: cx + Math.cos(a) * 330, y2: cy + Math.sin(a) * 330 };
   });
 
@@ -235,7 +241,9 @@ export function ProtectionRings() {
           UV ↘
         </span>
       </div>
-      <VisualCaption>Protection woven into the fabric — UV deflected before it reaches skin</VisualCaption>
+      <VisualCaption>
+        Protection woven into the fabric — UV deflected before it reaches skin
+      </VisualCaption>
     </figure>
   );
 }
@@ -276,9 +284,26 @@ export function AirflowSystem() {
               viewport={viewportOnce}
               transition={{ duration: 0.9, delay: i * 0.12, ease: ease.smooth }}
             >
-              <rect x={36} y={layer.y} width={648} height={26} rx={13} fill="#3a2a22" fillOpacity={0.05} stroke="#3a2a22" strokeOpacity={0.12} />
+              <rect
+                x={36}
+                y={layer.y}
+                width={648}
+                height={26}
+                rx={13}
+                fill="#3a2a22"
+                fillOpacity={0.05}
+                stroke="#3a2a22"
+                strokeOpacity={0.12}
+              />
               {Array.from({ length: 22 }, (_, k) => (
-                <circle key={k} cx={56 + k * 28} cy={layer.y + 13} r={1.4} fill="#3a2a22" fillOpacity={0.18} />
+                <circle
+                  key={k}
+                  cx={56 + k * 28}
+                  cy={layer.y + 13}
+                  r={1.4}
+                  fill="#3a2a22"
+                  fillOpacity={0.18}
+                />
               ))}
             </motion.g>
           ))}
@@ -332,7 +357,9 @@ export function AirflowSystem() {
           Air in → heat out
         </span>
       </div>
-      <VisualCaption>A breathable system — air moves through the weave while heat escapes</VisualCaption>
+      <VisualCaption>
+        A breathable system — air moves through the weave while heat escapes
+      </VisualCaption>
     </figure>
   );
 }
@@ -545,7 +572,13 @@ export function EnvironmentSystem() {
             viewport={viewportOnce}
             transition={{ duration: 0.9, delay: i * 0.12, ease: ease.luxe }}
             className={`relative flex flex-col gap-2 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5 sm:p-7 ${
-              i === 0 ? "items-start" : i === 1 ? "items-end text-right" : i === 2 ? "items-start" : "items-end text-right"
+              i === 0
+                ? "items-start"
+                : i === 1
+                  ? "items-end text-right"
+                  : i === 2
+                    ? "items-start"
+                    : "items-end text-right"
             }`}
           >
             <ForceGlyph kind={f.kind} />

@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as PublicTermsRouteImport } from './routes/_public/terms'
 import { Route as PublicTechnologyRouteImport } from './routes/_public/technology'
+import { Route as PublicSupportRouteImport } from './routes/_public/support'
 import { Route as PublicStoryRouteImport } from './routes/_public/story'
 import { Route as PublicProfileRouteImport } from './routes/_public/profile'
 import { Route as PublicOrderConfirmedRouteImport } from './routes/_public/order-confirmed'
@@ -60,6 +61,11 @@ const PublicTermsRoute = PublicTermsRouteImport.update({
 const PublicTechnologyRoute = PublicTechnologyRouteImport.update({
   id: '/technology',
   path: '/technology',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicSupportRoute = PublicSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicStoryRoute = PublicStoryRouteImport.update({
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/order-confirmed': typeof PublicOrderConfirmedRoute
   '/profile': typeof PublicProfileRoute
   '/story': typeof PublicStoryRoute
+  '/support': typeof PublicSupportRoute
   '/technology': typeof PublicTechnologyRoute
   '/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/order-confirmed': typeof PublicOrderConfirmedRoute
   '/profile': typeof PublicProfileRoute
   '/story': typeof PublicStoryRoute
+  '/support': typeof PublicSupportRoute
   '/technology': typeof PublicTechnologyRoute
   '/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/_public/order-confirmed': typeof PublicOrderConfirmedRoute
   '/_public/profile': typeof PublicProfileRoute
   '/_public/story': typeof PublicStoryRoute
+  '/_public/support': typeof PublicSupportRoute
   '/_public/technology': typeof PublicTechnologyRoute
   '/_public/terms': typeof PublicTermsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/order-confirmed'
     | '/profile'
     | '/story'
+    | '/support'
     | '/technology'
     | '/terms'
     | '/admin/dashboard'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/order-confirmed'
     | '/profile'
     | '/story'
+    | '/support'
     | '/technology'
     | '/terms'
     | '/admin/dashboard'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/_public/order-confirmed'
     | '/_public/profile'
     | '/_public/story'
+    | '/_public/support'
     | '/_public/technology'
     | '/_public/terms'
     | '/admin/dashboard'
@@ -301,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/technology'
       fullPath: '/technology'
       preLoaderRoute: typeof PublicTechnologyRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/support': {
+      id: '/_public/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof PublicSupportRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/_public/story': {
@@ -417,6 +436,7 @@ interface PublicRouteRouteChildren {
   PublicOrderConfirmedRoute: typeof PublicOrderConfirmedRoute
   PublicProfileRoute: typeof PublicProfileRoute
   PublicStoryRoute: typeof PublicStoryRoute
+  PublicSupportRoute: typeof PublicSupportRoute
   PublicTechnologyRoute: typeof PublicTechnologyRoute
   PublicTermsRoute: typeof PublicTermsRoute
   PublicProductsSlugRoute: typeof PublicProductsSlugRoute
@@ -429,6 +449,7 @@ const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicOrderConfirmedRoute: PublicOrderConfirmedRoute,
   PublicProfileRoute: PublicProfileRoute,
   PublicStoryRoute: PublicStoryRoute,
+  PublicSupportRoute: PublicSupportRoute,
   PublicTechnologyRoute: PublicTechnologyRoute,
   PublicTermsRoute: PublicTermsRoute,
   PublicProductsSlugRoute: PublicProductsSlugRoute,

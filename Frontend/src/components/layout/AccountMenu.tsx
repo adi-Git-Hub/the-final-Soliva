@@ -141,14 +141,14 @@ export function AccountMenu() {
             <MessageCircle className="h-4 w-4 text-[#25D366]" />
             WhatsApp Support
           </a>
-          <a
-            href={`mailto:${SUPPORT_EMAIL}`}
+          <Link
+            to="/support"
             onClick={close}
             className="flex items-center gap-2.5 text-[0.8rem] font-medium text-brown-deep/80 transition-colors hover:text-brown-deep"
           >
             <Mail className="h-4 w-4 text-[#c76600]/70" />
-            {SUPPORT_EMAIL}
-          </a>
+            Support Center →
+          </Link>
         </div>
       </div>
     </div>

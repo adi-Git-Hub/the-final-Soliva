@@ -192,8 +192,7 @@ export function EverydayInsightHorizontal() {
                       Cover again.
                     </p>
                     <p>
-                      Protection should move naturally with life — not demand constant
-                      attention.
+                      Protection should move naturally with life — not demand constant attention.
                     </p>
                   </motion.div>
 
@@ -262,8 +261,7 @@ export function EverydayInsightHorizontal() {
                       className="absolute inset-0 w-full h-full object-cover select-none"
                       style={{
                         objectPosition: "50% 40%",
-                        filter:
-                          "saturate(0.86) contrast(1.04) brightness(0.95) sepia(0.07)",
+                        filter: "saturate(0.86) contrast(1.04) brightness(0.95) sepia(0.07)",
                       }}
                     />
                     <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_72%_18%,rgba(245,200,130,0.28),transparent_55%)] mix-blend-screen" />
@@ -337,8 +335,8 @@ export function EverydayInsightHorizontal() {
                   </span>
                 </h2>
                 <p className="mt-3 text-[13px] md:text-[14.5px] text-white/70 font-light leading-relaxed max-w-2xl">
-                  Thoughtfully designed full face, neck, and back coverage for everyday
-                  commuting, work, college, travel, and long outdoor hours.
+                  Thoughtfully designed full face, neck, and back coverage for everyday commuting,
+                  work, college, travel, and long outdoor hours.
                 </p>
               </motion.div>
 
@@ -396,8 +394,7 @@ export function EverydayInsightHorizontal() {
                       className="absolute inset-0 w-full h-full object-cover select-none"
                       style={{
                         objectPosition: "50% 35%",
-                        filter:
-                          "saturate(0.88) contrast(1.05) brightness(0.94) sepia(0.06)",
+                        filter: "saturate(0.88) contrast(1.05) brightness(0.94) sepia(0.06)",
                       }}
                     />
                     {/* warm sunlight glow */}
@@ -425,7 +422,9 @@ export function EverydayInsightHorizontal() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.1 }}
-                  variants={{ visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } }}
+                  variants={{
+                    visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+                  }}
                   className="flex flex-col gap-4 justify-center"
                 >
                   {/* Card 03 */}
@@ -469,9 +468,7 @@ export function EverydayInsightHorizontal() {
                     </span>
                     <h4 className="font-display text-[1.05rem] md:text-[1.15rem] text-[#FAF7F3] tracking-tight leading-snug mb-1.5">
                       Designed for{" "}
-                      <span className="italic font-light text-[#d9b27a]">
-                        little explorers
-                      </span>{" "}
+                      <span className="italic font-light text-[#d9b27a]">little explorers</span>{" "}
                       too.
                     </h4>
                     <p className="text-[12px] md:text-[12.5px] text-white/65 italic font-light leading-relaxed">
